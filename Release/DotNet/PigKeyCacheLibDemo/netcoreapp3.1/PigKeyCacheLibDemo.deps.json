@@ -6,9 +6,9 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "PigKeyCacheLibDemo/1.0.1.1": {
+      "PigKeyCacheLibDemo/1.0.2.2": {
         "dependencies": {
-          "PigKeyCacheLib": "1.0.1.13"
+          "PigKeyCacheLib": "1.0.2.36"
         },
         "runtime": {
           "PigKeyCacheLibDemo.dll": {}
@@ -16,14 +16,14 @@
       },
       "Microsoft.NETCore.Platforms/1.1.1": {},
       "Microsoft.NETCore.Targets/1.1.0": {},
-      "PigKeyCacheLib/1.0.1.13": {
+      "PigKeyCacheLib/1.0.2.36": {
         "dependencies": {
           "PigToolsLib": "1.0.15.12"
         },
         "runtime": {
           "lib/netcoreapp3.1/PigKeyCacheLib.dll": {
-            "assemblyVersion": "1.0.1.13",
-            "fileVersion": "1.0.1.13"
+            "assemblyVersion": "1.0.2.36",
+            "fileVersion": "1.0.2.36"
           }
         }
       },
@@ -431,7 +431,7 @@
     }
   },
   "libraries": {
-    "PigKeyCacheLibDemo/1.0.1.1": {
+    "PigKeyCacheLibDemo/1.0.2.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -450,12 +450,12 @@
       "path": "microsoft.netcore.targets/1.1.0",
       "hashPath": "microsoft.netcore.targets.1.1.0.nupkg.sha512"
     },
-    "PigKeyCacheLib/1.0.1.13": {
+    "PigKeyCacheLib/1.0.2.36": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KkW2YubvnD56XB88v/WhUV+m1gezdxN+9zbN5YFcPccMpkC3ItyUpOSVLNi9XI0y3WRy+VMw055EXkK7IOJiEA==",
-      "path": "pigkeycachelib/1.0.1.13",
-      "hashPath": "pigkeycachelib.1.0.1.13.nupkg.sha512"
+      "sha512": "sha512-DWnR5D1LTFmx3hVfLXL99yJFZRdDGlPRdkmj/H2XACfPoO3AgWbEUMwB9hp4U4ufwm/tYBru43/FILE9v7viLA==",
+      "path": "pigkeycachelib/1.0.2.36",
+      "hashPath": "pigkeycachelib.1.0.2.36.nupkg.sha512"
     },
     "PigToolsLib/1.0.15.12": {
       "type": "package",

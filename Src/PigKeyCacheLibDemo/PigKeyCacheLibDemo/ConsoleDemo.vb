@@ -11,6 +11,7 @@ Public Class ConsoleDemo
     Public Sub Main()
         Me.PigKeyValueApp.OpenDebug()
         Me.PigKeyValueApp.PigKeyValues.OpenDebug()
+        Me.PigKeyValueApp.IsUseMemCache = True
         Dim strLine As String
         Do While True
             Console.WriteLine("*******************")
@@ -21,6 +22,7 @@ Public Class ConsoleDemo
             Console.WriteLine("Press B to GetPigKeyValue")
             Console.WriteLine("Press C to Show all KeyValues")
             Console.WriteLine("Press D to RemoveExpItems")
+            Console.WriteLine("Press E to RemovePigKeyValue")
             Console.WriteLine("*******************")
             Select Case Console.ReadKey().Key
                 Case ConsoleKey.Q
@@ -105,7 +107,21 @@ Public Class ConsoleDemo
                             Console.WriteLine("OK")
                         End If
                     End With
-
+                Case ConsoleKey.E
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("RemovePigKeyValue")
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("Input KeyName:" & Me.KeyName)
+                    strLine = Console.ReadLine
+                    If strLine <> "" Then Me.KeyName = strLine
+                    With Me.PigKeyValueApp
+                        Dim strRet As String = .RemovePigKeyValue(Me.KeyName)
+                        If strRet <> "OK" Then
+                            Console.WriteLine(strRet)
+                        Else
+                            Console.WriteLine("OK")
+                        End If
+                    End With
             End Select
         Loop
     End Sub
