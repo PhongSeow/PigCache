@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.0.8
+'* Version: 1.0.14
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -13,12 +13,18 @@
 '* 1.0.6	11/5/2021 Modify StrValue
 '* 1.0.7	17/5/2021 Modify New
 '* 1.0.8	8/8/2021  Modify New, and Add IsExpired
+'* 1.0.9	10/8/2021  Add KeyValueLen, remove mstrStrValue, modify StrValue
+'* 1.0.10	11/8/2021  Add SMNameHead,SMNameBody
+'* 1.0.11	13/8/2021  Rename KeyValueLen to ValueLen, add ValueMD5Bytes
+'* 1.0.12	13/8/2021  Modify ValueMD5Bytes
+'* 1.0.13	16/8/2021  Modify mstrSMNameBody,SMNameBody,SMNameHead
+'* 1.0.14	17/8/2021  Modify New
 '************************************
 
 Imports PigToolsLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "1.0.8.5"
+    Private Const CLS_VERSION As String = "1.0.14.1"
     Private mabKeyValue As Byte()
     Private mbolIsKeyValueReady As Boolean = False
     ''' <summary>
@@ -45,15 +51,15 @@ Public Class PigKeyValue
     ''' <summary>
     ''' 字符串值
     ''' </summary>
-    Private mstrStrValue As String
+    'Private mstrStrValue As String
     Public ReadOnly Property StrValue As String
         Get
             Try
                 Select Case Me.ValueType
-                    Case enmValueType.Bytes, enmValueType.EncBytes, enmValueType.ZipBytes
-                        Return New PigText(mabKeyValue).Text
+                    Case enmValueType.Bytes, enmValueType.EncBytes, enmValueType.ZipBytes, enmValueType.ZipEncBytes
+                        Return New PigText(mabKeyValue).Base64
                     Case enmValueType.Text
-                        Return mstrStrValue
+                        Return New PigText(mabKeyValue, PigText.enmTextType.UTF8).Text
                     Case Else
                         Return ""
                 End Select
@@ -64,14 +70,47 @@ Public Class PigKeyValue
         End Get
     End Property
 
+    Public ReadOnly Property ValueLen As Long
+        Get
+            Try
+                Return mabKeyValue.Length
+            Catch ex As Exception
+                Me.SetSubErrInf("ValueLen", ex)
+                Return -1
+            End Try
+        End Get
+    End Property
+
+
+
     ''' <summary>
-    ''' 值类型，非文本类型转为 base64 保存
+    ''' Value type, non text type, saved in byte array
     ''' </summary>
     Public Enum enmValueType
-        Text = 0 '文本
-        Bytes = 1 '字节数组
-        ZipBytes = 2 '压缩的字节数组
-        EncBytes = 3 '压缩后加密的字节数组
+        ''' <summary>
+        ''' text
+        ''' </summary>
+        Unknow = 0
+        ''' <summary>
+        ''' text
+        ''' </summary>
+        Text = 10
+        ''' <summary>
+        ''' Byte array
+        ''' </summary>
+        Bytes = 20
+        ''' <summary>
+        ''' Compressed byte array
+        ''' </summary>
+        ZipBytes = 30
+        ''' <summary>
+        ''' Encrypted byte array
+        ''' </summary>
+        EncBytes = 40
+        ''' <summary>
+        ''' Compressed encrypted byte array
+        ''' </summary>
+        ZipEncBytes = 50
     End Enum
 
     ''' <summary>
@@ -92,6 +131,24 @@ Public Class PigKeyValue
             Catch ex As Exception
                 Me.SetSubErrInf("ValueMD5", ex)
                 Return ""
+            End Try
+        End Get
+    End Property
+
+    Private mabValueMD5 As Byte()
+    Public ReadOnly Property ValueMD5Bytes As Byte()
+        Get
+            Try
+                Select Case Me.ValueType
+                    Case enmValueType.Bytes, enmValueType.EncBytes, enmValueType.ZipBytes
+                        If mabValueMD5 Is Nothing Then mabValueMD5 = New PigMD5(mabKeyValue).PigMD5Bytes
+                    Case enmValueType.Text
+                        If mabValueMD5 Is Nothing Then mabValueMD5 = New PigMD5(Me.StrValue, PigMD5.enmTextType.UTF8).PigMD5Bytes
+                End Select
+                Return mabValueMD5
+            Catch ex As Exception
+                Me.SetSubErrInf("ValueMD5Bytes", ex)
+                Return Nothing
             End Try
         End Get
     End Property
@@ -136,17 +193,19 @@ Public Class PigKeyValue
         MyBase.New(CLS_VERSION)
         Try
             If KeyName.Length > 128 Then Throw New Exception("The KeyName length cannot exceed 128 bytes.")
+            Me.KeyName = KeyName
             If ExpTime < Now Then Throw New Exception("ExpTime unreasonable.")
             If MatchValueMD5.Length > 0 Then
                 Dim strValueMD5 As String = New PigMD5(KeyValue, PigMD5.enmTextType.UTF8).PigMD5
                 If strValueMD5 <> MatchValueMD5 Then Throw New Exception("ValueMD5 not match。")
                 mstrValueMD5 = MatchValueMD5
             End If
-            Me.KeyName = KeyName
             Me.ExpTime = ExpTime
             Me.ValueType = enmValueType.Text
             mbolIsKeyValueReady = True
-            mstrStrValue = KeyValue
+            Dim oPigText As New PigText(KeyValue, PigText.enmTextType.UTF8)
+            mabKeyValue = oPigText.TextBytes
+            oPigText = Nothing
             Me.ClearErr()
         Catch ex As Exception
             Me.SetSubErrInf("New", ex)
@@ -160,31 +219,21 @@ Public Class PigKeyValue
     ''' <param name="ExpTime">键值过期时间</param>
     ''' <param name="KeyValue">字节数组键值</param>
     ''' <param name="ValueType">键值类型</param>
-    ''' <param name="MatchValueMD5">匹配PigMD5，如果指定则校验</param>
-    Public Sub New(KeyName As String, ExpTime As DateTime, KeyValue As Byte(), ValueType As enmValueType, Optional MatchValueMD5 As String = "")
+    ''' <param name="MatchValueMD5Bytes">匹配PigMD5数组，如果指定则校验</param>
+    Public Sub New(KeyName As String, ExpTime As DateTime, KeyValue As Byte(), ValueType As enmValueType, Optional MatchValueMD5Bytes As Byte() = Nothing)
         MyBase.New(CLS_VERSION)
         Try
             If KeyName.Length > 128 Then Throw New Exception("The KeyName length cannot exceed 128 bytes.")
-            If ExpTime < Now Then Throw New Exception("ExpTime unreasonable.")
-            If MatchValueMD5.Length > 0 Then
-                Dim strValueMD5 As String = New PigMD5(KeyValue).PigMD5
-                If strValueMD5 <> MatchValueMD5 Then Throw New Exception("ValueMD5 not match.")
-                mstrValueMD5 = MatchValueMD5
-            End If
             Me.KeyName = KeyName
+            If ExpTime < Now Then Throw New Exception("ExpTime unreasonable.")
+            If Not MatchValueMD5Bytes Is Nothing Then
+                Dim oPigMD5 As PigMD5 = New PigMD5(KeyValue)
+                If oPigMD5.PigMD5Bytes.SequenceEqual(MatchValueMD5Bytes) = False Then Throw New Exception("ValueMD5 not match.")
+            End If
             Me.ExpTime = ExpTime
-            Select Case ValueType
-                Case enmValueType.Text
-                    mstrStrValue = New PigText(KeyValue, PigText.enmTextType.UTF8).Text
-                Case enmValueType.Bytes
-                    mabKeyValue = KeyValue
-                    mbolIsKeyValueReady = False
-                Case enmValueType.ZipBytes, enmValueType.EncBytes
-                    mabKeyValue = KeyValue
-                    mbolIsKeyValueReady = True
-                Case Else
-                    Throw New Exception("Unknow ValueType " & ValueType.ToString)
-            End Select
+            Me.ValueType = ValueType
+            mabKeyValue = KeyValue
+            mabValueMD5 = MatchValueMD5Bytes
             Me.ClearErr()
         Catch ex As Exception
             Me.SetSubErrInf("New", ex)
@@ -201,5 +250,37 @@ Public Class PigKeyValue
         End Get
     End Property
 
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    Private mstrSMNameHead As String = ""
+    Friend ReadOnly Property SMNameHead() As String
+        Get
+            If mstrSMNameHead.Length = 0 Then
+                Dim strSMName As String = Me.Parent.ShareMemRoot & "." & Me.KeyName & ".Head"
+                Dim oPigMD5 As New PigMD5(strSMName, PigMD5.enmTextType.UTF8)
+                mstrSMNameHead = oPigMD5.PigMD5
+                oPigMD5 = Nothing
+            End If
+            Return mstrSMNameHead
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' 共享内存体
+    ''' </summary>
+    Private mstrSMNameBody As String = ""
+    Friend ReadOnly Property SMNameBody() As String
+        Get
+            If mstrSMNameBody.Length = 0 Then
+                Dim strSMName As String = Me.Parent.ShareMemRoot & "." & Me.KeyName & ".Body"
+                Dim oPigMD5 As New PigMD5(strSMName, PigMD5.enmTextType.UTF8)
+                mstrSMNameBody = oPigMD5.PigMD5
+                oPigMD5 = Nothing
+            End If
+            Return mstrSMNameBody
+        End Get
+    End Property
 
 End Class
