@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.0.14
+'* Version: 1.0.15
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -19,12 +19,13 @@
 '* 1.0.12	13/8/2021  Modify ValueMD5Bytes
 '* 1.0.13	16/8/2021  Modify mstrSMNameBody,SMNameBody,SMNameHead
 '* 1.0.14	17/8/2021  Modify New
+'* 1.0.15	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib, and add 
 '************************************
 
-Imports PigToolsLib
+Imports PigToolsWinLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "1.0.14.1"
+    Private Const CLS_VERSION As String = "1.0.15.2"
     Private mabKeyValue As Byte()
     Private mbolIsKeyValueReady As Boolean = False
     ''' <summary>
@@ -228,7 +229,7 @@ Public Class PigKeyValue
             If ExpTime < Now Then Throw New Exception("ExpTime unreasonable.")
             If Not MatchValueMD5Bytes Is Nothing Then
                 Dim oPigMD5 As PigMD5 = New PigMD5(KeyValue)
-                If oPigMD5.PigMD5Bytes.SequenceEqual(MatchValueMD5Bytes) = False Then Throw New Exception("ValueMD5 not match.")
+                If Me.mIsBytesMatch(oPigMD5.PigMD5Bytes, MatchValueMD5Bytes) = False Then Throw New Exception("ValueMD5 not match.")
             End If
             Me.ExpTime = ExpTime
             Me.ValueType = ValueType
@@ -239,6 +240,31 @@ Public Class PigKeyValue
             Me.SetSubErrInf("New", ex)
         End Try
     End Sub
+
+    Private Function mIsBytesMatch(ByRef SrcBytes As Byte(), ByRef MatchBytes As Byte()) As Boolean
+        Try
+#If NET40_OR_GREATER Then
+            Return SrcBytes.SequenceEqual(MatchBytes)
+#Else
+            Dim i As Long
+            If SrcBytes.Length <> MatchBytes.Length Then
+                Return False
+            Else
+                mIsBytesMatch = True
+                For i = 0 To SrcBytes.Length - 1
+                    If SrcBytes(i) <> MatchBytes(i) Then
+                        mIsBytesMatch = False
+                        Exit For
+                    End If
+                Next
+            End If
+
+#End If
+        Catch ex As Exception
+            Me.SetSubErrInf("mIsBytesMatch", ex)
+            Return False
+        End Try
+    End Function
 
     Public ReadOnly Property IsExpired As Boolean
         Get

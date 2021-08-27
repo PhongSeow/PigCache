@@ -4,16 +4,17 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: PigKeyValue 的 集合类
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.0.2
+'* Version: 1.0.3
 '* Create Time: 8/5/2021
 '* 1.0.2	5/8/2021 Add mAdd,IsItemExists, and modify Add,Remove
+'* 1.0.3	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib
 '************************************
-Imports PigToolsLib
+Imports PigToolsWinLib
 
 Public Class PigKeyValues
     Inherits PigBaseMini
     Implements IEnumerable(Of PigKeyValue)
-    Private Const CLS_VERSION As String = "1.0.2.5"
+    Private Const CLS_VERSION As String = "1.0.3.1"
 
     Private moList As New List(Of PigKeyValue)
 

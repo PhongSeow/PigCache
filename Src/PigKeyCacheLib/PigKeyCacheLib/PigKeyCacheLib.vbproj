@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLib</RootNamespace>
-    <TargetFrameworks>net40;net461;net472;net5.0;netcoreapp3.1;</TargetFrameworks>
+    <TargetFrameworks>net20;net30;net40;net461;net472;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.3.8</Version>
+    <Version>1.0.5.11</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Copyright>Copyright (c) 2021 Seow Phong</Copyright>
@@ -14,11 +14,12 @@
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLib</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <PackageTags>Key Value Windows cache multiprocessing multithreading memcached redis Linux</PackageTags>
-    <Description>PigKeyCacheLib is a very lightweight key value Caching Application. It supports multi processes and multi threads. It does not need to install application support like memcached or redis. It is suitable for lightweight small applications.
-It can run on Windows and Linux platforms.
+    <PackageTags>Key Value Windows cache multiprocessing multithreading memcached redis share memory</PackageTags>
+    <Description>PigKeyCacheLib is a very lightweight key value Caching Application. 
+It supports multi processes and multi threads. It does not need to install application support like memcached or redis. It is suitable for lightweight small applications.
+It can run on Windows only.
 </Description>
-    <PackageReleaseNotes>Add statistical function and fix RemoveExpItems bugs.</PackageReleaseNotes>
+    <PackageReleaseNotes>Optimize code that uses share memory.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,7 +34,7 @@ It can run on Windows and Linux platforms.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigToolsLib" Version="1.0.15.12" />
+    <PackageReference Include="PigToolsWinLib" Version="1.0.6.3" />
   </ItemGroup>
 
 </Project>
