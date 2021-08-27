@@ -1,17 +1,46 @@
 ﻿Imports System.Data
 Imports PigKeyCacheLib
-Imports PigToolsLib
+Imports PigToolsWinLib
 
 Public Class ConsoleDemo
-    Public PigKeyValueApp As New PigKeyValueApp
+    Public PigKeyValueApp As PigKeyValueApp
+    Public ShareMemRoot As String = "Test"
+    Public CacheWorkDir As String = "C:\Temp"
+    Public CacheLevel As PigKeyValueApp.enmCacheLevel = PigKeyValueApp.enmCacheLevel.ToShareMem
     Public KeyName As String = "Key1"
     Public KeyValue As String = "Value1"
     Public ExpTime As DateTime = Now.AddMinutes(10)
     Public PigFunc As New PigFunc
     Public Sub Main()
+        Dim strLine As String
+        Console.WriteLine("*******************")
+        Console.WriteLine("Init Setting")
+        Console.WriteLine("*******************")
+        Console.WriteLine("Input ShareMemRoot:" & Me.ShareMemRoot)
+        strLine = Console.ReadLine
+        If strLine <> "" Then Me.ShareMemRoot = strLine
+        Console.WriteLine("Input CacheLevel")
+        Console.WriteLine("10 = ToList (Program for single process multithreading)")
+        Console.WriteLine("20 = ToShareMem (It is applicable to multi-process and multi-threaded programs under the same user session or IIS application pools.)")
+        'Console.WriteLine("30 = ToFile (It is suitable for any multi process and multi thread program on the same host.)")
+        Console.WriteLine("Now is " & Me.CacheLevel)
+        strLine = Console.ReadLine
+        If strLine <> "" Then Me.CacheLevel = strLine
+        If Me.CacheLevel = PigKeyValueApp.enmCacheLevel.ToFile Then
+            Console.WriteLine("Input CacheWorkDir:" & Me.CacheWorkDir)
+            Me.CacheWorkDir = Console.ReadLine
+        End If
+        Select Case Me.CacheLevel
+            Case PigKeyValueApp.enmCacheLevel.ToList, PigKeyValueApp.enmCacheLevel.ToShareMem
+                Me.PigKeyValueApp = New PigKeyValueApp(Me.ShareMemRoot, Me.CacheLevel)
+            Case PigKeyValueApp.enmCacheLevel.ToFile
+                Me.PigKeyValueApp = New PigKeyValueApp(Me.CacheWorkDir)
+            Case Else
+                Console.WriteLine("Unsupported CacheLevel")
+                Exit Sub
+        End Select
         Me.PigKeyValueApp.OpenDebug()
         Me.PigKeyValueApp.PigKeyValues.OpenDebug()
-        Dim strLine As String
         Do While True
             Console.WriteLine("*******************")
             Console.WriteLine("Main menu")
@@ -70,13 +99,15 @@ Public Class ConsoleDemo
                             Console.WriteLine(.LastErr)
                         Else
                             Console.WriteLine("OK")
-                            With oPigKeyValue
-                                Console.WriteLine("KeyName=" & .KeyName)
-                                Console.WriteLine("IsExpired=" & .IsExpired)
-                                Console.WriteLine("ExpTime=" & .ExpTime)
-                                Console.WriteLine("ValueType=" & .ValueType.ToString)
-                                Console.WriteLine("StrValue=" & .StrValue)
-                            End With
+                            If Not oPigKeyValue Is Nothing Then
+                                With oPigKeyValue
+                                    Console.WriteLine("KeyName=" & .KeyName)
+                                    Console.WriteLine("IsExpired=" & .IsExpired)
+                                    Console.WriteLine("ExpTime=" & .ExpTime)
+                                    Console.WriteLine("ValueType=" & .ValueType.ToString)
+                                    Console.WriteLine("StrValue=" & .StrValue)
+                                End With
+                            End If
                         End If
                     End With
                 Case ConsoleKey.C

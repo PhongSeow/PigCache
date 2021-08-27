@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLibDemo</RootNamespace>
-    <TargetFrameworks>net40;net461;net472;net5.0;netcoreapp3.1;</TargetFrameworks>
+    <TargetFrameworks>net20;net30;net40;net461;net472;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
@@ -12,13 +12,13 @@
     <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLibDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Version>1.0.3.1</Version>
+    <Version>1.0.5.2</Version>
     <PackageTags>Key Value Windows cache Single process Multithreading</PackageTags>
-    <PackageReleaseNotes>Add statistical function and fix RemoveExpItems bugs.</PackageReleaseNotes>
+    <PackageReleaseNotes>Optimize code that uses share memory.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib" Version="1.0.3.8" />
+    <PackageReference Include="PigKeyCacheLib" Version="1.0.5.11" />
   </ItemGroup>
 
   <ItemGroup>
