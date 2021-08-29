@@ -1,7 +1,6 @@
 ﻿Imports System.Data
 Imports PigKeyCacheLib
-Imports PigToolsWinLib
-
+Imports PigToolsLiteLib
 Public Class ConsoleDemo
     Public PigKeyValueApp As PigKeyValueApp
     Public ShareMemRoot As String = "Test"
