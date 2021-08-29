@@ -20,12 +20,13 @@
 '* 1.0.13	16/8/2021  Modify mstrSMNameBody,SMNameBody,SMNameHead
 '* 1.0.14	17/8/2021  Modify New
 '* 1.0.15	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib, and add 
+'* 1.1	    29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
 '************************************
 
-Imports PigToolsWinLib
+Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "1.0.15.2"
+    Private Const CLS_VERSION As String = "1.1.1"
     Private mabKeyValue As Byte()
     Private mbolIsKeyValueReady As Boolean = False
     ''' <summary>

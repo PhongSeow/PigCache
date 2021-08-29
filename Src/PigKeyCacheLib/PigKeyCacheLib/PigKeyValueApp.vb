@@ -24,13 +24,14 @@
 '* 1.0.17	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib, and add mIsBytesMatch, mSavePigKeyValueToSM rename to mSavePigKeyValueToShareMem
 '* 1.0.18	26/8/2021 Modify RemovePigKeyValue,SavePigKeyValue, and add mClearShareMem
 '* 1.0.19	27/8/2021 Modify mGetPigKeyValueByShareMem
+'* 1.1		29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
 '************************************
 
-Imports PigToolsWinLib
+Imports PigToolsLiteLib
 
 Public Class PigKeyValueApp
 	Inherits PigBaseMini
-	Private Const CLS_VERSION As String = "1.0.19.1"
+	Private Const CLS_VERSION As String = "1.1.1"
 
 	''' <summary>
 	''' Value type, non text type, saved in byte array

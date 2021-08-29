@@ -8,13 +8,14 @@
 '* Create Time: 8/5/2021
 '* 1.0.2	5/8/2021 Add mAdd,IsItemExists, and modify Add,Remove
 '* 1.0.3	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib
+'* 1.1	    29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
 '************************************
-Imports PigToolsWinLib
+Imports PigToolsLiteLib
 
 Public Class PigKeyValues
     Inherits PigBaseMini
     Implements IEnumerable(Of PigKeyValue)
-    Private Const CLS_VERSION As String = "1.0.3.1"
+    Private Const CLS_VERSION As String = "1.1.1"
 
     Private moList As New List(Of PigKeyValue)
 
