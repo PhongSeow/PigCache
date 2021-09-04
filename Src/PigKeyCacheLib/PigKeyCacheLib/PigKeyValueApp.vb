@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用|Piggy key value application
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.0.19
+'* Version: 1.2
 '* Create Time: 8/5/2021
 '* 1.0.2	13/5/2021 Modify New
 '* 1.0.3	22/7/2021 Modify GetPigKeyValue
@@ -25,13 +25,14 @@
 '* 1.0.18	26/8/2021 Modify RemovePigKeyValue,SavePigKeyValue, and add mClearShareMem
 '* 1.0.19	27/8/2021 Modify mGetPigKeyValueByShareMem
 '* 1.1		29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
+'* 1.2		31/8/2021 Modify ForceRefCacheTime
 '************************************
 
 Imports PigToolsLiteLib
 
 Public Class PigKeyValueApp
 	Inherits PigBaseMini
-	Private Const CLS_VERSION As String = "1.1.1"
+	Private Const CLS_VERSION As String = "1.2.1"
 
 	''' <summary>
 	''' Value type, non text type, saved in byte array
@@ -50,14 +51,14 @@ Public Class PigKeyValueApp
 		''' It is suitable for any multi process and multi thread program on the same host.
 		''' </summary>
 		ToFile = 30
-		''' <summary>
-		''' It is suitable for multi server, multi process and multi-threaded programs, and has the highest requirements for the availability of cached content, but the writing performance is poor, but the advantage is that it can share the database with the application to reduce the point of failure.
-		''' </summary>
-		ToDB = 40
-		''' <summary>
-		''' It is suitable for multi server, multi process and multi thread programs. The read and write performance is very good, but redis needs to be installed, which needs to increase the cost of managing the high availability of redis.
-		''' </summary>
-		ToRedis = 50
+		'''' <summary>
+		'''' It is suitable for multi server, multi process and multi-threaded programs, and has the highest requirements for the availability of cached content, but the writing performance is poor, but the advantage is that it can share the database with the application to reduce the point of failure.
+		'''' </summary>
+		'ToDB = 40
+		'''' <summary>
+		'''' It is suitable for multi server, multi process and multi thread programs. The read and write performance is very good, but redis needs to be installed, which needs to increase the cost of managing the high availability of redis.
+		'''' </summary>
+		'ToRedis = 50
 	End Enum
 
 	Public ReadOnly Property PigKeyValues As New PigKeyValues
@@ -1039,12 +1040,12 @@ Public Class PigKeyValueApp
 						oPigXml.AddEle("SaveToShareMemCount", .SaveToShareMemCount)
 						oPigXml.AddEle("CacheByFileCount", .CacheByFileCount)
 						oPigXml.AddEle("SaveToFileCountSaveToFileCount", .SaveToFileCount)
-					Case enmCacheLevel.ToDB
-						oPigXml.AddEle("CacheByShareMemCount", .CacheByShareMemCount)
-						oPigXml.AddEle("CacheByDBCount", .CacheByDBCount)
-					Case enmCacheLevel.ToRedis
-						oPigXml.AddEle("CacheByShareMemCount", .CacheByShareMemCount)
-						oPigXml.AddEle("CacheByRedisCount", .CacheByRedisCount)
+						'Case enmCacheLevel.ToDB
+						'	oPigXml.AddEle("CacheByShareMemCount", .CacheByShareMemCount)
+						'	oPigXml.AddEle("CacheByDBCount", .CacheByDBCount)
+						'Case enmCacheLevel.ToRedis
+						'	oPigXml.AddEle("CacheByShareMemCount", .CacheByShareMemCount)
+						'	oPigXml.AddEle("CacheByRedisCount", .CacheByRedisCount)
 				End Select
 			End With
 			GetStatisticsXml = oPigXml.MainXmlStr
@@ -1068,7 +1069,7 @@ Public Class PigKeyValueApp
 	Private mintForceRefCacheTime As Integer = 60
 	Public Property ForceRefCacheTime As Integer
 		Get
-			Return menmCacheLevel
+			Return mintForceRefCacheTime
 		End Get
 		Friend Set(value As Integer)
 			mintForceRefCacheTime = value

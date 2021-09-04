@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.0.15
+'* Version: 1.2
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -21,14 +21,14 @@
 '* 1.0.14	17/8/2021  Modify New
 '* 1.0.15	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib, and add 
 '* 1.1	    29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
+'* 1.2	    2/9/2021  Add IsValueTypeOK,ValueMD5Base64
 '************************************
 
 Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "1.1.1"
+    Private Const CLS_VERSION As String = "1.2.2"
     Private mabKeyValue As Byte()
-    Private mbolIsKeyValueReady As Boolean = False
     ''' <summary>
     ''' 父对象
     ''' </summary>
@@ -155,6 +155,19 @@ Public Class PigKeyValue
         End Get
     End Property
 
+    Public ReadOnly Property ValueMD5Base64 As String
+        Get
+            Try
+                Dim pbMD5 As New PigBytes(mabValueMD5)
+                ValueMD5Base64 = pbMD5.Base64Str
+                pbMD5 = Nothing
+            Catch ex As Exception
+                Me.SetSubErrInf("ValueMD5Base64", ex)
+                Return ""
+            End Try
+        End Get
+    End Property
+
     Public ReadOnly Property BytesBase64Value As String
         Get
             Try
@@ -204,7 +217,6 @@ Public Class PigKeyValue
             End If
             Me.ExpTime = ExpTime
             Me.ValueType = enmValueType.Text
-            mbolIsKeyValueReady = True
             Dim oPigText As New PigText(KeyValue, PigText.enmTextType.UTF8)
             mabKeyValue = oPigText.TextBytes
             oPigText = Nothing
@@ -267,6 +279,17 @@ Public Class PigKeyValue
         End Try
     End Function
 
+    Public ReadOnly Property IsValueTypeOK As Boolean
+        Get
+            Select Case Me.ValueType
+                Case enmValueType.Bytes, enmValueType.EncBytes, enmValueType.Text, enmValueType.ZipBytes, enmValueType.ZipEncBytes
+                    Return True
+                Case Else
+                    Return False
+            End Select
+        End Get
+    End Property
+
     Public ReadOnly Property IsExpired As Boolean
         Get
             If Me.ExpTime < Now Then
@@ -276,7 +299,6 @@ Public Class PigKeyValue
             End If
         End Get
     End Property
-
 
     ''' <summary>
     ''' 
