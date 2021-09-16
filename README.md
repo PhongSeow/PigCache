@@ -1,24 +1,15 @@
 # PigCache
 #### [中文文档](https://github.com/PhongSeow/PigCache/blob/master/README.CN.md)
-Pigcache is a caching system with many different application scenarios.
+PigCache is a lightweight key value caching system for multiple application scenarios. It can support single process micro applications to large-scale multi server load balancing scenarios. Most scenarios do not need the support of third-party services such as memcached or Redis. The running environment can support Windows or Linux platforms. Codes in different scenarios only need to reference different class libraries, Make minor changes to the source code.
 
-## ***Folders and files description***
+------
 
-### Release
-
-Release execute code directory, if you don't want to see the source program, you can use the files in this directory directly in your VB.NET project.
-
-##### Release\DotNet
-Library DLL files and NuGet package.
-
-#### Release\DotNet\PigCacheLib
-The lightest class library requires a client only.
-
-### Src
-
-Source code directory.
-
-#### Src\DotNet\PigSQLSrvLib
-
-Library Directory
+|                        Class library                         |                     Application scenario                     | Other service support | Read performance | Write performance | 运行平台          | Advantage                                                    | Shortcoming                                                  |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :-------------------: | ---------------- | ----------------- | ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [PigKeyCacheLib](https://www.nuget.org/packages/PigKeyCacheLib/) |        Support single process multithreaded programs         |        no need        | good             | good              | Windows and Linux | No third-party service support is required, and no fault points will be added | Only single process is supported                             |
+|                                                              | Support multi process and multi thread programs under the same user |        no need        | good             | good              | Windows and Linux | It does not need third-party service support, does not increase fault points, and can support multiple processes | Can only be used between programs within the same user session |
+|                                                              | Support multi process and multi thread programs under the same host |        no need        | good             | preferably        | Windows and Linux | No third-party service support is required, no fault points will be added, and multi-user process use can be supported | Can only be used on the same server                          |
+| [PigKeyCacheLib.SQLServer](https://www.nuget.org/packages/PigKeyCacheLib.SQLServer/) |             Support multi server load balancing              |      SQL Server       | Good, scalable   | Slightly worse    | Windows Only      | This is a scenario with the best read performance and horizontal scalability. It shares database connection with applications, which is equivalent to no third-party service support, and the high availability of the database is better than redis | Poor write performance                                       |
+| [PigKeyCacheCoreLib.SQLServer](https://www.nuget.org/packages/PigKeyCacheCoreLib.SQLServer/) |             Support multi server load balancing              |      SQL Server       | Good, scalable   | Slightly worse    | Windows and Linux | This is a scenario with the best read performance and horizontal scalability. It shares database connection with applications, which is equivalent to no third-party service support, and the high availability of the database is better than redis | Poor write performance                                       |
+|              PigKeyCacheLib.Redis(coming soon)               |             Support multi server load balancing              |         Redis         | Good, scalable   | very good         | Windows Only      | This is the scenario with the best performance and can be expanded horizontally | Redis is required, which will increase a failure point and the cost of managing redis |
 
