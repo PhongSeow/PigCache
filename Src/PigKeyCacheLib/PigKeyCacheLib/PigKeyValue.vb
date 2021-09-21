@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.2
+'* Version: 1.3
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -22,12 +22,13 @@
 '* 1.0.15	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib, and add 
 '* 1.1	    29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
 '* 1.2	    2/9/2021  Add IsValueTypeOK,ValueMD5Base64
+'* 1.3	    17/9/2021  Modify ValueMD5Base64, Add Check
 '************************************
 
 Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "1.2.2"
+    Private Const CLS_VERSION As String = "1.3.1"
     Private mabKeyValue As Byte()
     ''' <summary>
     ''' 父对象
@@ -158,7 +159,7 @@ Public Class PigKeyValue
     Public ReadOnly Property ValueMD5Base64 As String
         Get
             Try
-                Dim pbMD5 As New PigBytes(mabValueMD5)
+                Dim pbMD5 As New PigBytes(Me.ValueMD5Bytes)
                 ValueMD5Base64 = pbMD5.Base64Str
                 pbMD5 = Nothing
             Catch ex As Exception
@@ -331,5 +332,20 @@ Public Class PigKeyValue
             Return mstrSMNameBody
         End Get
     End Property
+
+    Public Function Check() As String
+        Try
+            If Me.IsExpired = True Then
+                Throw New Exception("IsExpired")
+            ElseIf Me.ValueLen = 0 Then
+                Throw New Exception("ValueLen is zero.")
+            ElseIf Me.IsValueTypeOK = False Then
+                Throw New Exception("ValueType is invalid.")
+            End If
+            Return "OK"
+        Catch ex As Exception
+            Return ex.Message.ToString
+        End Try
+    End Function
 
 End Class
