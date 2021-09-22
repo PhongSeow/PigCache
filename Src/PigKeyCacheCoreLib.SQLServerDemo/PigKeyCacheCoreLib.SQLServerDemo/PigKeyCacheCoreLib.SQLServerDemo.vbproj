@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PigKeyCacheCoreLib.SQLServerDemo</RootNamespace>
+    <TargetFrameworks>net5.0;netcoreapp3.1;</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Seow Phong</Authors>
+    <Company>Seow Phong Studio</Company>
+    <Description>Demo console program for PigKeyCacheCoreLib.SQLServer</Description>
+    <Copyright>Copyright (c) 2021 Seow Phong</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheCoreLib.SQLServerDemo</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>Key Value Windows cache Single process Multithreading SQLServer Linux Core</PackageTags>
+    <Version>1.0.3</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PigKeyCacheCoreLib.SQLServer" Version="1.0.18" />
+  </ItemGroup>
+
+</Project>
