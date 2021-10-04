@@ -16,25 +16,26 @@ Public Class ConsoleDemo
         Console.WriteLine("*******************")
         Console.WriteLine("Init Setting")
         Console.WriteLine("*******************")
-        Console.WriteLine("Input ShareMemRoot:" & Me.ShareMemRoot)
-        strLine = Console.ReadLine
-        If strLine <> "" Then Me.ShareMemRoot = strLine
         Console.WriteLine("Input CacheLevel")
         Console.WriteLine("10 = ToList (Program for single process multithreading)")
         Console.WriteLine("20 = ToShareMem (It is applicable to multi-process and multi-threaded programs under the same user session or IIS application pools.)")
-        'Console.WriteLine("30 = ToFile (It is suitable for any multi process and multi thread program on the same host.)")
+        Console.WriteLine("30 = ToFile (It is suitable for any multi process and multi thread program on the same host.)")
         Console.WriteLine("Now is " & Me.CacheLevel)
         strLine = Console.ReadLine
         If strLine <> "" Then Me.CacheLevel = strLine
-        If Me.CacheLevel = PigKeyValueApp.enmCacheLevel.ToFile Then
-            Console.WriteLine("Input CacheWorkDir:" & Me.CacheWorkDir)
-            Me.CacheWorkDir = Console.ReadLine
-        End If
         Select Case Me.CacheLevel
-            Case PigKeyValueApp.enmCacheLevel.ToList, PigKeyValueApp.enmCacheLevel.ToShareMem
-                Me.PigKeyValueApp = New PigKeyValueApp(Me.ShareMemRoot, Me.CacheLevel)
+            Case PigKeyValueApp.enmCacheLevel.ToList
+                Me.PigKeyValueApp = New PigKeyValueApp()
+            Case PigKeyValueApp.enmCacheLevel.ToShareMem
+                Console.WriteLine("Input ShareMemRoot:" & Me.ShareMemRoot)
+                strLine = Console.ReadLine
+                If strLine <> "" Then Me.ShareMemRoot = strLine
+                Me.PigKeyValueApp = New PigKeyValueApp(Me.ShareMemRoot)
             Case PigKeyValueApp.enmCacheLevel.ToFile
-                Me.PigKeyValueApp = New PigKeyValueApp(Me.CacheWorkDir)
+                Console.WriteLine("Input CacheWorkDir:" & Me.CacheWorkDir)
+                strLine = Console.ReadLine
+                If strLine <> "" Then Me.CacheWorkDir = strLine
+                Me.PigKeyValueApp = New PigKeyValueApp(Me.CacheWorkDir, Me.CacheLevel)
             Case Else
                 Console.WriteLine("Unsupported CacheLevel")
                 Exit Sub
@@ -146,7 +147,7 @@ Public Class ConsoleDemo
                     strLine = Console.ReadLine
                     If strLine <> "" Then Me.KeyName = strLine
                     With Me.PigKeyValueApp
-                        Dim strRet As String = .RemovePigKeyValue(Me.KeyName)
+                        Dim strRet As String = .RemovePigKeyValue(Me.KeyName, Me.CacheLevel)
                         If strRet <> "OK" Then
                             Console.WriteLine(strRet)
                         Else

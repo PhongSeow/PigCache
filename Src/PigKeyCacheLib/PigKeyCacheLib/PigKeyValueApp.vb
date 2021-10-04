@@ -37,7 +37,7 @@ Imports PigToolsLiteLib
 
 Public Class PigKeyValueApp
 	Inherits PigBaseMini
-	Private Const CLS_VERSION As String = "1.7.16"
+	Private Const CLS_VERSION As String = "1.7.20"
 
 	''' <summary>
 	''' Value type, non text type, saved in byte array
@@ -737,6 +737,7 @@ Public Class PigKeyValueApp
 							End If
 							If Not GetPigKeyValue Is Nothing Then
 								If GetPigKeyValue.Parent Is Nothing Then GetPigKeyValue.Parent = Me
+								msuStatistics.SaveToShareMemCount += 1
 								strStepName = "mSavePigKeyValueToShareMem.ToFile2"
 								strRet = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
 								If strRet <> "OK" Then
@@ -745,9 +746,21 @@ Public Class PigKeyValueApp
 								End If
 							End If
 						Else
+							If pkvShareMem.Parent Is Nothing Then pkvShareMem.Parent = Me
+							msuStatistics.SaveToListCount += 1
+							strStepName = "mAddPigKeyValueToList"
+							strRet = Me.mAddPigKeyValueToList(pkvShareMem)
+							If strRet <> "OK" Then
+								strStepName &= "(" & KeyName & ")"
+								Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+								msuStatistics.SaveFailCount += 1
+							End If
 							GetPigKeyValue = pkvShareMem
 							pkvList = Nothing
 						End If
+					Else
+						GetPigKeyValue = pkvList
+						pkvList = Nothing
 					End If
 				Case Else
 					strStepName = KeyName
@@ -1677,6 +1690,7 @@ Public Class PigKeyValueApp
 			If bolIsToFile = True Then
 				If Me.mIsCacheFileExists(KeyName) = True Then
 					Dim oPigKeyValue As New PigKeyValue(KeyName, Now.AddSeconds(1), "")
+					oPigKeyValue.Parent = Me
 					strStepName = "mRemoveFile"
 					strRet = Me.mRemoveFile(oPigKeyValue)
 					If strRet <> "OK" Then strErr &= strStepName & ":" & strRet
