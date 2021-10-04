@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.3
+'* Version: 1.6
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -23,12 +23,15 @@
 '* 1.1	    29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
 '* 1.2	    2/9/2021  Add IsValueTypeOK,ValueMD5Base64
 '* 1.3	    17/9/2021  Modify ValueMD5Base64, Add Check
+'* 1.4	    2/10/2021  Modify SMNameBody,SMNameHead
+'* 1.5	    3/10/2021  Add CompareOther
+'* 1.6	    4/10/2021  Add LastRefCacheTime,IsForceRefCache,CopyToMe
 '************************************
 
 Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "1.3.1"
+    Private Const CLS_VERSION As String = "1.6.2"
     Private mabKeyValue As Byte()
     ''' <summary>
     ''' 父对象
@@ -45,11 +48,28 @@ Public Class PigKeyValue
     ''' 键值类型
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property ValueType As enmValueType
+    Private mintValueType As enmValueType
+    Public Property ValueType As enmValueType
+        Get
+            Return mintValueType
+        End Get
+        Friend Set(value As enmValueType)
+            mintValueType = value
+        End Set
+    End Property
     ''' <summary>
     '''   过期时间
     ''' </summary>
-    Public ReadOnly Property ExpTime As DateTime
+    Private mdteExpTime As DateTime
+    Public Property ExpTime As DateTime
+        Get
+            Return mdteExpTime
+        End Get
+        Friend Set(value As DateTime)
+            mdteExpTime = value
+        End Set
+    End Property
+    Friend Property LastRefCacheTime As DateTime = Now
 
     ''' <summary>
     ''' 字符串值
@@ -307,13 +327,20 @@ Public Class PigKeyValue
     Private mstrSMNameHead As String = ""
     Friend ReadOnly Property SMNameHead() As String
         Get
-            If mstrSMNameHead.Length = 0 Then
-                Dim strSMName As String = Me.Parent.ShareMemRoot & "." & Me.KeyName & ".Head"
-                Dim oPigMD5 As New PigMD5(strSMName, PigMD5.enmTextType.UTF8)
-                mstrSMNameHead = oPigMD5.PigMD5
-                oPigMD5 = Nothing
-            End If
-            Return mstrSMNameHead
+            Try
+                If mstrSMNameHead.Length = 0 Then
+                    If Me.Parent Is Nothing Then Throw New Exception("Parent Is Nothing")
+                    Dim strSMName As String = Me.Parent.ShareMemRoot & "." & Me.KeyName & ".Head"
+                    Dim oPigMD5 As New PigMD5(strSMName, PigMD5.enmTextType.UTF8)
+                    mstrSMNameHead = oPigMD5.PigMD5
+                    oPigMD5 = Nothing
+                End If
+                Return mstrSMNameHead
+            Catch ex As Exception
+                Me.SetSubErrInf("SMNameHead.Get", ex)
+                mstrSMNameHead = ""
+                Return ""
+            End Try
         End Get
     End Property
 
@@ -323,13 +350,20 @@ Public Class PigKeyValue
     Private mstrSMNameBody As String = ""
     Friend ReadOnly Property SMNameBody() As String
         Get
-            If mstrSMNameBody.Length = 0 Then
-                Dim strSMName As String = Me.Parent.ShareMemRoot & "." & Me.KeyName & ".Body"
-                Dim oPigMD5 As New PigMD5(strSMName, PigMD5.enmTextType.UTF8)
-                mstrSMNameBody = oPigMD5.PigMD5
-                oPigMD5 = Nothing
-            End If
-            Return mstrSMNameBody
+            Try
+                If mstrSMNameBody.Length = 0 Then
+                    If Me.Parent Is Nothing Then Throw New Exception("Parent Is Nothing")
+                    Dim strSMName As String = Me.Parent.ShareMemRoot & "." & Me.KeyName & ".Body"
+                    Dim oPigMD5 As New PigMD5(strSMName, PigMD5.enmTextType.UTF8)
+                    mstrSMNameBody = oPigMD5.PigMD5
+                    oPigMD5 = Nothing
+                End If
+                Return mstrSMNameBody
+            Catch ex As Exception
+                Me.SetSubErrInf("SMNameBody.Get", ex)
+                mstrSMNameBody = ""
+                Return ""
+            End Try
         End Get
     End Property
 
@@ -345,6 +379,60 @@ Public Class PigKeyValue
             Return "OK"
         Catch ex As Exception
             Return ex.Message.ToString
+        End Try
+    End Function
+
+    Friend Function CopyToMe(ByRef SrcItem As PigKeyValue) As String
+        Try
+            If SrcItem Is Nothing Then
+                Throw New Exception("SrcItem Is Nothing")
+            Else
+                With SrcItem
+                    If .KeyName <> Me.KeyName Then Throw New Exception("KeyName mismatch")
+                    If .ValueType <> Me.ValueType Then Me.ValueType = .ValueType
+                    If .ExpTime <> Me.ExpTime Then Me.ExpTime = .ExpTime
+                    Me.mabKeyValue = .BytesValue
+                    Me.mabValueMD5 = .ValueMD5Bytes
+                    Me.LastRefCacheTime = Now
+                End With
+            End If
+            Return "OK"
+        Catch ex As Exception
+            Return Me.GetSubErrInf("CopyToMe", ex)
+        End Try
+    End Function
+
+    Friend Function CompareOther(ByRef OtherItem As PigKeyValue) As Boolean
+        Try
+            If OtherItem Is Nothing Then
+                Return False
+            Else
+                CompareOther = False
+                With OtherItem
+                    If .KeyName <> Me.KeyName Then Exit Function
+                    If .ValueType <> Me.ValueType Then Exit Function
+                    If .ExpTime <> Me.ExpTime Then Exit Function
+                    If .ValueLen <> Me.ValueLen Then Exit Function
+                    If .ValueMD5 <> Me.ValueMD5 Then Exit Function
+                End With
+                Return True
+            End If
+        Catch ex As Exception
+            Me.SetSubErrInf("CompareOther", ex)
+            Return False
+        End Try
+    End Function
+
+    Friend Function IsForceRefCache() As Boolean
+        Try
+            If Math.Abs(DateDiff(DateInterval.Second, Me.LastRefCacheTime, Now)) > Me.Parent.ForceRefCacheTime Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            Me.SetSubErrInf("IsForceRefCache", ex)
+            Return False
         End Try
     End Function
 
