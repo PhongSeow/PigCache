@@ -1,4 +1,15 @@
-﻿Imports System.Data
+﻿'**********************************
+'* Name: ConsoleDemo
+'* Author: Seow Phong
+'* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
+'* Describe: ConsoleDemo for PigKeyCacheLib.SQLServer
+'* Home Url: https://www.seowphong.com or https://en.seowphong.com
+'* Version: 1.1
+'* Create Time: 18/8/2021
+'* 1.1	5/10/2021	Modify RemovePigKeyValue
+'**********************************
+
+Imports System.Data
 Imports PigToolsLiteLib
 #If NETFRAMEWORK Then
 Imports PigKeyCacheLib.SQLServer
@@ -169,7 +180,7 @@ Public Class ConsoleDemo
                     strLine = Console.ReadLine
                     If strLine <> "" Then Me.KeyName = strLine
                     With Me.PigKeyValueApp
-                        Dim strRet As String = .RemovePigKeyValue(Me.KeyName)
+                        Dim strRet As String = .RemovePigKeyValue(Me.KeyName, PigKeyCacheLib.PigKeyValueApp.enmCacheLevel.ToShareMem)
                         If strRet <> "OK" Then
                             Console.WriteLine(strRet)
                         Else
