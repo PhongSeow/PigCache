@@ -4,7 +4,7 @@
     <RootNamespace>PigKeyCacheCoreLib.SQLServer</RootNamespace>
     <TargetFrameworks>net5.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.18</Version>
+    <Version>1.1.18</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Description>PigKeyCacheLib.SQLServer is a very lightweight key value Caching Application support multi server load balancing.
@@ -19,6 +19,7 @@ It can run on Windows and Linux.
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheCoreLib.SQLServer</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Key Value Windows cache multiprocessing multithreading memcached redis share memory Linux SQL Server</PackageTags>
+    <PackageReleaseNotes>Upgrade PigKeyCacheLib.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,8 +30,8 @@ It can run on Windows and Linux.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib" Version="1.3.3" />
-    <PackageReference Include="PigSQLSrvCoreLib" Version="1.4.6" />
+    <PackageReference Include="PigKeyCacheLib" Version="1.5.60" />
+    <PackageReference Include="PigSQLSrvCoreLib" Version="1.5.18" />
   </ItemGroup>
 
 </Project>
