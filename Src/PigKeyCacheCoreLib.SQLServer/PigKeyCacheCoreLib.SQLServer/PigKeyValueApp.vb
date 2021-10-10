@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用 SQL Server 版|Piggy key value application for SQL Server
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.6
+'* Version: 1.7
 '* Create Time: 31/8/2021
 '* 1.1	1/9/2021 Add mCreateTableKeyValueInf,PigBaseMini,OpenDebug,mIsDBObjExists,GetPigKeyValue
 '* 1.2	2/9/2021 Modify mNew,IsPigKeyValueExists,SavePigKeyValue,mCreateTableKeyValueInf, and remove mIsDBObjExists.
@@ -12,6 +12,7 @@
 '* 1.4	16/9/2021 Modify SavePigKeyValue
 '* 1.5	17/9/2021 Modify mCreateTableKeyValueInf,SavePigKeyValue,IsPigKeyValueExists
 '* 1.6	21/9/2021 Modify GetPigKeyValue,OpenDebug,SavePigKeyValue,mNew
+'* 1.7	10/10/2021 Modify New
 '************************************
 
 Imports PigKeyCacheLib
@@ -27,7 +28,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class PigKeyValueApp
     Inherits PigKeyCacheLib.PigKeyValueApp
-    Private Const CLS_VERSION As String = "1.6.7"
+    Private Const CLS_VERSION As String = "1.7.1"
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
 
@@ -88,6 +89,7 @@ Public Class PigKeyValueApp
     End Sub
 
     Public Sub New(ConnSQLSrv As ConnSQLSrv)
+        MyBase.New(ConnSQLSrv.Connection.ConnectionString)
         Me.mNew(ConnSQLSrv)
     End Sub
 
