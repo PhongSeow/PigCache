@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLib.SQLServer</RootNamespace>
     <TargetFrameworks>net20;net30;net40;</TargetFrameworks>
-    <Version>1.2.12</Version>
+    <Version>1.2.18</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Seow Phong</Authors>
@@ -19,7 +19,7 @@
 This is a scenario with the best read performance and horizontal scalability. It shares database connection with applications, which is equivalent to no third-party service support, and the high availability of the database is better than redis.
 It can run on Windows Only.
 </Description>
-    <PackageReleaseNotes>Performance optimization and reference the latest class library.</PackageReleaseNotes>
+    <PackageReleaseNotes>PigKeyValue optimization and reference the latest class library.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,8 +34,8 @@ It can run on Windows Only.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib" Version="1.5.68" />
-    <PackageReference Include="PigSQLSrvLib" Version="1.5.28" />
+    <PackageReference Include="PigKeyCacheLib" Version="1.6.8" />
+    <PackageReference Include="PigSQLSrvLib" Version="1.5.38" />
   </ItemGroup>
 
 </Project>
