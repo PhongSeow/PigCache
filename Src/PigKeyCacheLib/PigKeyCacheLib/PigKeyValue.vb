@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.6
+'* Version: 1.7
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -26,12 +26,13 @@
 '* 1.4	    2/10/2021  Modify SMNameBody,SMNameHead
 '* 1.5	    3/10/2021  Add CompareOther
 '* 1.6	    4/10/2021  Add LastRefCacheTime,IsForceRefCache,CopyToMe
+'* 1.7	    13/11/2021  Modify BytesValue,New
 '************************************
 
 Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "1.6.2"
+    Private Const CLS_VERSION As String = "1.7.3"
     Private mabKeyValue As Byte()
     ''' <summary>
     ''' 父对象
@@ -202,17 +203,27 @@ Public Class PigKeyValue
 
     Public ReadOnly Property BytesValue As Byte()
         Get
+            Dim strStepName As String = ""
             Try
                 Select Case Me.ValueType
                     Case enmValueType.Bytes
                         Return mabKeyValue
+                    Case enmValueType.ZipBytes
+                        strStepName = "New PigBytes(ZipBytes)"
+                        Dim oPigBytes As New PigBytes(mabKeyValue)
+                            If oPigBytes.LastErr <> "" Then Throw New Exception(oPigBytes.LastErr)
+                            strStepName = "UnCompress(ZipBytes)"
+                            oPigBytes.UnCompress()
+                            If oPigBytes.LastErr <> "" Then Throw New Exception(oPigBytes.LastErr)
+                            BytesValue = oPigBytes.Main
+                            oPigBytes = Nothing
                     Case enmValueType.Text
                         Return New PigText(Me.StrValue, PigText.enmTextType.UTF8).TextBytes
                     Case Else
                         Return Nothing
                 End Select
             Catch ex As Exception
-                Me.SetSubErrInf("BytesValue", ex)
+                Me.SetSubErrInf("BytesValue", strStepName, ex)
                 Return Nothing
             End Try
         End Get
