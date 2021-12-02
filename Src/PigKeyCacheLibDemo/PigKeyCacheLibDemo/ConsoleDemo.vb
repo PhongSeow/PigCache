@@ -4,10 +4,13 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: ConsoleDemo for PigKeyCacheLib
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.2.3
+'* Version: 1.5.2
 '* Create Time: 28/8/2021
 '* 1.1	13/11/2021	Add ValueType
 '* 1.2	14/11/2021	Modify SavePigKeyValue,GetPigKeyValue
+'* 1.3	21/11/2021	Modify SavePigKeyValue,GetPigKeyValue
+'* 1.4	1/12/2021	Add TextType,SaveType
+'* 1.5	2/12/2021	Modify TextType,SaveType
 '**********************************
 Imports System.Data
 Imports PigKeyCacheLib
@@ -23,6 +26,9 @@ Public Class ConsoleDemo
     Public ExpTime As DateTime = Now.AddMinutes(10)
     Public PigFunc As New PigFunc
     Public ValueType As PigKeyValue.enmValueType = PigKeyValue.enmValueType.Text
+    Public TextType As PigText.enmTextType = PigText.enmTextType.UTF8
+    Public SaveType As PigKeyValue.enmSaveType = PigKeyValue.enmSaveType.Original
+
     Public Sub Main()
         Dim strLine As String
         Console.WriteLine("*******************")
@@ -76,7 +82,7 @@ Public Class ConsoleDemo
                     Console.WriteLine("Input KeyName:" & Me.KeyName)
                     strLine = Console.ReadLine
                     If strLine <> "" Then Me.KeyName = strLine
-                    Console.WriteLine("Input ValueType(10-Text,20-Bytes,30-ZipBytes,40-EncBytes,50-ZipEncBytes):" & Me.ValueType.ToString)
+                    Console.WriteLine("Input ValueType(10-Text,20-Bytes):" & Me.ValueType.ToString)
                     strLine = Console.ReadLine
                     Select Case strLine
                         Case "10", "20"
@@ -90,36 +96,56 @@ Public Class ConsoleDemo
                             Console.WriteLine("New PigKeyValue")
                             Dim oPigKeyValue As PigKeyValue
                             oPigKeyValue = Nothing
+                            Dim bolIsAdd As Boolean = False
                             Select Case Me.ValueType
                                 Case PigKeyValue.enmValueType.Text
-                                    oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, Me.KeyValue)
-                                Case Else
-                                    Dim oPigText As New PigText(Me.KeyValue, PigText.enmTextType.UTF8)
-                                    Select Case Me.ValueType
-                                        Case PigKeyValue.enmValueType.Bytes
-                                            oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, oPigText.TextBytes, Me.ValueType)
-                                        Case PigKeyValue.enmValueType.ZipBytes
-                                            oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, oPigText.CompressTextBytes, Me.ValueType)
+                                    Console.WriteLine("Input TextType(1-Unicode,2-UTF8,3-Ascii):" & Me.TextType.ToString)
+                                    strLine = Console.ReadLine
+                                    Select Case strLine
+                                        Case "1", "2", "3"
+                                            Me.TextType = CInt(strLine)
+                                            oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, Me.KeyValue, Me.TextType)
+                                            If oPigKeyValue.LastErr <> "" Then
+                                                Console.WriteLine(oPigKeyValue.LastErr)
+                                            Else
+                                                Console.WriteLine("OK")
+                                                bolIsAdd = True
+                                            End If
                                         Case Else
-                                            Console.WriteLine("Not yet supported ValueType" & Me.ValueType.ToString)
+                                            Console.WriteLine("Invalid TextType")
                                     End Select
+                                    oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, Me.KeyValue, Me.TextType)
+                                Case PigKeyValue.enmValueType.Bytes
+                                    Console.WriteLine("Input SaveType(0-Original,10-SaveSpace,20-EncSaveSpace):" & Me.SaveType.ToString)
+                                    strLine = Console.ReadLine
+                                    Select Case strLine
+                                        Case "0", "10", "20"
+                                            Me.SaveType = CInt(strLine)
+                                            Dim oPigText As New PigText(Me.KeyValue, PigText.enmTextType.UTF8)
+                                            oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, oPigText.TextBytes, Me.SaveType)
+                                            If oPigKeyValue.LastErr <> "" Then
+                                                Console.WriteLine(oPigKeyValue.LastErr)
+                                            Else
+                                                Console.WriteLine("OK")
+                                                bolIsAdd = True
+                                            End If
+                                        Case Else
+                                            Console.WriteLine("Invalid SaveType")
+                                    End Select
+                                Case Else
+                                    Console.WriteLine("Invalid SaveType")
                             End Select
-                            If oPigKeyValue.LastErr <> "" Then
-                                Console.WriteLine(oPigKeyValue.LastErr)
-                            Else
-                                Console.WriteLine("OK")
+                            If bolIsAdd = True Then
+                                With Me.PigKeyValueApp
+                                    Console.WriteLine("SavePigKeyValue")
+                                    .SavePigKeyValue(oPigKeyValue)
+                                    If .LastErr <> "" Then
+                                        Console.WriteLine(.LastErr)
+                                    Else
+                                        Console.WriteLine("OK")
+                                    End If
+                                End With
                             End If
-                            With Me.PigKeyValueApp
-                                Console.WriteLine("SavePigKeyValue")
-                                .SavePigKeyValue(oPigKeyValue)
-                                If .LastErr <> "" Then
-                                    Console.WriteLine(.LastErr)
-                                Else
-                                    Console.WriteLine("OK")
-                                End If
-                            End With
-                        Case "30", "40", "50"
-                            Console.WriteLine("Not yet supported ValueType" & Me.ValueType.ToString)
                         Case Else
                             Console.WriteLine("Invalid ValueType")
                     End Select
@@ -144,14 +170,19 @@ Public Class ConsoleDemo
                                     Console.WriteLine("IsExpired=" & .IsExpired)
                                     Console.WriteLine("ExpTime=" & .ExpTime)
                                     Console.WriteLine("ValueType=" & .ValueType.ToString)
+                                    If .ValueType = PigKeyValue.enmValueType.Bytes Then
+                                        Console.WriteLine("SaveType=" & .SaveType.ToString)
+                                    Else
+                                        Console.WriteLine("TextType=" & .TextType.ToString)
+                                    End If
                                     Console.WriteLine("ValueLen=" & .ValueLen)
                                     Select Case Me.ValueType
                                         Case PigKeyValue.enmValueType.Text
                                             Console.WriteLine("StrValue=" & .StrValue)
-                                        Case PigKeyValue.enmValueType.Bytes, PigKeyValue.enmValueType.ZipBytes
+                                        Case PigKeyValue.enmValueType.Bytes
                                             Console.WriteLine("StrValue(Base64)=" & .StrValue)
                                             Dim oPigText As New PigText(.BytesValue, PigText.enmTextType.UTF8)
-                                            Console.WriteLine("Bytes2Text=" & oPigText.Text)
+                                            Console.WriteLine("BytesValue(Text)=" & oPigText.Text)
                                     End Select
                                 End With
                             End If
