@@ -12,13 +12,13 @@
     <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLibDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Version>2.0.2</Version>
+    <Version>2.1.2</Version>
     <PackageTags>Key Value Windows cache Single process Multithreading</PackageTags>
-    <PackageReleaseNotes>Reference the latest class library, Some properties are incompatible with version 1.x .</PackageReleaseNotes>
+    <PackageReleaseNotes>Add a simplified SavePigKeyValue interface.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib" Version="2.0.32" />
+    <PackageReference Include="PigKeyCacheLib" Version="2.1.6" />
   </ItemGroup>
 
   <ItemGroup>

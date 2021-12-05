@@ -4,13 +4,14 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: ConsoleDemo for PigKeyCacheLib
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.5.2
+'* Version: 1.6.1
 '* Create Time: 28/8/2021
 '* 1.1	13/11/2021	Add ValueType
 '* 1.2	14/11/2021	Modify SavePigKeyValue,GetPigKeyValue
 '* 1.3	21/11/2021	Modify SavePigKeyValue,GetPigKeyValue
 '* 1.4	1/12/2021	Add TextType,SaveType
 '* 1.5	2/12/2021	Modify TextType,SaveType
+'* 1.6	5/12/2021	Modify TextType,SaveType
 '**********************************
 Imports System.Data
 Imports PigKeyCacheLib
@@ -24,6 +25,7 @@ Public Class ConsoleDemo
     Public KeyName As String = "Key1"
     Public KeyValue As String = "Value1"
     Public ExpTime As DateTime = Now.AddMinutes(10)
+    Public ExpTimeSec As Integer = 60
     Public PigFunc As New PigFunc
     Public ValueType As PigKeyValue.enmValueType = PigKeyValue.enmValueType.Text
     Public TextType As PigText.enmTextType = PigText.enmTextType.UTF8
@@ -71,6 +73,8 @@ Public Class ConsoleDemo
             Console.WriteLine("Press D to RemoveExpItems")
             Console.WriteLine("Press E to RemovePigKeyValue")
             Console.WriteLine("Press F to GetStatisticsXml")
+            Console.WriteLine("Press G to SavePigKeyValue(Simplified interface Text)")
+            Console.WriteLine("Press H to SavePigKeyValue(Simplified interface Bytes)")
             Console.WriteLine("*******************")
             Select Case Console.ReadKey().Key
                 Case ConsoleKey.Q
@@ -236,6 +240,51 @@ Public Class ConsoleDemo
                     Console.WriteLine("GetStatisticsXml")
                     Console.WriteLine("*******************")
                     Console.WriteLine(Me.PigKeyValueApp.GetStatisticsXml)
+                Case ConsoleKey.G
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("SavePigKeyValue(Simplified interface Text)")
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("Input KeyName:" & Me.KeyName)
+                    strLine = Console.ReadLine
+                    If strLine <> "" Then Me.KeyName = strLine
+                    Console.WriteLine("Input KeyValue:" & Me.KeyValue)
+                    strLine = Console.ReadLine
+                    If strLine <> "" Then Me.KeyValue = strLine
+                    Console.WriteLine("Input ExpTimeSec:" & Me.ExpTimeSec)
+                    strLine = Console.ReadLine
+                    If strLine <> "" Then Me.ExpTimeSec = 60
+                    With Me.PigKeyValueApp
+                        Console.WriteLine("SavePigKeyValue")
+                        .SavePigKeyValue(Me.KeyName, Me.KeyValue, Me.ExpTimeSec)
+                        If .LastErr <> "" Then
+                            Console.WriteLine(.LastErr)
+                        Else
+                            Console.WriteLine("OK")
+                        End If
+                    End With
+                Case ConsoleKey.H
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("SavePigKeyValue(Simplified interface Bytes)")
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("Input KeyName:" & Me.KeyName)
+                    strLine = Console.ReadLine
+                    If strLine <> "" Then Me.KeyName = strLine
+                    Console.WriteLine("Input KeyValue:" & Me.KeyValue)
+                    strLine = Console.ReadLine
+                    If strLine <> "" Then Me.KeyValue = strLine
+                    Console.WriteLine("Input ExpTimeSec:" & Me.ExpTimeSec)
+                    strLine = Console.ReadLine
+                    If strLine <> "" Then Me.ExpTimeSec = 60
+                    With Me.PigKeyValueApp
+                        Dim oPigText As New PigText(Me.KeyValue, PigText.enmTextType.UTF8)
+                        Console.WriteLine("SavePigKeyValue")
+                        .SavePigKeyValue(Me.KeyName, oPigText.TextBytes, Me.ExpTimeSec)
+                        If .LastErr <> "" Then
+                            Console.WriteLine(.LastErr)
+                        Else
+                            Console.WriteLine("OK")
+                        End If
+                    End With
             End Select
         Loop
     End Sub
