@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 2.3
+'* Version: 2.5
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -28,19 +28,20 @@
 '* 1.6	    4/10/2021  Add LastRefCacheTime,IsForceRefCache,CopyToMe
 '* 1.7	    13/11/2021  Modify BytesValue,New
 '* 1.8	    20/11/2021  Add OriginalBytesValue, modify BytesValue
-'* 1.9	    21/11/2021  Modify New, add fSaveValueLen,fSaveBytesValue,fInitBytesBySave,IsDataReady, Rename fCompareOther,fCopyToMe,fIsForceRefCache,fSMNameBody,fSMNameHead
-'* 1.10	    24/11/2021  Modify fSaveValueLen,fInitBytesBySave
+'* 1.9	    21/11/2021  Modify New, add fSaveValueLen,fSaveBytesValue,InitBytesBySave,IsDataReady, Rename fCompareOther,fCopyToMe,fIsForceRefCache,fSMNameBody,fSMNameHead
+'* 1.10	    24/11/2021  Modify fSaveValueLen,InitBytesBySave
 '* 1.11	    25/11/2021  Modify StrValue,Check
 '* 2.0	    27/11/2021  Add enmSaveType,TextType，IsValueTypeOK,IsTextTypeOK,mNew, and modify enmValueType,New
 '* 2.1	    28/11/2021  Remove fSMNameHead,fSMNameBody
-'* 2.2	    30/11/2021  Add fGetSaveData, modify ValueLen,StrValue,mInitSMNameHeadBody
-'* 2.3	    2/12/2021  Add mNew for Byte, modify fGetSaveData,ValueLen,fCopyToMe
+'* 2.2	    30/11/2021  Add GetSaveData, modify ValueLen,StrValue,mInitSMNameHeadBody
+'* 2.3	    2/12/2021  Add mNew for Byte, modify GetSaveData,ValueLen,fCopyToMe
+'* 2.5	    5/12/2021  fInitBytesBySave rename to InitBytesBySave,fGetSaveData rename to GetSaveData
 '************************************
 
 Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "2.3.10"
+    Private Const CLS_VERSION As String = "2.5.3"
     Private mabKeyValue As Byte()
     ''' <summary>
     ''' 父对象
@@ -105,7 +106,7 @@ Public Class PigKeyValue
     End Property
 
     ''' <summary>
-    '''   过期时间
+    '''   过期时间|Expiration time
     ''' </summary>
     Private mdteExpTime As DateTime
     Public Property ExpTime As DateTime
@@ -345,7 +346,7 @@ Public Class PigKeyValue
 
     Private mabSaveValue As Byte()
 
-    Friend Function fGetSaveData(ByRef SaveBytes As Byte(), ByRef SavePigMD5 As Byte()) As String
+    Public Function GetSaveData(ByRef SaveBytes As Byte(), ByRef SavePigMD5 As Byte()) As String
         Dim strStepName As String = ""
         Dim strRet As String = ""
         Try
@@ -382,7 +383,7 @@ Public Class PigKeyValue
             oPigMD5 = Nothing
             Return "OK"
         Catch ex As Exception
-            strRet = Me.GetSubErrInf("fGetSaveData", strStepName, ex)
+            strRet = Me.GetSubErrInf("GetSaveData", strStepName, ex)
             Return strRet
         End Try
     End Function
@@ -457,12 +458,11 @@ Public Class PigKeyValue
     ''' Initialize the class with the saved data
     ''' </summary>
     ''' <returns></returns>
-    Friend Function fInitBytesBySave(KeyName As String, SuSMHead As PigKeyValueApp.StruSMHead, ByRef KeyValue As Byte()) As String
+    Public Function InitBytesBySave(SuSMHead As PigKeyValueApp.StruSMHead, ByRef KeyValue As Byte()) As String
         Dim strStepName As String = ""
         Dim strRet As String = ""
         Try
             With Me
-                .KeyName = KeyName
                 .ExpTime = SuSMHead.ExpTime
                 .ValueType = SuSMHead.ValueType
                 .TextType = SuSMHead.TextType
@@ -503,7 +503,7 @@ Public Class PigKeyValue
             End With
             Return "OK"
         Catch ex As Exception
-            Return Me.GetSubErrInf("fInitBytesBySave", strStepName, ex)
+            Return Me.GetSubErrInf("InitBytesBySave", strStepName, ex)
         End Try
     End Function
 

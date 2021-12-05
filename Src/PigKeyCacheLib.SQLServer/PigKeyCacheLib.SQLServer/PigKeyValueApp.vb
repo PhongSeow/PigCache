@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用 SQL Server 版|Piggy key value application for SQL Server
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.7
+'* Version: 1.8
 '* Create Time: 31/8/2021
 '* 1.1	1/9/2021 Add mCreateTableKeyValueInf,PigBaseMini,OpenDebug,mIsDBObjExists,GetPigKeyValue
 '* 1.2	2/9/2021 Modify mNew,IsPigKeyValueExists,SavePigKeyValue,mCreateTableKeyValueInf, and remove mIsDBObjExists.
@@ -13,6 +13,7 @@
 '* 1.5	17/9/2021 Modify mCreateTableKeyValueInf,SavePigKeyValue,IsPigKeyValueExists
 '* 1.6	21/9/2021 Modify GetPigKeyValue,OpenDebug,SavePigKeyValue,mNew
 '* 1.7	10/10/2021 Modify New
+'* 1.8	4/12/2021 Modify GetPigKeyValue,mCreateTableKeyValueInf,GetPigKeyValue
 '************************************
 
 Imports PigKeyCacheLib
@@ -28,7 +29,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class PigKeyValueApp
     Inherits PigKeyCacheLib.PigKeyValueApp
-    Private Const CLS_VERSION As String = "1.7.1"
+    Private Const CLS_VERSION As String = "1.8.3"
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
 
@@ -93,6 +94,8 @@ Public Class PigKeyValueApp
         Me.mNew(ConnSQLSrv)
     End Sub
 
+
+
     Private Sub mNew(ConnSQLSrv As ConnSQLSrv)
         Dim strStepName As String = ""
         Dim strRet As String = ""
@@ -123,7 +126,7 @@ Public Class PigKeyValueApp
             strStepName = "MyBase.GetPigKeyValue"
             Dim oPigKeyValue As PigKeyCacheLib.PigKeyValue = MyBase.GetPigKeyValue(KeyName)
             If oPigKeyValue Is Nothing Then
-                Dim strSQL As String = "SELECT TOP 1 ValueType,ExpTime,KeyValue,ValueMD5 FROM dbo._ptKeyValueInf WITH(NOLOCK) WHERE KeyName=@KeyName AND ExpTime>GETDATE()"
+                Dim strSQL As String = "SELECT TOP 1 ValueType,ExpTime,KeyValue,ValueMD5,SaveType,TextType FROM dbo._ptKeyValueInf WITH(NOLOCK) WHERE KeyName=@KeyName AND ExpTime>GETDATE()"
                 strStepName = "New CmdSQLSrvText"
                 Dim oCmdSQLSrvText As New CmdSQLSrvText(strSQL)
                 With oCmdSQLSrvText
@@ -138,22 +141,28 @@ Public Class PigKeyValueApp
                     End If
                     If rsAny.EOF = False Then
                         strStepName = "Check ValueType"
-                        Dim intValueType As PigKeyCacheLib.PigKeyValue.enmValueType
-                        intValueType = rsAny.Fields.Item("ValueType").IntValue
+                        Dim intValueType As PigKeyCacheLib.PigKeyValue.enmValueType = rsAny.Fields.Item("ValueType").IntValue
+                        Dim intSaveType As PigKeyCacheLib.PigKeyValue.enmSaveType = rsAny.Fields.Item("SaveType").IntValue
+                        Dim intTextType As PigText.enmTextType = rsAny.Fields.Item("TextType").IntValue
                         Dim abValue(0) As Byte
-                        Select Case intValueType
-                            Case PigKeyCacheLib.PigKeyValue.enmValueType.Text
-                                Dim oPigText As New PigText(rsAny.Fields.Item("KeyValue").StrValue, PigText.enmTextType.UTF8)
-                                ReDim abValue(oPigText.TextBytes.Length - 1)
-                                abValue = oPigText.TextBytes
-                                oPigText = Nothing
-                            Case PigKeyCacheLib.PigKeyValue.enmValueType.Bytes, PigKeyCacheLib.PigKeyValue.enmValueType.EncBytes, PigKeyCacheLib.PigKeyValue.enmValueType.ZipBytes, PigKeyCacheLib.PigKeyValue.enmValueType.ZipEncBytes
-                                strStepName &= "(" & KeyName & ")"
-                                Throw New Exception("Not support ValueType " & intValueType.ToString & " now.")
+                        Select Case intSaveType
+                            Case PigKeyCacheLib.PigKeyValue.enmSaveType.Original
                             Case Else
-                                strStepName &= "(" & KeyName & ")"
-                                Throw New Exception("Invalid ValueType " & intValueType.ToString)
+                                Throw New Exception(intSaveType.ToString & " is not supported yet")
                         End Select
+                        'Select Case intValueType
+                        '    Case PigKeyCacheLib.PigKeyValue.enmValueType.Text
+                        '        Dim oPigText As New PigText(rsAny.Fields.Item("KeyValue").StrValue, PigText.enmTextType.UTF8)
+                        '        ReDim abValue(oPigText.TextBytes.Length - 1)
+                        '        abValue = oPigText.TextBytes
+                        '        oPigText = Nothing
+                        '    Case PigKeyCacheLib.PigKeyValue.enmValueType.Bytes
+                        '        strStepName &= "(" & KeyName & ")"
+                        '        Throw New Exception("Not support ValueType " & intValueType.ToString & " now.")
+                        '    Case Else
+                        '        strStepName &= "(" & KeyName & ")"
+                        '        Throw New Exception("Invalid ValueType " & intValueType.ToString)
+                        'End Select
                         strStepName = "New PigBytes ValueMD5"
                         Dim pbMD5 As New PigBytes(rsAny.Fields.Item("ValueMD5").StrValue)
                         If pbMD5.LastErr <> "" Then Throw New Exception(pbMD5.LastErr)
@@ -299,6 +308,8 @@ Public Class PigKeyValueApp
             moPigFunc.AddMultiLineText(strSQL, "ExpTime datetime NOT NULL,", 1)
             moPigFunc.AddMultiLineText(strSQL, "KeyValue varchar(max)NOT NULL DEFAULT (''),", 1)
             moPigFunc.AddMultiLineText(strSQL, "ValueMD5 varchar(64)NOT NULL DEFAULT (''),", 1)
+            moPigFunc.AddMultiLineText(strSQL, "SaveType int NOT NULL DEFAULT((0)),", 1)
+            moPigFunc.AddMultiLineText(strSQL, "TextType int NOT NULL DEFAULT((0)),", 1)
             moPigFunc.AddMultiLineText(strSQL, "CONSTRAINT PK_ptKeyValueInf PRIMARY KEY CLUSTERED(KeyName)", 1)
             moPigFunc.AddMultiLineText(strSQL, ")")
             moPigFunc.AddMultiLineText(strSQL, "CREATE INDEX UI_ptKeyValueInf_ExpTime ON dbo._ptKeyValueInf(ExpTime)")
@@ -318,5 +329,6 @@ Public Class PigKeyValueApp
             Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
         End Try
     End Function
+
 
 End Class
