@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用|Piggy key value application
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 2.5
+'* Version: 3.3
 '* Create Time: 8/5/2021
 '* 1.0.2	13/5/2021 Modify New
 '* 1.0.3	22/7/2021 Modify GetPigKeyValue
@@ -12,10 +12,10 @@
 '* 1.0.5	4/8/2021 Remove PigSQLSrvLib
 '* 1.0.6	5/8/2021 Modify GetPigKeyValue,SavePigKeyValue
 '* 1.0.7	7/8/2021 Modify New and add IsUseMemCache
-'* 1.0.8	11/8/2021 Add mSavePigKeyValueToShareMem,mGetBytesSMBody
-'* 1.0.9	13/8/2021 Modify mGetBytesSMBody
+'* 1.0.8	11/8/2021 Add mSavePigKeyValueToShareMem,mSetBodyBytesByShareMem
+'* 1.0.9	13/8/2021 Modify mSetBodyBytesByShareMem
 '* 1.0.10	13/8/2021 Modify mSaveSMHead,IsUseMemCache
-'* 1.0.11	16/8/2021 Modify mSavePigKeyValueToShareMem,mSavePigKeyValueToShareMem,ShareMemRoot,GetPigKeyValue,mGetStruSMHead,mGetBytesSMBody, and add mSaveSMBody
+'* 1.0.11	16/8/2021 Modify mSavePigKeyValueToShareMem,mSavePigKeyValueToShareMem,ShareMemRoot,GetPigKeyValue,mSetHeadBytesByShareMem,mSetBodyBytesByShareMem, and add mSaveSMBody
 '* 1.0.12	17/8/2021 Add PrintDebugLog,IsPigKeyValueExists,RemovePigKeyValue and modify GetPigKeyValue,SavePigKeyValue
 '* 1.0.13	19/8/2021 Modify RemoveExpItems, and add GetStatisticsXml
 '* 1.0.14	22/8/2021 Add CacheLevel,ForceRefCacheTime， and modify New,mNew,SavePigKeyValue,GetPigKeyValue,RemovePigKeyValue
@@ -26,18 +26,25 @@
 '* 1.0.19	27/8/2021 Modify mGetPigKeyValueByShareMem
 '* 1.1		29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
 '* 1.2		31/8/2021 Modify ForceRefCacheTime
-'* 1.3		25/9/2021 Add mSavePigKeyValueToFile,mGetStruFileHead,mSaveFileHead,mSaveFileBody
+'* 1.3		25/9/2021 Add mSavePigKeyValueToFile,mGetStruFileHead,mSaveHeadToFile,mSaveFileBody
 '* 1.4		26/9/2021 Modify mSavePigKeyValueToFile,SavePigKeyValue,GetPigKeyValue, and add mGetPigKeyValueByFile
 '* 1.5		2/10/2021 Modify New,mNew,GetPigKeyValue
 '* 1.6		3/10/2021 Add StruKeyValueCtrl,mRemoveFile,mGetPigKeyValueByList,mGetPigKeyValueByShareMem, and modify GetPigKeyValue,StruStatistics,GetStatisticsXml
 '* 1.7		4/10/2021 Modify GetPigKeyValue,SavePigKeyValue,mAddPigKeyValueToList,mRemoveFile,RemovePigKeyValue, and add mGetPigKeyValueByFile
 '* 1.8		21/10/2021 Modify mIsCacheFileExists,SavePigKeyValue,mIsCacheFileExists,GetPigKeyValue,mSavePigKeyValueToShareMem
-'* 1.9		24/10/2021 Modify SavePigKeyValue,fSaveValueLen,mGetPigKeyValueByFile,mGetPigKeyValueFromFile,StruSMHead
+'* 1.9		24/10/2021 Modify SavePigKeyValue,fSaveValueLen,mGetPigKeyValueByFile,mGetPigKeyValueFromFile,StruValueHead
 '* 2.0		28/10/2021 Add fGetSMNameHeadAndBody,mIsCacheFileExists
-'* 2.1		30/11/2021 Modify mGetStruSMHead,mGetPigKeyValueFromFile, remove mGetStruFileHead
-'* 2.2		1/12/2021 Modify mSaveSMHead,mGetPigKeyValueFromFile,mSaveFileHead,mGetStruSMHead,mGetPigKeyValueFromShareMem, remove mGetSMNamePart
-'* 2.3		2/12/2021 Imports System.IO, Add mChkSaveBodyBytes, Modify mSavePigKeyValueToFile,mGetStruSMHead
+'* 2.1		30/11/2021 Modify mSetHeadBytesByShareMem,mGetPigKeyValueFromFile, remove mGetStruFileHead
+'* 2.2		1/12/2021 Modify mSaveSMHead,mGetPigKeyValueFromFile,mSaveHeadToFile,mSetHeadBytesByShareMem,mGetPigKeyValueFromShareMem, remove mGetSMNamePart
+'* 2.3		2/12/2021 Imports System.IO, Add mChkSaveBodyBytes, Modify mSavePigKeyValueToFile,mSetHeadBytesByShareMem
 '* 2.5		5/12/2021 Add new SavePigKeyValue,DefaultSaveType,DefaultTextType
+'* 2.6		7/12/2021 Modify GetPigKeyValue,mIsCacheFileExists
+'* 2.7		8/12/2021 Modify EnmCacheLevel,StruValueHead, add mSetHeadBytesByFile,StruValueHead2PigBytes,mIsCacheFileExists
+'* 2.8		9/12/2021 Add PigKeyValue2StruValueHead, remove StruValueHead
+'* 3.0		10/12/2021 A large number of code rewrites, the interface is upgraded to 3.0, and the interface is no longer compatible with versions below 3.0
+'* 3.1		10/12/2021 Add GetKeyTitle,mGetPigKeyValueByFile,LoadBytesFromFile, modify mRemoveFile,RemovePigKeyValue,mGetPigKeyValueByShareMem,mSavePigKeyValueToShareMem
+'* 3.2		12/12/2021 Modify mSavePigKeyValue,SaveBytesToShareMem,SavePigKeyValue,mClearShareMem,mGetPigKeyValueFromShareMem
+'* 3.3		14/12/2021 Modify mGetPigKeyValueFromFile,mSavePigKeyValueToFile
 '************************************
 
 Imports PigToolsLiteLib
@@ -45,38 +52,38 @@ Imports System.IO
 
 Public Class PigKeyValueApp
 	Inherits PigBaseMini
-	Private Const CLS_VERSION As String = "2.5.6"
-	Private moPigFunc As New PigFunc
+	Private Const CLS_VERSION As String = "3.3.6"
+	Private Const SM_HEAD_LEN As Integer = 40
+	Private ReadOnly moPigFunc As New PigFunc
 
 	''' <summary>
 	''' Value type, non text type, saved in byte array
 	''' </summary>
-	Public Enum enmCacheLevel
+	Public Enum EnmCacheLevel
 		Unknow = 0
 		''' <summary>
 		''' Program for single process multithreading
 		''' </summary>
-		ToList = 10
+		ToList = 1
 		''' <summary>
 		''' It is applicable to multi-process and multi-threaded programs under the same user session or IIS application pools.
 		''' </summary>
-		ToShareMem = 20
+		ToShareMem = 2
 		''' <summary>
 		''' It is suitable for any multi process and multi thread program on the same host.
 		''' </summary>
-		ToFile = 30
-		'''' <summary>
-		'''' It is suitable for multi server, multi process and multi-threaded programs, and has the highest requirements for the availability of cached content, but the writing performance is poor, but the advantage is that it can share the database with the application to reduce the point of failure.
-		'''' </summary>
-		'ToDB = 40
-		'''' <summary>
-		'''' It is suitable for multi server, multi process and multi thread programs. The read and write performance is very good, but redis needs to be installed, which needs to increase the cost of managing the high availability of redis.
-		'''' </summary>
-		'ToRedis = 50
+		ToFile = 3
+		''''' <summary>
+		''''' It is suitable for multi server, multi process and multi-threaded programs, and has the highest requirements for the availability of cached content, but the writing performance is poor, but the advantage is that it can share the database with the application to reduce the point of failure.
+		''''' </summary>
+		'ToDB = 4
+		''''' <summary>
+		''''' It is suitable for multi server, multi process and multi thread programs. The read and write performance is very good, but redis needs to be installed, which needs to increase the cost of managing the high availability of redis.
+		''''' </summary>
+		'ToRedis = 5
 	End Enum
 
 	Public ReadOnly Property PigKeyValues As New PigKeyValues
-	'Public Property IsUseMemCache As Boolean = False
 	Friend Property ShareMemRoot As String = ""
 
 	Private msuStatistics As StruStatistics
@@ -109,18 +116,6 @@ Public Class PigKeyValueApp
 		Dim RemoveExpiredRedisCount As Long
 	End Structure
 
-	''' <summary>
-	''' 共享内存头结构
-	''' </summary>
-	Public Structure StruSMHead
-		Dim ValueType As PigKeyValue.enmValueType
-		Dim ExpTime As DateTime
-		Dim ValueLen As Long
-		Dim SaveValueMD5 As Byte()
-		Dim TextType As PigText.enmTextType
-		Dim SaveType As PigKeyValue.enmSaveType
-		Dim SaveValueLen As Long
-	End Structure
 
 	''' <summary>
 	''' 键值控制结构
@@ -141,21 +136,21 @@ Public Class PigKeyValueApp
 
 	Public Sub New()
 		MyBase.New(CLS_VERSION)
-		mNew("", enmCacheLevel.ToList)
+		mNew("", EnmCacheLevel.ToList)
 	End Sub
 
-	Private Sub mNew(Optional ShareMemRootOrCacheWorkDir As String = "", Optional CacheLevel As enmCacheLevel = enmCacheLevel.ToShareMem, Optional ForceRefCacheTime As Integer = 60)
+	Private Sub mNew(Optional ShareMemRootOrCacheWorkDir As String = "", Optional CacheLevel As EnmCacheLevel = EnmCacheLevel.ToShareMem, Optional ForceRefCacheTime As Integer = 60)
 		Try
 			Me.CacheLevel = CacheLevel
 			Select Case Me.CacheLevel
-				Case enmCacheLevel.ToList
+				Case EnmCacheLevel.ToList
 					Me.ShareMemRoot = ""
 					Me.CacheWorkDir = ""
-				Case enmCacheLevel.ToShareMem
+				Case EnmCacheLevel.ToShareMem
 					If ShareMemRootOrCacheWorkDir = "" Then ShareMemRootOrCacheWorkDir = Me.AppTitle
 					Me.ShareMemRoot = ShareMemRootOrCacheWorkDir
 					Me.CacheWorkDir = ""
-				Case enmCacheLevel.ToFile
+				Case EnmCacheLevel.ToFile
 					If ShareMemRootOrCacheWorkDir = "" Then ShareMemRootOrCacheWorkDir = Me.AppPath
 					Me.ShareMemRoot = ShareMemRootOrCacheWorkDir
 					Me.CacheWorkDir = ShareMemRootOrCacheWorkDir
@@ -175,7 +170,7 @@ Public Class PigKeyValueApp
 			Me.ClearErr()
 		Catch ex As Exception
 			Me.SetSubErrInf("mNew", ex)
-			Me.CacheLevel = enmCacheLevel.Unknow
+			Me.CacheLevel = EnmCacheLevel.Unknow
 		End Try
 	End Sub
 	Public Sub New(ShareMemRoot As String)
@@ -183,316 +178,242 @@ Public Class PigKeyValueApp
 		Me.mNew(ShareMemRoot)
 	End Sub
 
-	Public Sub New(ShareMemRootOrCacheWorkDir As String, CacheLevel As enmCacheLevel)
+	Public Sub New(ShareMemRootOrCacheWorkDir As String, CacheLevel As EnmCacheLevel)
 		MyBase.New(CLS_VERSION)
 		Me.mNew(ShareMemRootOrCacheWorkDir, CacheLevel)
 	End Sub
 
 
 	Private Function mIsCacheFileExists(KeyName As String) As Boolean
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("mIsCacheFileExists")
 		Try
-			Dim oPigKeyValue As New PigKeyValue(KeyName)
-			If oPigKeyValue.LastErr <> "" Then Throw New Exception(oPigKeyValue.LastErr)
-			Dim strSMNameHeadPath As String = Me.CacheWorkDir & Me.OsPathSep & oPigKeyValue.fSMNameHead
-			If IO.File.Exists(strSMNameHeadPath) = False Then
-				strStepName = "Check " & strSMNameHeadPath
-				Throw New Exception("Non-existent")
+			Dim strHeadTitle As String = "", strBodyTitle As String = ""
+			LOG.StepName = "GetKeyTitle"
+			LOG.Ret = Me.GetKeyTitle(KeyName, strHeadTitle, strBodyTitle)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName)
+				Throw New Exception(LOG.Ret)
 			End If
-			Dim SuSMHead As StruSMHead
-			ReDim SuSMHead.SaveValueMD5(0)
-			strStepName = "mGetStruSMHead"
-			strRet = Me.mGetStruSMHead(SuSMHead, oPigKeyValue.fSMNameHead, Me.CacheWorkDir)
-			If strRet <> "OK" Then Throw New Exception(strRet)
-			Dim strSMNameBodyPath As String = Me.CacheWorkDir & Me.OsPathSep & oPigKeyValue.fSMNameBody
-			Dim lngFileSize As Long
-			strStepName = "mGetFileLen"
-			strRet = Me.mGetFileLen(strSMNameBodyPath, lngFileSize)
-			If strRet <> "OK" Then
-				strStepName &= "(" & strSMNameBodyPath & ")"
-				Throw New Exception(strRet)
+			Dim strFilePath As String
+			LOG.StepName = "Check File"
+			strFilePath = Me.CacheWorkDir & Me.OsPathSep & strHeadTitle
+			If IO.File.Exists(strFilePath) = False Then
+				LOG.AddStepNameInf(strFilePath)
+				Throw New Exception("File not found")
 			End If
-			If SuSMHead.SaveValueLen <> lngFileSize Then
-				strStepName &= "(" & strSMNameBodyPath & ")"
-				Throw New Exception("Length mismatch")
+			strFilePath = Me.CacheWorkDir & Me.OsPathSep & strBodyTitle
+			If IO.File.Exists(strFilePath) = False Then
+				LOG.AddStepNameInf(strFilePath)
+				Throw New Exception("File not found")
 			End If
 			Return "OK"
 		Catch ex As Exception
-			strRet = Me.GetSubErrInf("mIsCacheFileExists", strStepName, ex)
-			Me.PrintDebugLog("As Exception", strRet)
+			Me.PrintDebugLog(LOG.SubName, LOG.StepName, ex.Message.ToString)
+			Return False
+		End Try
+	End Function
+
+	Private Function mIsHeadBytesInit(ByRef AbHead As Byte()) As Boolean
+		Try
+			If AbHead.Length <> SM_HEAD_LEN Then
+				Return False
+			Else
+				mIsHeadBytesInit = False
+				For Each bytAny In AbHead
+					If bytAny <> 0 Then
+						mIsHeadBytesInit = True
+						Exit For
+					End If
+				Next
+			End If
+		Catch ex As Exception
+			Me.PrintDebugLog("mIsHeadBytesInit", ex.Message.ToString)
 			Return False
 		End Try
 	End Function
 
 	Private Function mGetPigKeyValueFromShareMem(KeyName As String, ByRef OutPigKeyValue As PigKeyValue) As String
-		Const SUB_NAME As String = "mGetPigKeyValueFromShareMem"
-		Dim strStepName As String = ""
-		Dim strRet As String
+		Dim LOG As New PigStepLog("mGetPigKeyValueFromShareMem")
 		Try
-
-			If OutPigKeyValue Is Nothing Then
-				strStepName = "New PigKeyValue"
-				OutPigKeyValue = New PigKeyValue(KeyName)
-				If OutPigKeyValue.LastErr <> "" Then
-					strStepName &= "(" & KeyName & ")"
-					Throw New Exception(OutPigKeyValue.LastErr)
+			If OutPigKeyValue IsNot Nothing Then OutPigKeyValue = Nothing
+			LOG.StepName = "New PigKeyValue"
+			OutPigKeyValue = New PigKeyValue(KeyName)
+			If OutPigKeyValue.LastErr <> "" Then
+				LOG.AddStepNameInf(KeyName)
+				Throw New Exception(OutPigKeyValue.LastErr)
+			End If
+			'--------
+			Dim strHeadTitle As String = "", strBodyTitle As String = ""
+			LOG.StepName = "GetKeyTitle"
+			LOG.Ret = Me.GetKeyTitle(KeyName, strHeadTitle, strBodyTitle)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName)
+				Throw New Exception(LOG.Ret)
+			End If
+			'--------
+			Dim pbMain As PigBytes = Nothing
+			'--------
+			LOG.StepName = "LoadBytesFromShareMem"
+			LOG.Ret = Me.LoadBytesFromShareMem(strHeadTitle, SM_HEAD_LEN, pbMain)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName & "." & strHeadTitle)
+				Throw New Exception(LOG.Ret)
+			End If
+			If pbMain Is Nothing Then
+				LOG.AddStepNameInf(KeyName & "." & strHeadTitle)
+				Throw New Exception("pbMain Is Nothing")
+			End If
+			If Me.mIsHeadBytesInit(pbMain.Main) = True Then
+				LOG.StepName = "OutPigKeyValue.LoadHead"
+				LOG.Ret = OutPigKeyValue.LoadHead(pbMain)
+				If LOG.Ret <> "OK" Then
+					LOG.AddStepNameInf(KeyName)
+					Throw New Exception(LOG.Ret)
+				End If
+				'--------
+				pbMain = Nothing
+				LOG.StepName = "LoadBytesFromShareMem"
+				LOG.Ret = Me.LoadBytesFromShareMem(strBodyTitle, OutPigKeyValue.BodyLen, pbMain)
+				If LOG.Ret <> "OK" Then
+					LOG.AddStepNameInf(KeyName & "." & strBodyTitle)
+					Throw New Exception(LOG.Ret)
+				End If
+				If pbMain Is Nothing Then
+					LOG.AddStepNameInf(KeyName & "." & strBodyTitle)
+					Throw New Exception("pbMain Is Nothing")
+				End If
+				LOG.StepName = "OutPigKeyValue.LoadBody"
+				LOG.Ret = OutPigKeyValue.LoadBody(pbMain.Main)
+				If LOG.Ret <> "OK" Then
+					LOG.AddStepNameInf(KeyName)
+					Throw New Exception(LOG.Ret)
 				End If
 			End If
-			Dim suSMHead As StruSMHead
-			ReDim suSMHead.SaveValueMD5(0)
-			strStepName = "mGetStruSMHead"
-			strRet = Me.mGetStruSMHead(suSMHead, OutPigKeyValue.fSMNameHead)
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Throw New Exception(strRet)
-			End If
-
-			Dim abSMBody As Byte()
-			ReDim abSMBody(0)
-			strStepName = "mGetBytesSMBody"
-			strRet = Me.mGetBytesSMBody(abSMBody, suSMHead, OutPigKeyValue.fSMNameBody)
-			If strRet = "OK" Then
-				If abSMBody.Length <> suSMHead.SaveValueLen Then
-					strRet = "SMBody.Length<>SuSMHead.SaveValueLen"
-				Else
-					strStepName &= ",mChkSaveBodyBytes"
-					strRet = Me.mChkSaveBodyBytes(abSMBody, suSMHead)
-					'Dim oPigBytes As New PigBytes(abSMBody)
-					'If Me.mIsBytesMatch(oPigBytes.PigMD5Bytes, suSMHead.SaveValueMD5) = False Then
-					'	strRet = "SMBody.PigMD5<>SuSMHead.ValueMD5"
-					'End If
-					'oPigBytes = Nothing
-				End If
-			End If
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Throw New Exception(strRet)
-			End If
-			strStepName = "InitBytesBySave"
-			strRet = OutPigKeyValue.InitBytesBySave(suSMHead, abSMBody)
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Throw New Exception(strRet)
-			End If
+			pbMain = Nothing
+			'--------
 			Return "OK"
 		Catch ex As Exception
 			OutPigKeyValue = Nothing
-			strRet = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 
-	Private Function mClearShareMem(KeyName As String) As String
-		Const SUB_NAME As String = "mClearShareMem"
-		Dim strStepName As String = "", strRet As String = ""
+	Private Function mClearShareMem(PkvOld As PigKeyValue) As String
+		Dim LOG As New PigStepLog("mClearShareMem")
 		Try
-			Dim oPigKeyValue As New PigKeyValue(KeyName)
-			If oPigKeyValue.LastErr <> "" Then
-				Throw New Exception(oPigKeyValue.LastErr)
+			If PkvOld Is Nothing Then Throw New Exception("PkvOld Is Nothing")
+			Dim strKeyName As String = PkvOld.KeyName
+			Dim strHeadTitle As String = "", strBodyTitle As String = ""
+			LOG.StepName = "GetKeyTitle"
+			LOG.Ret = Me.GetKeyTitle(strKeyName, strHeadTitle, strBodyTitle)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName)
+				Throw New Exception(LOG.Ret)
 			End If
-			Dim SuSMHead As StruSMHead
-			ReDim SuSMHead.SaveValueMD5(15)
-			strStepName = "mGetStruSMHead"
-			strRet = Me.mGetStruSMHead(SuSMHead, oPigKeyValue.fSMNameHead)
-			If strRet = "OK" Then
-				Dim intBodyLen As Integer = SuSMHead.SaveValueLen
-				With SuSMHead
-					.ExpTime = DateTime.MinValue
-					.SaveValueLen = 0
-					.ValueType = PigKeyValue.enmValueType.Unknow
-					ReDim .SaveValueMD5(15)
-					.TextType = PigText.enmTextType.UnknowOrBin
-					.SaveType = PigKeyValue.enmSaveType.Original
-				End With
-				strStepName = "mSaveSMBody"
-				strRet = Me.mSaveSMHead(SuSMHead, oPigKeyValue.fSMNameHead)
-				If strRet <> "OK" Then Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
-				Dim abBody As Byte()
-				ReDim abBody(intBodyLen - 1)
-				strStepName = "mSaveSMBody"
-				strRet = Me.mSaveSMBody(SuSMHead, oPigKeyValue.fSMNameBody, abBody)
-				If strRet <> "OK" Then
-					strStepName &= "(" & KeyName & ")"
-					Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+			Dim abTmp As Byte()
+			ReDim abTmp(SM_HEAD_LEN - 1)
+			LOG.StepName = "SaveBytesToShareMem"
+			LOG.Ret = Me.SaveBytesToShareMem(strHeadTitle, SM_HEAD_LEN, abTmp)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf("HeadTitle")
+				Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+			End If
+			Dim lngBodyLen As Long = PkvOld.BodyLen
+			If lngBodyLen > 0 Then
+				ReDim abTmp(lngBodyLen - 1)
+				LOG.Ret = Me.SaveBytesToShareMem(strBodyTitle, lngBodyLen, abTmp)
+				If LOG.Ret <> "OK" Then
+					LOG.AddStepNameInf("BodyTitle")
+					Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 				End If
-			Else
-				strStepName &= "(" & KeyName & ")"
-				Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
 			End If
-			oPigKeyValue = Nothing
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf("mClearShareMem", strStepName, ex)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
-	Private Function mIsShareMemExists(KeyName As String) As Boolean
-		Const SUB_NAME As String = "mIsShareMemExists"
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
-		Try
-			Dim oPigKeyValue As New PigKeyValue(KeyName)
-			If oPigKeyValue.LastErr <> "" Then Throw New Exception(oPigKeyValue.LastErr)
-			Dim SuSMHead As StruSMHead
-			ReDim SuSMHead.SaveValueMD5(0)
-			strStepName = "mGetStruSMHead"
-			strRet = Me.mGetStruSMHead(SuSMHead, oPigKeyValue.fSMNameHead)
-			If strRet <> "OK" Then
-				Return False
-			Else
-				Dim abSMBody As Byte()
-				ReDim abSMBody(0)
-				strStepName = "mGetBytesSMBody"
-				strRet = Me.mGetBytesSMBody(abSMBody, SuSMHead, oPigKeyValue.fSMNameBody)
-				If strRet <> "OK" Then
-					Return False
-				ElseIf abSMBody.Length <> SuSMHead.SaveValueLen Then
-					Return False
-				Else
-					strStepName &= ",mChkSaveBodyBytes"
-					strRet = Me.mChkSaveBodyBytes(abSMBody, SuSMHead)
-					If strRet <> "OK" Then
-						mIsShareMemExists = False
-					Else
-						mIsShareMemExists = True
-					End If
-					'Dim oPigBytes As New PigBytes(abSMBody)
-					'If Me.mIsBytesMatch(oPigBytes.PigMD5Bytes, SuSMHead.SaveValueMD5) = False Then
-					'	mIsShareMemExists = False
-					'Else
-					'	mIsShareMemExists = True
-					'End If
-					'oPigBytes = Nothing
-				End If
-			End If
-		Catch ex As Exception
-			strRet = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Me.PrintDebugLog(SUB_NAME, strRet)
-			Return False
-		End Try
-	End Function
 
-	Public Function IsPigKeyValueExists(KeyName As String) As Boolean
-		Dim strStepName As String = ""
-		Try
-			Select Case Me.CacheLevel
-				Case enmCacheLevel.ToList
-					If Me.PigKeyValues.IsItemExists(KeyName) = True Then
-						Return True
-					Else
-						Return False
-					End If
-				Case enmCacheLevel.ToShareMem
-					Return Me.mIsShareMemExists(KeyName)
-				Case enmCacheLevel.ToFile
-					Return Me.mIsCacheFileExists(KeyName)
-				Case Else
-					strStepName = ""
-					Throw New Exception("Currently unsupported cachelevel")
-			End Select
-		Catch ex As Exception
-			Me.SetSubErrInf("IsPigKeyValueExists", ex)
-			Return False
-		End Try
-	End Function
-
-	'Private Function mIsForceRefCache() As Boolean
-	'	Try
-	'		If Math.Abs(DateDiff(DateInterval.Second, Me.mLastRefCacheTime, Now)) > Me.ForceRefCacheTime Then
-	'			Return True
-	'		Else
-	'			Return False
-	'		End If
-	'	Catch ex As Exception
-	'		Me.SetSubErrInf("mIsForceRefCache", ex)
-	'		Return False
-	'	End Try
-	'End Function
 
 	Private Function mRemovePigKeyValueFromList(KeyName As String) As String
-		Dim strStepName As String = ""
+		Dim LOG As New PigStepLog("mRemovePigKeyValueFromList")
 		Try
 			If Me.PigKeyValues.IsItemExists(KeyName) = False Then
 				Return "OK"
 			Else
-				strStepName = "PigKeyValues.Remove"
+				LOG.StepName = "PigKeyValues.Remove"
 				Me.PigKeyValues.Remove(KeyName)
 				If Me.PigKeyValues.LastErr <> "" Then
-					strStepName &= "(" & KeyName & ")"
+					LOG.AddStepNameInf(KeyName)
 					Throw New Exception(Me.PigKeyValues.LastErr)
 				End If
 				Return "OK"
 			End If
 		Catch ex As Exception
-			Return Me.GetSubErrInf("mRemovePigKeyValueFromList", ex)
+			Return Me.GetSubErrInf("mRemovePigKeyValueFromList", LOG.StepName, ex)
 		End Try
 	End Function
 
 
 	Private Function mAddPigKeyValueToList(NewItem As PigKeyValue) As String
-		Const SUB_NAME As String = "mAddPigKeyValueToList"
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("mAddPigKeyValueToList")
 		Try
 			Dim strKeyName As String = NewItem.KeyName
 			'If Me.PigKeyValues.IsItemExists(strKeyName) = True Then
-			'	strStepName = "mRemovePigKeyValueFromList"
-			'	strRet = Me.mRemovePigKeyValueFromList(strKeyName)
-			'	If strRet <> "OK" Then
-			'		Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+			'	LOG.StepName = "mRemovePigKeyValueFromList"
+			'	LOG.Ret = Me.mRemovePigKeyValueFromList(strKeyName)
+			'	If log.Ret <> "OK" Then
+			'		Me.PrintDebugLog(log.SUBNAME, LOG.StepName, LOG.Ret)
 			'		If Me.PigKeyValues.IsItemExists(strKeyName) Then
-			'			strStepName &= "(" & strKeyName & ")"
+			'			LOG.StepName &= "(" & strKeyName & ")"
 			'			Throw New Exception("Cannot remove exists item")
 			'		End If
 			'	End If
 			'End If
 			NewItem.LastRefCacheTime = Now
-			strStepName = "PigKeyValues.Add"
+			LOG.StepName = "PigKeyValues.Add"
 			Me.PigKeyValues.Add(NewItem)
 			If Me.PigKeyValues.LastErr <> "" Then
-				strStepName &= "(" & strKeyName & ")"
+				LOG.StepName &= "(" & strKeyName & ")"
 				Throw New Exception(strKeyName)
 			End If
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 	Private Function mGetPigKeyValueByShareMem(KeyName As String, ByRef OutPigKeyValue As PigKeyValue) As String
-		Const SUB_NAME As String = "mGetPigKeyValueByShareMem"
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("mGetPigKeyValueByShareMem")
 		Try
 			msuStatistics.GetCount += 1
-			strStepName = "mGetPigKeyValueFromShareMem"
-			strRet = Me.mGetPigKeyValueFromShareMem(KeyName, OutPigKeyValue)
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+			LOG.StepName = "mGetPigKeyValueFromShareMem"
+			LOG.Ret = Me.mGetPigKeyValueFromShareMem(KeyName, OutPigKeyValue)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName)
+				Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 			End If
-			If Not OutPigKeyValue Is Nothing Then
+			If OutPigKeyValue IsNot Nothing Then
 				If OutPigKeyValue.IsExpired = True Then
 					msuStatistics.RemoveCount += 1
 					msuStatistics.RemoveExpiredShareMemCount += 1
-					strStepName = "mClearShareMem"
-					strRet = Me.mClearShareMem(KeyName)
-					If strRet <> "OK" Then
-						strStepName &= "(" & KeyName & ")"
-						Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+					LOG.StepName = "mClearShareMem"
+					LOG.Ret = Me.mClearShareMem(OutPigKeyValue)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(KeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 						msuStatistics.RemoveFailCount += 1
 					End If
 					OutPigKeyValue = Nothing
 					If Me.PigKeyValues.IsItemExists(KeyName) = True Then
 						msuStatistics.RemoveCount += 1
 						msuStatistics.RemoveExpiredListCount += 1
-						strStepName = "mRemovePigKeyValueFromList"
-						strRet = Me.mRemovePigKeyValueFromList(KeyName)
-						If strRet <> "OK" Then
-							strStepName &= "(" & KeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+						LOG.StepName = "mRemovePigKeyValueFromList"
+						LOG.Ret = Me.mRemovePigKeyValueFromList(KeyName)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(KeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 							msuStatistics.RemoveFailCount += 1
 						End If
 					End If
@@ -504,54 +425,50 @@ Public Class PigKeyValueApp
 			Return "OK"
 		Catch ex As Exception
 			OutPigKeyValue = Nothing
-			Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 	Private Function mGetPigKeyValueByFile(KeyName As String, ByRef OutPigKeyValue As PigKeyValue) As String
-		Const SUB_NAME As String = "mGetPigKeyValueByFile"
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("mGetPigKeyValueByFile")
 		Try
 			msuStatistics.GetCount += 1
-			strStepName = "mGetPigKeyValueFromFile"
-			strRet = Me.mGetPigKeyValueFromFile(KeyName, OutPigKeyValue)
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+			LOG.StepName = "mGetPigKeyValueFromFile"
+			LOG.Ret = Me.mGetPigKeyValueFromFile(KeyName, OutPigKeyValue)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName)
+				Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 			End If
-			If Not OutPigKeyValue Is Nothing Then
+			If OutPigKeyValue IsNot Nothing Then
 				If OutPigKeyValue.IsExpired = True Then
 					msuStatistics.RemoveCount += 1
 					msuStatistics.RemoveExpiredFileCount += 1
 					If OutPigKeyValue.Parent Is Nothing Then OutPigKeyValue.Parent = Me
-					strStepName = "mRemoveFile"
-					strRet = Me.mRemoveFile(OutPigKeyValue)
-					If strRet <> "OK" Then
-						strStepName &= "(" & KeyName & ")"
-						Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+					LOG.StepName = "mRemoveFile"
+					LOG.Ret = Me.mRemoveFile(OutPigKeyValue.KeyName)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(KeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 						msuStatistics.RemoveFailCount += 1
 					End If
 					OutPigKeyValue = Nothing
-					If Me.mIsShareMemExists(KeyName) = True Then
-						msuStatistics.RemoveCount += 1
-						msuStatistics.RemoveExpiredShareMemCount += 1
-						strStepName = "mClearShareMem"
-						strRet = Me.mClearShareMem(KeyName)
-						If strRet <> "OK" Then
-							strStepName &= "(" & KeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
-							msuStatistics.RemoveFailCount += 1
-						End If
+					msuStatistics.RemoveCount += 1
+					msuStatistics.RemoveExpiredShareMemCount += 1
+					LOG.StepName = "mClearShareMem"
+					LOG.Ret = Me.mClearShareMem(OutPigKeyValue)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(KeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+						msuStatistics.RemoveFailCount += 1
 					End If
 					If Me.PigKeyValues.IsItemExists(KeyName) = True Then
 						msuStatistics.RemoveCount += 1
 						msuStatistics.RemoveExpiredListCount += 1
-						strStepName = "mRemovePigKeyValueFromList"
-						strRet = Me.mRemovePigKeyValueFromList(KeyName)
-						If strRet <> "OK" Then
-							strStepName &= "(" & KeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+						LOG.StepName = "mRemovePigKeyValueFromList"
+						LOG.Ret = Me.mRemovePigKeyValueFromList(KeyName)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(KeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 							msuStatistics.RemoveFailCount += 1
 						End If
 					End If
@@ -563,31 +480,29 @@ Public Class PigKeyValueApp
 			Return "OK"
 		Catch ex As Exception
 			OutPigKeyValue = Nothing
-			Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 	Private Function mGetPigKeyValueByList(KeyName As String, ByRef OutPigKeyValue As PigKeyValue) As String
-		Const SUB_NAME As String = "mGetPigKeyValueByList"
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("mGetPigKeyValueByList")
 		Try
 			msuStatistics.GetCount += 1
-			strStepName = "GetByList"
+			LOG.StepName = "GetByList"
 			OutPigKeyValue = Me.PigKeyValues.Item(KeyName)
 			If Me.PigKeyValues.LastErr <> "" Then
-				strStepName &= "(" & KeyName & ")"
-				Me.PrintDebugLog(SUB_NAME, strStepName, Me.PigKeyValues.LastErr)
+				LOG.AddStepNameInf(KeyName)
+				Me.PrintDebugLog(LOG.SubName, LOG.StepName, Me.PigKeyValues.LastErr)
 			End If
-			If Not OutPigKeyValue Is Nothing Then
+			If OutPigKeyValue IsNot Nothing Then
 				If OutPigKeyValue.IsExpired = True Then
 					msuStatistics.RemoveCount += 1
 					msuStatistics.RemoveExpiredListCount += 1
-					strStepName = "mRemovePigKeyValueFromList"
-					strRet = Me.mRemovePigKeyValueFromList(KeyName)
-					If strRet <> "OK" Then
-						strStepName &= "(" & KeyName & ")"
-						Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+					LOG.StepName = "mRemovePigKeyValueFromList"
+					LOG.Ret = Me.mRemovePigKeyValueFromList(KeyName)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(KeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, Me.PigKeyValues.LastErr)
 						msuStatistics.RemoveFailCount += 1
 					End If
 					OutPigKeyValue = Nothing
@@ -599,49 +514,47 @@ Public Class PigKeyValueApp
 			Return "OK"
 		Catch ex As Exception
 			OutPigKeyValue = Nothing
-			Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 	Public Function GetPigKeyValue(KeyName As String) As PigKeyValue
-		Const SUB_NAME As String = "GetKeyValue"
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("GetPigKeyValue")
 		Try
 			GetPigKeyValue = Nothing
 			Dim pkvList As PigKeyValue = Nothing
-			strStepName = "mGetPigKeyValueByList"
-			strRet = Me.mGetPigKeyValueByList(KeyName, pkvList)
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Throw New Exception(strRet)
+			LOG.StepName = "mGetPigKeyValueByList"
+			LOG.Ret = Me.mGetPigKeyValueByList(KeyName, pkvList)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName)
+				Throw New Exception(LOG.Ret)
 			End If
 			Select Case Me.CacheLevel
-				Case enmCacheLevel.ToList
+				Case EnmCacheLevel.ToList
 					GetPigKeyValue = pkvList
 					pkvList = Nothing
-				Case enmCacheLevel.ToShareMem
+				Case EnmCacheLevel.ToShareMem
 					Dim bolIsGetByShareMem As Boolean = False
 					If pkvList Is Nothing Then
 						bolIsGetByShareMem = True
 					Else
-						If pkvList.Parent Is Nothing Then pkvList.Parent = Me
+						'If pkvList.Parent Is Nothing Then pkvList.Parent = Me
 						If pkvList.fIsForceRefCache = True Then
 							bolIsGetByShareMem = True
 						End If
 					End If
 					If bolIsGetByShareMem = True Then
-						strStepName = "mGetPigKeyValueByShareMem.ToShareMem"
-						strRet = Me.mGetPigKeyValueByShareMem(KeyName, GetPigKeyValue)
-						If strRet <> "OK" Then
-							strStepName &= "(" & KeyName & ")"
-							Throw New Exception(strRet)
+						LOG.StepName = "mGetPigKeyValueByShareMem.ToShareMem"
+						LOG.Ret = Me.mGetPigKeyValueByShareMem(KeyName, GetPigKeyValue)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(KeyName)
+							Throw New Exception(LOG.Ret)
 						End If
 						Dim bolIsRemoveList As Boolean = False
 						Dim bolIsAddList As Boolean = False
 						If GetPigKeyValue Is Nothing Then
-							If Not pkvList Is Nothing Then bolIsRemoveList = True
-						ElseIf Not pkvList Is Nothing Then
-							If GetPigKeyValue.fCompareOther(pkvList) = False Then
+							If pkvList IsNot Nothing Then bolIsRemoveList = True
+						ElseIf pkvList IsNot Nothing Then
+							If GetPigKeyValue.IsMatchAnother(pkvList) = False Then
 								bolIsRemoveList = True
 								bolIsAddList = True
 							Else
@@ -651,22 +564,22 @@ Public Class PigKeyValueApp
 							bolIsAddList = True
 						End If
 						If bolIsRemoveList = True Then
-							strStepName = "mClearShareMem"
-							strRet = Me.mClearShareMem(KeyName)
-							If strRet <> "OK" Then
-								strStepName &= "(" & KeyName & ")"
-								Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+							LOG.StepName = "mClearShareMem"
+							LOG.Ret = Me.mClearShareMem(pkvList)
+							If LOG.Ret <> "OK" Then
+								LOG.AddStepNameInf(KeyName)
+								Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 								msuStatistics.RemoveFailCount += 1
 							End If
 							pkvList = Nothing
 						End If
 						If bolIsAddList = True Then
 							msuStatistics.SaveToListCount += 1
-							strStepName = "mAddPigKeyValueToList"
-							strRet = Me.mAddPigKeyValueToList(GetPigKeyValue)
-							If strRet <> "OK" Then
-								strStepName &= "(" & KeyName & ")"
-								Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+							LOG.StepName = "mAddPigKeyValueToList"
+							LOG.Ret = Me.mAddPigKeyValueToList(GetPigKeyValue)
+							If LOG.Ret <> "OK" Then
+								LOG.AddStepNameInf(KeyName)
+								Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 								msuStatistics.SaveFailCount += 1
 							End If
 						End If
@@ -674,7 +587,7 @@ Public Class PigKeyValueApp
 						GetPigKeyValue = pkvList
 						pkvList = Nothing
 					End If
-				Case enmCacheLevel.ToFile
+				Case EnmCacheLevel.ToFile
 					Dim bolIsGetByShareMem As Boolean = False
 					Dim bolIsGetByFile As Boolean = False
 					If pkvList Is Nothing Then
@@ -687,84 +600,82 @@ Public Class PigKeyValueApp
 					End If
 					Dim pkvShareMem As PigKeyValue = Nothing
 					If bolIsGetByFile = True Then
-						strStepName = "mGetPigKeyValueByFile.ToFile"
-						strRet = Me.mGetPigKeyValueByFile(KeyName, GetPigKeyValue)
-						If strRet <> "OK" Then
-							strStepName &= "(" & KeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+						LOG.StepName = "mGetPigKeyValueByFile.ToFile"
+						LOG.Ret = Me.mGetPigKeyValueByFile(KeyName, GetPigKeyValue)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(KeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 						End If
 						If GetPigKeyValue Is Nothing Then
-							strStepName = "RemovePigKeyValue.ToShareMem"
-							strRet = Me.RemovePigKeyValue(KeyName, enmCacheLevel.ToShareMem)
-							If strRet <> "OK" Then
-								strStepName &= "(" & KeyName & ")"
-								Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+							LOG.StepName = "RemovePigKeyValue.ToShareMem"
+							LOG.Ret = Me.RemovePigKeyValue(pkvList, EnmCacheLevel.ToShareMem)
+							If LOG.Ret <> "OK" Then
+								LOG.AddStepNameInf(KeyName)
+								Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 							End If
 						Else
-							If Me.mIsShareMemExists(KeyName) = True Then
-								If GetPigKeyValue.Parent Is Nothing Then GetPigKeyValue.Parent = Me
-								strStepName = "mGetPigKeyValueByShareMem.ToFile"
-								strRet = Me.mGetPigKeyValueByShareMem(KeyName, pkvShareMem)
-								If strRet <> "OK" Then
-									strStepName &= "(" & KeyName & ")"
-									Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
-								End If
-								Dim bolIsSaveShareMem As Boolean = False
-								If Not pkvShareMem Is Nothing Then
-									If pkvShareMem.fCompareOther(GetPigKeyValue) = False Then
-										strStepName = "mClearShareMem.ToFile"
-										strRet = Me.mClearShareMem(KeyName)
-										If strRet <> "OK" Then
-											strStepName &= "(" & KeyName & ")"
-											Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
-										End If
-										bolIsSaveShareMem = True
+							If GetPigKeyValue.Parent Is Nothing Then GetPigKeyValue.Parent = Me
+							LOG.StepName = "mGetPigKeyValueByShareMem.ToFile"
+							LOG.Ret = Me.mGetPigKeyValueByShareMem(KeyName, pkvShareMem)
+							If LOG.Ret <> "OK" Then
+								LOG.AddStepNameInf(KeyName)
+								Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+							End If
+							Dim bolIsSaveShareMem As Boolean = False
+							If pkvShareMem IsNot Nothing Then
+								If pkvShareMem.IsMatchAnother(GetPigKeyValue) = False Then
+									LOG.StepName = "mClearShareMem.ToFile"
+									LOG.Ret = Me.mClearShareMem(pkvShareMem)
+									If LOG.Ret <> "OK" Then
+										LOG.AddStepNameInf(KeyName)
+										Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 									End If
-								Else
 									bolIsSaveShareMem = True
 								End If
-								If bolIsSaveShareMem = True Then
-									strStepName = "mSavePigKeyValueToShareMem.ToFile"
-									strRet = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
-									If strRet <> "OK" Then
-										strStepName &= "(" & KeyName & ")"
-										Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
-									End If
+							Else
+								bolIsSaveShareMem = True
+							End If
+							If bolIsSaveShareMem = True Then
+								LOG.StepName = "mSavePigKeyValueToShareMem.ToFile"
+								LOG.Ret = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
+								If LOG.Ret <> "OK" Then
+									LOG.AddStepNameInf(KeyName)
+									Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 								End If
 							End If
 						End If
 					ElseIf bolIsGetByShareMem = True Then
-						strStepName = "mGetPigKeyValueByShareMem.ToFile"
-						strRet = Me.mGetPigKeyValueByShareMem(KeyName, pkvShareMem)
-						If strRet <> "OK" Then
-							strStepName &= "(" & KeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+						LOG.StepName = "mGetPigKeyValueByShareMem.ToFile"
+						LOG.Ret = Me.mGetPigKeyValueByShareMem(KeyName, pkvShareMem)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(KeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 						End If
 						If pkvShareMem Is Nothing Then
-							strStepName = "mGetPigKeyValueByFile.ToFile2"
-							strRet = Me.mGetPigKeyValueByFile(KeyName, GetPigKeyValue)
-							If strRet <> "OK" Then
-								strStepName &= "(" & KeyName & ")"
-								Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+							LOG.StepName = "mGetPigKeyValueByFile.ToFile2"
+							LOG.Ret = Me.mGetPigKeyValueByFile(KeyName, GetPigKeyValue)
+							If LOG.Ret <> "OK" Then
+								LOG.AddStepNameInf(KeyName)
+								Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 							End If
-							If Not GetPigKeyValue Is Nothing Then
+							If GetPigKeyValue IsNot Nothing Then
 								If GetPigKeyValue.Parent Is Nothing Then GetPigKeyValue.Parent = Me
 								msuStatistics.SaveToShareMemCount += 1
-								strStepName = "mSavePigKeyValueToShareMem.ToFile2"
-								strRet = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
-								If strRet <> "OK" Then
-									strStepName &= "(" & KeyName & ")"
-									Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+								LOG.StepName = "mSavePigKeyValueToShareMem.ToFile2"
+								LOG.Ret = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
+								If LOG.Ret <> "OK" Then
+									LOG.AddStepNameInf(KeyName)
+									Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 								End If
 							End If
 						Else
 							If pkvShareMem.Parent Is Nothing Then pkvShareMem.Parent = Me
 							msuStatistics.SaveToListCount += 1
-							strStepName = "mAddPigKeyValueToList"
-							strRet = Me.mAddPigKeyValueToList(pkvShareMem)
-							If strRet <> "OK" Then
-								strStepName &= "(" & KeyName & ")"
-								Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+							LOG.StepName = "mAddPigKeyValueToList"
+							LOG.Ret = Me.mAddPigKeyValueToList(pkvShareMem)
+							If LOG.Ret <> "OK" Then
+								LOG.AddStepNameInf(KeyName)
+								Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 								msuStatistics.SaveFailCount += 1
 							End If
 							GetPigKeyValue = pkvShareMem
@@ -775,589 +686,341 @@ Public Class PigKeyValueApp
 						pkvList = Nothing
 					End If
 				Case Else
-					strStepName = KeyName
+					LOG.StepName = KeyName
 					Throw New Exception("Unsupported CacheLevel")
 			End Select
 			Me.ClearErr()
 		Catch ex As Exception
 			msuStatistics.GetFailCount += 1
-			Me.SetSubErrInf(SUB_NAME, strStepName, ex)
+			Me.SetSubErrInf(LOG.SubName, LOG.StepName, ex)
 			Return Nothing
 		End Try
 	End Function
 
 
-	Private Function mGetBytesSMBody(ByRef BodyBytes As Byte(), SuSMHead As StruSMHead, SMNameBody As String) As String
-		Const SUB_NAME As String = "mGetBytesSMBody"
-		Dim strStepName As String = ""
+	Public Function SaveBytesToShareMem(SMName As String, SMLen As Long, ByRef AbIn As Byte()) As String
+		Dim LOG As New PigStepLog("SaveBytesToShareMem")
 		Try
-			Dim strRet As String
-			Dim msmBody As New ShareMem
-			strStepName = "Body.Init"
-			strRet = msmBody.Init(SMNameBody, SuSMHead.SaveValueLen)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception(strRet)
+			Dim smMain As New ShareMem
+			LOG.StepName = "Init"
+			LOG.Ret = smMain.Init(SMName, SMLen)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(SMName)
+				Throw New Exception(LOG.Ret)
 			End If
-			ReDim BodyBytes(0)
-			strStepName = "Body.Read"
-			strRet = msmBody.Read(BodyBytes)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception(strRet)
+			LOG.StepName = "Write"
+			LOG.Ret = smMain.Write(AbIn)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(SMName)
+				Throw New Exception(LOG.Ret)
 			End If
-			strStepName = "Body New PigBytes"
-			Dim pbBody As New PigBytes(BodyBytes)
-			If pbBody.LastErr <> "" Then
-				strStepName &= "(abBody.Length=" & BodyBytes.Length & ")"
-				Throw New Exception(strRet)
-			End If
-			strStepName = "Check Value"
-			If SuSMHead.SaveValueLen <> BodyBytes.Length Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception("ValueLen not match " & SuSMHead.SaveValueLen & "," & BodyBytes.Length)
-			End If
-			strStepName = "mChkSaveBodyBytes"
-			strRet = Me.mChkSaveBodyBytes(BodyBytes, SuSMHead)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception(strRet)
-			End If
-			'Dim oPigMD5 As New PigMD5(BodyBytes)
-			'If oPigMD5.LastErr <> "" Then
-			'	strStepName &= "(" & SMNameBody & ")"
-			'	Throw New Exception(oPigMD5.LastErr)
-			'End If
-			'If Me.mIsBytesMatch(pbBody.PigMD5Bytes, SuSMHead.SaveValueMD5) = False Then
-			'	strStepName &= "(" & SMNameBody & ")"
-			'	Throw New Exception("PigMD5 not match")
-			'End If
+			smMain = Nothing
 			Return "OK"
 		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
-	Private Function mChkSaveBodyBytes(ByRef SaveBodyBytes As Byte(), SuSMHead As StruSMHead) As String
-		Const SUB_NAME As String = "mChkSaveBodyBytes"
-		Dim strStepName As String = ""
-		Try
-			If SaveBodyBytes.Length <> SuSMHead.SaveValueLen Then
-				strStepName = "Check Length"
-				Throw New Exception("Mismatch")
-			End If
-			strStepName = "New PigMD5"
-			Dim oPigMD5 As New PigMD5(SaveBodyBytes)
-			If oPigMD5.LastErr <> "" Then Throw New Exception(oPigMD5.LastErr)
-			If Me.mIsBytesMatch(oPigMD5.PigMD5Bytes, SuSMHead.SaveValueMD5) = False Then
-				strStepName = "Check PigMD5"
-				Throw New Exception("Mismatch")
-			End If
-			oPigMD5 = Nothing
-			Return "OK"
-		Catch ex As Exception
-			Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-		End Try
-	End Function
 
-	Private Function mGetBytesFileBody(ByRef BodyBytes As Byte(), SuSMHead As StruSMHead, SMNameBody As String, CacheWorkDir As String) As String
-		Const SUB_NAME As String = "mGetBytesFileBody"
-		Dim strStepName As String = ""
+
+	''' <summary>
+	''' 从文件读取一个 PigBytes 对象
+	''' </summary>
+	''' <param name="FilePath">文件路径</param>
+	''' <param name="PbOut">输出的PigBytes</param>
+	''' <returns></returns>
+	Public Function LoadBytesFromFile(FilePath As String, ByRef PbOut As PigBytes) As String
+		Dim LOG As New PigStepLog("LoadBytesFromFile")
 		Try
-			Dim strRet As String
-			Dim strFilePath As String = CacheWorkDir & Me.OsPathSep & SMNameBody
-			strStepName = "New PigFile"
-			Dim pfBody As New PigFile(strFilePath)
-			If pfBody.LastErr <> "" Then
-				strStepName &= "(" & strFilePath & ")"
-				Throw New Exception(pfBody.LastErr)
+			LOG.StepName = "New PigFile"
+			Dim pfHead As New PigFile(FilePath)
+			If pfHead.LastErr <> "" Then
+				LOG.AddStepNameInf(FilePath)
+				Throw New Exception(pfHead.LastErr)
 			End If
-			ReDim BodyBytes(0)
-			strStepName = "Body.LoadFile"
-			strRet = pfBody.LoadFile
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception(strRet)
+			LOG.StepName = "Head.LoadFile"
+			LOG.Ret = pfHead.LoadFile
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(FilePath)
+				Throw New Exception(LOG.Ret)
 			End If
-			strStepName = "Body Get Bytes"
-			BodyBytes = pfBody.GbMain.Main
-			strStepName = "Body New PigBytes"
-			Dim pbBody As New PigBytes(BodyBytes)
-			If pbBody.LastErr <> "" Then
-				strStepName &= "(abBody.Length=" & BodyBytes.Length & ")"
-				Throw New Exception(strRet)
-			End If
-			strStepName = "Check Value"
-			If SuSMHead.SaveValueLen <> BodyBytes.Length Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception("ValueLen not match " & SuSMHead.SaveValueLen & "," & BodyBytes.Length)
-			End If
+			LOG.StepName = "Set PbOut"
+			PbOut = pfHead.GbMain
 			Return "OK"
 		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 	''' <summary>
-	''' GetStruSMHead from file
+	''' 保存字节数组到文件
 	''' </summary>
-	''' <param name="SuSMHead"></param>
-	''' <param name="SMNameHead"></param>
-	''' <param name="CacheWorkDir"></param>
+	''' <param name="FilePath">文件路径</param>
+	''' <param name="PbOut">输出的PigBytes</param>
 	''' <returns></returns>
-	Private Function mGetStruSMHead(ByRef SuSMHead As StruSMHead, SMNameHead As String, CacheWorkDir As String) As String
-		Const SUB_NAME As String = "mGetStruSMHead"
-		Dim strStepName As String = ""
+	Public Function SaveBytesToFile(FilePath As String, ByRef AbIn As Byte()) As String
+		Dim LOG As New PigStepLog("SaveBytesToFile")
 		Try
-			Dim strRet As String
-			If CacheWorkDir = "" Then
-				strStepName = "Check CacheWorkDir"
-				Throw New Exception("Undefined")
+			Dim oPigFile As PigFile
+			LOG.StepName = "New PigFile"
+			oPigFile = New PigFile(FilePath)
+			If oPigFile.LastErr <> "" Then
+				LOG.AddStepNameInf(FilePath)
+				Throw New Exception(oPigFile.LastErr)
 			End If
-			Dim strFilePath As String = CacheWorkDir & Me.OsPathSep & SMNameHead
-			strStepName = "New PigFile"
-			Dim pfHead As New PigFile(strFilePath)
-			If pfHead.LastErr <> "" Then
-				strStepName &= "(" & strFilePath & ")"
-				Throw New Exception(pfHead.LastErr)
+			LOG.StepName = "New GbMain"
+			oPigFile.GbMain = New PigBytes(AbIn)
+			If oPigFile.LastErr <> "" Then
+				LOG.AddStepNameInf(FilePath)
+				Throw New Exception(oPigFile.LastErr)
 			End If
-			Dim abHead(0) As Byte
-			strStepName = "Head.LoadFile"
-			strRet = pfHead.LoadFile
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameHead & ")"
-				Throw New Exception(strRet)
+			LOG.StepName = "SaveFile"
+			oPigFile.SaveFile(False)
+			If oPigFile.LastErr <> "" Then
+				LOG.AddStepNameInf(FilePath)
+				Throw New Exception(oPigFile.LastErr)
 			End If
-			abHead = pfHead.GbMain.Main
-			pfHead = Nothing
-			strStepName = "New PigBytes(abHead)"
-			Dim pbHead As New PigBytes(abHead)
-			If pbHead.LastErr <> "" Then
-				strStepName &= "(abHead.Length=" & abHead.Length & ")"
-				Throw New Exception(strRet)
-			End If
-			ReDim SuSMHead.SaveValueMD5(15)
-			With pbHead
-				SuSMHead.ValueType = .GetInt32Value()
-				SuSMHead.ExpTime = .GetDateTimeValue
-				SuSMHead.SaveValueLen = .GetInt64Value
-				SuSMHead.SaveValueMD5 = .GetBytesValue(16)
-				SuSMHead.TextType = .GetInt32Value()
-				SuSMHead.SaveType = .GetInt32Value()
-				SuSMHead.SaveValueLen = .GetInt32Value()
-			End With
-			strStepName = "Check StruSMHead (" & SMNameHead & ")"
-			With SuSMHead
-				If .SaveValueLen < 0 Then Throw New Exception("Data length is less than or equal to 0")
-				If .ExpTime < Now Then Throw New Exception("Data expired ")
-				Select Case .ValueType
-					Case PigKeyValue.enmValueType.Bytes
-					Case PigKeyValue.enmValueType.Text
-						Select Case .TextType
-							Case PigText.enmTextType.Ascii, PigText.enmTextType.Unicode, PigText.enmTextType.UTF8
-							Case Else
-								Throw New Exception("Invalid TextType is " & .TextType)
-						End Select
-					Case Else
-						Throw New Exception("Invalid ValueType is " & .ValueType)
-				End Select
-			End With
+			oPigFile = Nothing
 			Return "OK"
 		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
-	Private Function mGetStruSMHead(ByRef SuSMHead As StruSMHead, SMNameHead As String) As String
-		Const SUB_NAME As String = "mGetStruSMHead"
-		Dim strStepName As String = ""
+	''' <summary>
+	''' 从共享内存读取一个 PigBytes 对象
+	''' </summary>
+	''' <param name="SMName">共享内存名</param>
+	''' <param name="SMLen">共享内存长度</param>
+	''' <param name="PbOut">输出的PigBytes</param>
+	''' <returns></returns>
+	Public Function LoadBytesFromShareMem(SMName As String, SMLen As Long, ByRef PbOut As PigBytes) As String
+		Dim LOG As New PigStepLog("LoadBytesFromFile")
 		Try
-			Dim strRet As String
-			Dim msmHead As New ShareMem
-			strStepName = "Head.Init"
-			strRet = msmHead.Init(SMNameHead, 52)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameHead & ")"
-				Throw New Exception(strRet)
+			Dim smMain As New ShareMem
+			LOG.StepName = "Init"
+			LOG.Ret = smMain.Init(SMName, SMLen)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(SMName)
+				Throw New Exception(LOG.Ret)
 			End If
-			Dim abHead(0) As Byte
-			strStepName = "Head.Read"
-			strRet = msmHead.Read(abHead)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameHead & ")"
-				Throw New Exception(strRet)
+			If PbOut IsNot Nothing Then PbOut = Nothing
+			LOG.StepName = "New PigBytes"
+			PbOut = New PigBytes
+			If PbOut.LastErr <> "" Then
+				LOG.AddStepNameInf(SMName)
+				Throw New Exception(PbOut.LastErr)
 			End If
-			msmHead = Nothing
-			strStepName = "Head New PigBytes"
-			Dim pbHead As New PigBytes(abHead)
-			If pbHead.LastErr <> "" Then
-				strStepName &= "(abHead.Length=" & abHead.Length & ")"
-				Throw New Exception(strRet)
+			LOG.StepName = "Read"
+			LOG.Ret = smMain.Read(PbOut.Main)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(SMName)
+				Throw New Exception(LOG.Ret)
 			End If
-			ReDim SuSMHead.SaveValueMD5(15)
-			With pbHead
-				SuSMHead.ValueType = .GetInt32Value()
-				SuSMHead.ExpTime = .GetDateTimeValue
-				SuSMHead.SaveValueLen = .GetInt64Value
-				SuSMHead.SaveValueMD5 = .GetBytesValue(16)
-				SuSMHead.TextType = .GetInt32Value()
-				SuSMHead.SaveType = .GetInt32Value()
-				SuSMHead.SaveValueLen = .GetInt32Value()
-			End With
-			strStepName = "Check StruSMHead (" & SMNameHead & ")"
-			With SuSMHead
-				If .SaveValueLen < 0 Then Throw New Exception("Data length is less than or equal to 0")
-				If .ExpTime < Now Then Throw New Exception("Data expired ")
-				Select Case .ValueType
-					Case PigKeyValue.enmValueType.Bytes
-					Case PigKeyValue.enmValueType.Text
-						Select Case .TextType
-							Case PigText.enmTextType.Ascii, PigText.enmTextType.Unicode, PigText.enmTextType.UTF8
-							Case Else
-								Throw New Exception("Invalid TextType is " & .TextType)
-						End Select
-					Case Else
-						Throw New Exception("Invalid ValueType is " & .ValueType)
-				End Select
-			End With
+			smMain = Nothing
 			Return "OK"
 		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
+			PbOut = Nothing
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
-	Private Function mSaveSMHead(SuSMHead As StruSMHead, SMNameHead As String) As String
-		Const SUB_NAME As String = "mSaveSMHead"
-		Dim strStepName As String = ""
-		Try
-			Dim strRet As String
-			Dim msmHead As New ShareMem
-			strStepName = "Head.Init"
-			strRet = msmHead.Init(SMNameHead, 52)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameHead & ")"
-				Throw New Exception(strRet)
-			End If
-			strStepName = "Head New PigBytes"
-			Dim pbHead As New PigBytes
-			If pbHead.LastErr <> "" Then
-				Throw New Exception(strRet)
-			End If
-			strStepName = "SetValue"
-			With pbHead
-				.SetValue(SuSMHead.ValueType)
-				If .LastErr <> "" Then
-					strStepName &= ".ValueType"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.ExpTime)
-				If .LastErr <> "" Then
-					strStepName &= ".ExpTime"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.ValueLen)
-				If .LastErr <> "" Then
-					strStepName &= ".ValueLen"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.SaveValueMD5)
-				If .LastErr <> "" Then
-					strStepName &= ".SaveValueMD5"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.TextType)
-				If .LastErr <> "" Then
-					strStepName &= ".TextType"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.SaveType)
-				If .LastErr <> "" Then
-					strStepName &= ".SaveType"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.SaveValueLen)
-				If .LastErr <> "" Then
-					strStepName &= ".SaveValueLen"
-					Throw New Exception(.LastErr)
-				End If
-			End With
-			strStepName = "Head.Write"
-			strRet = msmHead.Write(pbHead.Main)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameHead & ")"
-				Throw New Exception(strRet)
-			End If
-			Return "OK"
-		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			'Me.PrintDebugLog(SUB_NAME, "Catch ex As Exception", strRet)
-			Return strRet
-		End Try
-	End Function
 
-	Private Function mSaveSMBody(SuSMHead As StruSMHead, SMNameBody As String, ByRef DataBytes As Byte()) As String
-		Const SUB_NAME As String = "mSaveSMBody"
-		Dim strStepName As String = ""
-		Try
-			Dim strRet As String
-			Dim msmBody As New ShareMem
-			strStepName = "Body.Init"
-			strRet = msmBody.Init(SMNameBody, SuSMHead.SaveValueLen)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception(strRet)
-			End If
-			strStepName = "Body.Write"
-			strRet = msmBody.Write(DataBytes)
-			If strRet <> "OK" Then
-				strStepName &= "(" & SMNameBody & ")"
-				Throw New Exception(strRet)
-			End If
-			Return "OK"
-		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			'Me.PrintDebugLog(SUB_NAME, "Catch ex As Exception", strRet)
-			Return strRet
-		End Try
-	End Function
+
 
 	Private Function mSavePigKeyValueToShareMem(ByRef NewItem As PigKeyValue) As String
-		Const SUB_NAME As String = "mSavePigKeyValueToShareMem"
-		Dim strStepName As String = ""
-		Dim strRet As String
+		Dim LOG As New PigStepLog("mSavePigKeyValueToShareMem")
 		Try
-			Dim suSMHead As StruSMHead
-			ReDim suSMHead.SaveValueMD5(0)
-			Dim abSaveBytes As Byte(), abSavePigMD5 As Byte()
-			ReDim abSaveBytes(0)
-			ReDim abSavePigMD5(0)
-			strStepName = "GetSaveData"
-			strRet = NewItem.GetSaveData(abSaveBytes, abSavePigMD5)
-			If strRet <> "OK" Then
-				strStepName &= "(" & NewItem.KeyName & ")"
-				Throw New Exception(strRet)
+			Dim strKeyName As String = NewItem.KeyName
+			'--------
+			LOG.StepName = "Check"
+			LOG.Ret = NewItem.Check()
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName)
+				Throw New Exception(LOG.Ret)
 			End If
-			With suSMHead
-				.ValueType = NewItem.ValueType
-				.SaveValueLen = abSaveBytes.Length
-				.SaveValueMD5 = abSavePigMD5
-				.ExpTime = NewItem.ExpTime
-				.TextType = NewItem.TextType
-				.SaveType = NewItem.SaveType
-				.ValueLen = NewItem.ValueLen
-			End With
-			strStepName = "mSaveSMHead"
-			strRet = Me.mSaveSMHead(suSMHead, NewItem.fSMNameHead)
-			If strRet <> "OK" Then
-				strStepName &= "(" & NewItem.KeyName & "." & NewItem.fSMNameHead & ")"
-				Throw New Exception(strRet)
+			'--------
+			Dim strHeadTitle As String = "", strBodyTitle As String = ""
+			LOG.StepName = "GetKeyTitle"
+			LOG.Ret = Me.GetKeyTitle(strKeyName, strHeadTitle, strBodyTitle)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName)
+				Throw New Exception(LOG.Ret)
 			End If
-			strStepName = "mSaveSMBody"
-			strRet = Me.mSaveSMBody(suSMHead, NewItem.fSMNameBody, abSaveBytes)
-			If strRet <> "OK" Then
-				strStepName &= "(" & NewItem.KeyName & "." & NewItem.fSMNameBody & ")"
-				Throw New Exception(strRet)
+			'--------
+			LOG.StepName = "SaveBytesToShareMem"
+			LOG.Ret = Me.SaveBytesToShareMem(strHeadTitle, SM_HEAD_LEN, NewItem.HeadData.Main)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName & "." & strHeadTitle)
+				Throw New Exception(LOG.Ret)
 			End If
+			'--------
+			LOG.StepName = "SaveBytesToShareMem"
+			LOG.Ret = Me.SaveBytesToShareMem(strBodyTitle, NewItem.BodyLen, NewItem.BodyData.Main)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName & "." & strBodyTitle)
+				Throw New Exception(LOG.Ret)
+			End If
+			'--------
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 	Private Function mSavePigKeyValueToFile(ByRef NewItem As PigKeyValue) As String
-		Const SUB_NAME As String = "mSavePigKeyValueToFile"
-		Dim strStepName As String = ""
-		Dim strRet As String
+		Dim LOG As New PigStepLog("mSavePigKeyValueToShareMem")
 		Try
-			Dim suSMHead As StruSMHead
-			ReDim suSMHead.SaveValueMD5(0)
-			Dim abSaveBytes As Byte(), abSavePigMD5 As Byte()
-			ReDim abSaveBytes(0)
-			ReDim abSavePigMD5(0)
-			strStepName = "GetSaveData"
-			strRet = NewItem.GetSaveData(abSaveBytes, abSavePigMD5)
-			If strRet <> "OK" Then
-				strStepName &= "(" & NewItem.KeyName & ")"
-				Throw New Exception(strRet)
+			Dim strKeyName As String = NewItem.KeyName
+			'--------
+			LOG.StepName = "Check"
+			LOG.Ret = NewItem.Check()
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName)
+				Throw New Exception(LOG.Ret)
 			End If
-			With suSMHead
-				.ValueType = NewItem.ValueType
-				.SaveValueLen = abSaveBytes.Length
-				.SaveValueMD5 = abSavePigMD5
-				.ExpTime = NewItem.ExpTime
-				.TextType = NewItem.TextType
-				.SaveType = NewItem.SaveType
-				.ValueLen = NewItem.ValueLen
-			End With
-			strStepName = "mSaveFileHead"
-			strRet = Me.mSaveFileHead(suSMHead, NewItem.fSMNameHead)
-			If strRet <> "OK" Then
-				strStepName &= "(" & NewItem.KeyName & "." & NewItem.fSMNameHead & ")"
-				Throw New Exception(strRet)
+			'--------
+			Dim strHeadTitle As String = "", strBodyTitle As String = ""
+			LOG.StepName = "GetKeyTitle"
+			LOG.Ret = Me.GetKeyTitle(strKeyName, strHeadTitle, strBodyTitle)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName)
+				Throw New Exception(LOG.Ret)
 			End If
-			strStepName = "mSaveFileBody"
-			strRet = Me.mSaveFileBody(suSMHead, NewItem.fSMNameBody, abSaveBytes)
-			If strRet <> "OK" Then
-				strStepName &= "(" & NewItem.KeyName & "." & NewItem.fSMNameBody & ")"
-				Throw New Exception(strRet)
+			'--------
+			Dim strFilePath As String
+			strFilePath = Me.CacheWorkDir & Me.OsPathSep & strHeadTitle
+			LOG.StepName = "SaveBytesToFile"
+			LOG.Ret = Me.SaveBytesToFile(strFilePath, NewItem.HeadData.Main)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName & "." & strHeadTitle)
+				Throw New Exception(LOG.Ret)
 			End If
-			'Dim suSMHead As StruSMHead
-			'ReDim suSMHead.SaveValueMD5(0)
-			'strStepName = "mGetStruSMHead"
-			'strRet = Me.mGetStruSMHead(suSMHead, NewItem.fSMNameHead, Me.CacheWorkDir)
-			'If strRet <> "OK" Then
-			'	Select Case NewItem.ValueType
-			'		Case PigKeyValue.enmValueType.Text, PigKeyValue.enmValueType.Bytes
-			'			Dim abSaveBytes As Byte(), abSavePigMD5 As Byte()
-			'			ReDim abSaveBytes(0)
-			'			ReDim abSavePigMD5(0)
-			'			strStepName = "GetSaveData"
-			'			strRet = NewItem.GetSaveData(abSaveBytes, abSavePigMD5)
-			'			If strRet <> "OK" Then Throw New Exception(strRet)
-			'			With suSMHead
-			'				.ValueType = NewItem.ValueType
-			'				.SaveValueLen = NewItem.ValueLen
-			'				.SaveValueMD5 = abSavePigMD5
-			'				.ExpTime = NewItem.ExpTime
-			'				.TextType = NewItem.TextType
-			'				.SaveType = NewItem.SaveType
-			'				.SaveValueLen = abSaveBytes.Length
-			'			End With
-			'			strStepName = "mSaveFileHead"
-			'			strRet = Me.mSaveFileHead(suSMHead, NewItem.fSMNameHead)
-			'			If strRet <> "OK" Then
-			'				strStepName &= "(" & NewItem.KeyName & "." & NewItem.fSMNameHead & ")"
-			'				Throw New Exception(strRet)
-			'			End If
-			'			strStepName = "mSaveFileBody"
-			'			strRet = Me.mSaveFileBody(suSMHead, NewItem.fSMNameBody, abSaveBytes)
-			'			If strRet <> "OK" Then
-			'				strStepName &= "(" & NewItem.KeyName & "." & NewItem.fSMNameBody & ")"
-			'				Throw New Exception(strRet)
-			'			End If
-			'		Case Else
-			'			strStepName = "ValueType is " & NewItem.ValueType.ToString
-			'			Throw New Exception("Unsupported")
-			'	End Select
-			'End If
+			'--------
+			LOG.StepName = "SaveBytesToFile"
+			strFilePath = Me.CacheWorkDir & Me.OsPathSep & strBodyTitle
+			LOG.Ret = Me.SaveBytesToFile(strFilePath, NewItem.BodyData.Main)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName & "." & strBodyTitle)
+				Throw New Exception(LOG.Ret)
+			End If
+			'--------
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf(SUB_NAME, strStepName, ex)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
-	Public Sub SavePigKeyValue(NewItem As PigKeyValue, Optional IsOverwrite As Boolean = True)
-		Try
-			Dim strRet As String = Me.mSavePigKeyValue(NewItem, IsOverwrite)
-			Me.ClearErr()
-		Catch ex As Exception
-			Me.SetSubErrInf("SavePigKeyValue", ex)
-		End Try
-	End Sub
 
 	Public Function SavePigKeyValue(KeyName As String, KeyValue As Byte(), ExpTimeSec As Long, Optional IsOverwrite As Boolean = True) As String
-		Dim strStepName As String = "SavePigKeyValue"
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("SavePigKeyValue")
 		Try
-			strStepName = "New PigKeyValue"
+			LOG.StepName = "New PigKeyValue"
 			Dim oNewItem As New PigKeyValue(KeyName, Now.AddSeconds(ExpTimeSec), KeyValue, Me.DefaultSaveType)
 			If oNewItem.LastErr <> "" Then Throw New Exception(oNewItem.LastErr)
-			strStepName = "mSavePigKeyValue"
-			strRet = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
-			If strRet <> "OK" Then Throw New Exception(strRet)
+			LOG.StepName = "mSavePigKeyValue"
+			LOG.Ret = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
+			If LOG.Ret <> "OK" Then Throw New Exception(LOG.Ret)
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf("SavePigKeyValue", strStepName, ex)
+			Return Me.GetSubErrInf("SavePigKeyValue", LOG.StepName, ex)
 		End Try
 	End Function
 
 	Public Function SavePigKeyValue(KeyName As String, KeyValue As Byte(), ExpTime As DateTime, Optional IsOverwrite As Boolean = True) As String
-		Dim strStepName As String = "SavePigKeyValue"
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("SavePigKeyValue")
 		Try
-			strStepName = "New PigKeyValue"
+			LOG.StepName = "New PigKeyValue"
 			Dim oNewItem As New PigKeyValue(KeyName, ExpTime, KeyValue, Me.DefaultSaveType)
 			If oNewItem.LastErr <> "" Then Throw New Exception(oNewItem.LastErr)
-			strStepName = "mSavePigKeyValue"
-			strRet = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
-			If strRet <> "OK" Then Throw New Exception(strRet)
+			LOG.StepName = "mSavePigKeyValue"
+			LOG.Ret = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
+			If LOG.Ret <> "OK" Then Throw New Exception(LOG.Ret)
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf("SavePigKeyValue", strStepName, ex)
+			Return Me.GetSubErrInf("SavePigKeyValue", LOG.StepName, ex)
 		End Try
 	End Function
 
 	Public Function SavePigKeyValue(KeyName As String, KeyValue As String, ExpTime As DateTime, Optional IsOverwrite As Boolean = True) As String
-		Dim strStepName As String = "SavePigKeyValue"
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("SavePigKeyValue")
 		Try
-			strStepName = "New PigKeyValue"
+			LOG.StepName = "New PigKeyValue"
 			Dim oNewItem As New PigKeyValue(KeyName, ExpTime, KeyValue, Me.DefaultTextType)
 			If oNewItem.LastErr <> "" Then Throw New Exception(oNewItem.LastErr)
-			strStepName = "mSavePigKeyValue"
-			strRet = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
-			If strRet <> "OK" Then Throw New Exception(strRet)
+			LOG.StepName = "mSavePigKeyValue"
+			LOG.Ret = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
+			If LOG.Ret <> "OK" Then Throw New Exception(LOG.Ret)
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf("SavePigKeyValue", strStepName, ex)
+			Return Me.GetSubErrInf("SavePigKeyValue", LOG.StepName, ex)
 		End Try
 	End Function
 
 	Public Function SavePigKeyValue(KeyName As String, KeyValue As String, ExpTimeSec As Long, Optional IsOverwrite As Boolean = True) As String
-		Dim strStepName As String = "SavePigKeyValue"
-		Dim strRet As String = ""
+		Dim LOG As New PigStepLog("SavePigKeyValue")
 		Try
-			strStepName = "New PigKeyValue"
+			LOG.StepName = "New PigKeyValue"
 			Dim oNewItem As New PigKeyValue(KeyName, Now.AddSeconds(ExpTimeSec), KeyValue, Me.DefaultTextType)
 			If oNewItem.LastErr <> "" Then Throw New Exception(oNewItem.LastErr)
-			strStepName = "mSavePigKeyValue"
-			strRet = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
-			If strRet <> "OK" Then Throw New Exception(strRet)
+			LOG.StepName = "mSavePigKeyValue"
+			LOG.Ret = Me.mSavePigKeyValue(oNewItem, IsOverwrite)
+			If LOG.Ret <> "OK" Then Throw New Exception(LOG.Ret)
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf("SavePigKeyValue", strStepName, ex)
+			Return Me.GetSubErrInf("SavePigKeyValue", LOG.StepName, ex)
 		End Try
 	End Function
 
-	Private Function mSavePigKeyValue(NewItem As PigKeyValue, Optional IsOverwrite As Boolean = True) As String
-		Const SUB_NAME As String = "mSavePigKeyValue"
-		Dim strStepName As String = ""
-		Dim strRet As String
+	Public Function SavePigKeyValue(NewItem As PigKeyValue, Optional IsOverwrite As Boolean = True) As String
+		Dim strRet As String = ""
 		Try
-			strStepName = "NewItem.Check"
-			strRet = NewItem.Check()
+			strRet = Me.mSavePigKeyValue(NewItem, IsOverwrite)
 			If strRet <> "OK" Then Throw New Exception(strRet)
+			Return strRet
+		Catch ex As Exception
+			Me.SetSubErrInf("SavePigKeyValue", ex)
+			Return strRet
+		End Try
+	End Function
+
+
+	Private Function mSavePigKeyValue(NewItem As PigKeyValue, Optional IsOverwrite As Boolean = True) As String
+		Dim LOG As New PigStepLog("SavePigKeyValue")
+		Try
 			Dim strKeyName As String = NewItem.KeyName
+			LOG.StepName = "NewItem.Check"
+			LOG.Ret = NewItem.Check()
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(strKeyName)
+				Throw New Exception(LOG.Ret)
+			End If
 			Dim pkvOld As PigKeyValue = Nothing
 			'获取旧的成员
 			Select Case Me.CacheLevel
-				Case enmCacheLevel.ToList
-					strStepName = "mGetPigKeyValueByList"
-					strRet = Me.mGetPigKeyValueByList(strKeyName, pkvOld)
-					If strRet <> "OK" Then
-						strStepName &= "(" & strKeyName & ")"
-						Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+				Case EnmCacheLevel.ToList
+					LOG.StepName = "mGetPigKeyValueByList"
+					LOG.Ret = Me.mGetPigKeyValueByList(strKeyName, pkvOld)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(strKeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 					End If
-				Case enmCacheLevel.ToShareMem
-					strStepName = "mGetPigKeyValueByShareMem"
-					strRet = Me.mGetPigKeyValueByShareMem(strKeyName, pkvOld)
-					If strRet <> "OK" Then
-						strStepName &= "(" & strKeyName & ")"
-						Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+				Case EnmCacheLevel.ToShareMem
+					LOG.StepName = "mGetPigKeyValueByShareMem"
+					LOG.Ret = Me.mGetPigKeyValueByShareMem(strKeyName, pkvOld)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(strKeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 					End If
-				Case enmCacheLevel.ToFile
-					strStepName = "mGetPigKeyValueByFile"
-					strRet = Me.mGetPigKeyValueByFile(strKeyName, pkvOld)
-					If strRet <> "OK" Then
-						strStepName &= "(" & strKeyName & ")"
-						Me.PrintDebugLog(SUB_NAME, strStepName, Me.PigKeyValues.LastErr)
+				Case EnmCacheLevel.ToFile
+					LOG.StepName = "mGetPigKeyValueByFile"
+					LOG.Ret = Me.mGetPigKeyValueByFile(strKeyName, pkvOld)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(strKeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, Me.PigKeyValues.LastErr)
 					End If
 				Case Else
-					strStepName = Me.CacheLevel.ToString
+					LOG.StepName = Me.CacheLevel.ToString
 					Throw New Exception("Unsupported CacheLevel")
 			End Select
 			'确定新增还是更新
@@ -1365,9 +1028,9 @@ Public Class PigKeyValueApp
 			If NewItem.Parent Is Nothing Then NewItem.Parent = Me
 			If pkvOld Is Nothing Then
 				bolIsNew = True
-			ElseIf pkvOld.fCompareOther(NewItem) = False Then
+			ElseIf pkvOld.IsMatchAnother(NewItem) = False Then
 				If IsOverwrite = False Then
-					strStepName = strKeyName
+					LOG.StepName = strKeyName
 					Throw New Exception("PigKeyValue Exists")
 				End If
 				bolUpdate = True
@@ -1376,72 +1039,72 @@ Public Class PigKeyValueApp
 			If bolIsNew = True Then
 				msuStatistics.SaveCount += 1
 				Select Case Me.CacheLevel
-					Case enmCacheLevel.ToList
-						strStepName = "mAddPigKeyValueToList"
-						strRet = Me.mAddPigKeyValueToList(NewItem)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Throw New Exception(strRet)
+					Case EnmCacheLevel.ToList
+						LOG.StepName = "mAddPigKeyValueToList"
+						LOG.Ret = Me.mAddPigKeyValueToList(NewItem)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Throw New Exception(LOG.Ret)
 						End If
 						msuStatistics.SaveToListCount += 1
-					Case enmCacheLevel.ToShareMem
-						strStepName = "mSavePigKeyValueToShareMem.New"
-						strRet = Me.mSavePigKeyValueToShareMem(NewItem)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Throw New Exception(strRet)
+					Case EnmCacheLevel.ToShareMem
+						LOG.StepName = "mSavePigKeyValueToShareMem.New"
+						LOG.Ret = Me.mSavePigKeyValueToShareMem(NewItem)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Throw New Exception(LOG.Ret)
 						End If
 						msuStatistics.SaveToShareMemCount += 1
-					Case enmCacheLevel.ToFile
-						strStepName = "mSavePigKeyValueToFile.New"
-						strRet = Me.mSavePigKeyValueToFile(NewItem)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Throw New Exception(strRet)
+					Case EnmCacheLevel.ToFile
+						LOG.StepName = "mSavePigKeyValueToFile.New"
+						LOG.Ret = Me.mSavePigKeyValueToFile(NewItem)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Throw New Exception(LOG.Ret)
 						End If
 						msuStatistics.SaveToFileCount += 1
 				End Select
 			ElseIf bolUpdate = True Then
 				msuStatistics.SaveCount += 1
 				Select Case Me.CacheLevel
-					Case enmCacheLevel.ToList
-						strStepName = "CopyToMe.Update.ToList"
-						strRet = pkvOld.fCopyToMe(NewItem)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Throw New Exception(strRet)
+					Case EnmCacheLevel.ToList
+						LOG.StepName = "CopyToMe.Update.ToList"
+						LOG.Ret = pkvOld.CopyToMe(NewItem)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Throw New Exception(LOG.Ret)
 						End If
 						msuStatistics.SaveToListCount += 1
-					Case enmCacheLevel.ToShareMem
-						strStepName = "mClearShareMem.Update"
-						strRet = Me.mClearShareMem(strKeyName)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+					Case EnmCacheLevel.ToShareMem
+						LOG.StepName = "mClearShareMem.Update"
+						LOG.Ret = Me.mClearShareMem(pkvOld)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 							msuStatistics.RemoveFailCount += 1
 						End If
-						strStepName = "mSavePigKeyValueToShareMem.Update"
-						strRet = Me.mSavePigKeyValueToShareMem(NewItem)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Throw New Exception(strRet)
+						LOG.StepName = "mSavePigKeyValueToShareMem.Update"
+						LOG.Ret = Me.mSavePigKeyValueToShareMem(NewItem)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Throw New Exception(LOG.Ret)
 						End If
 						msuStatistics.SaveToShareMemCount += 1
-					Case enmCacheLevel.ToFile
+					Case EnmCacheLevel.ToFile
 						If pkvOld.Parent Is Nothing Then pkvOld.Parent = Me
-						strStepName = "mClearShareMem.Update"
-						strRet = Me.mRemoveFile(pkvOld)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+						LOG.StepName = "mClearShareMem.Update"
+						LOG.Ret = Me.mRemoveFile(pkvOld.KeyName)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 							msuStatistics.RemoveFailCount += 1
 						End If
 						If NewItem.Parent Is Nothing Then NewItem.Parent = Me
-						strStepName = "mSavePigKeyValueToFile.Update"
-						strRet = Me.mSavePigKeyValueToFile(NewItem)
-						If strRet <> "OK" Then
-							strStepName &= "(" & strKeyName & ")"
-							Throw New Exception(strRet)
+						LOG.StepName = "mSavePigKeyValueToFile.Update"
+						LOG.Ret = Me.mSavePigKeyValueToFile(NewItem)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Throw New Exception(LOG.Ret)
 						End If
 						msuStatistics.SaveToFileCount += 1
 				End Select
@@ -1449,44 +1112,42 @@ Public Class PigKeyValueApp
 				pkvOld.LastRefCacheTime = Now
 			End If
 			Select Case Me.CacheLevel
-				Case enmCacheLevel.ToShareMem, enmCacheLevel.ToFile
-					If Me.CacheLevel = enmCacheLevel.ToFile Then
-						If Me.mIsShareMemExists(strKeyName) = True Then
-							strStepName = "mGetPigKeyValueByShareMem"
-							strRet = Me.mGetPigKeyValueByShareMem(strKeyName, pkvOld)
-							If strRet <> "OK" Then
-								strStepName &= "(" & strKeyName & ")"
-								Me.PrintDebugLog(SUB_NAME, strStepName, Me.PigKeyValues.LastErr)
-							End If
-							If Not pkvOld Is Nothing Then
-								If pkvOld.Parent Is Nothing Then pkvOld.Parent = Me
-								If pkvOld.fCompareOther(NewItem) = False Then
-									strStepName = "mClearShareMem.ToFile"
-									strRet = Me.mClearShareMem(strKeyName)
-									If strRet <> "OK" Then
-										strStepName &= "(" & strKeyName & ")"
-										Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
-										msuStatistics.RemoveFailCount += 1
-									End If
+				Case EnmCacheLevel.ToShareMem, EnmCacheLevel.ToFile
+					If Me.CacheLevel = EnmCacheLevel.ToFile Then
+						LOG.StepName = "mGetPigKeyValueByShareMem"
+						LOG.Ret = Me.mGetPigKeyValueByShareMem(strKeyName, pkvOld)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(strKeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, Me.PigKeyValues.LastErr)
+						End If
+						If pkvOld IsNot Nothing Then
+							If pkvOld.Parent Is Nothing Then pkvOld.Parent = Me
+							If pkvOld.IsMatchAnother(NewItem) = False Then
+								LOG.StepName = "mClearShareMem.ToFile"
+								LOG.Ret = Me.mClearShareMem(pkvOld)
+								If LOG.Ret <> "OK" Then
+									LOG.AddStepNameInf(strKeyName)
+									Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+									msuStatistics.RemoveFailCount += 1
 								End If
 							End If
 						End If
 					End If
 					If Me.PigKeyValues.IsItemExists(strKeyName) = True Then
-						strStepName = "mGetPigKeyValueByList.ToShareMem.ToFile"
-						strRet = Me.mGetPigKeyValueByList(strKeyName, pkvOld)
+						LOG.StepName = "mGetPigKeyValueByList.ToShareMem.ToFile"
+						LOG.Ret = Me.mGetPigKeyValueByList(strKeyName, pkvOld)
 						If Me.PigKeyValues.LastErr <> "" Then
-							strStepName &= "(" & strKeyName & ")"
-							Me.PrintDebugLog(SUB_NAME, strStepName, Me.PigKeyValues.LastErr)
+							LOG.AddStepNameInf(strKeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, Me.PigKeyValues.LastErr)
 						End If
-						If Not pkvOld Is Nothing Then
+						If pkvOld IsNot Nothing Then
 							If pkvOld.Parent Is Nothing Then pkvOld.Parent = Me
-							If pkvOld.fCompareOther(NewItem) = False Then
-								strStepName = "CopyToMe.ToShareMem.ToFile"
-								strRet = pkvOld.fCopyToMe(NewItem)
-								If strRet <> "OK" Then
-									strStepName &= "(" & strKeyName & ")"
-									Throw New Exception(strRet)
+							If pkvOld.IsMatchAnother(NewItem) = False Then
+								LOG.StepName = "CopyToMe.ToShareMem.ToFile"
+								LOG.Ret = pkvOld.CopyToMe(NewItem)
+								If LOG.Ret <> "OK" Then
+									LOG.AddStepNameInf(strKeyName)
+									Throw New Exception(LOG.Ret)
 								End If
 							End If
 						End If
@@ -1495,76 +1156,67 @@ Public Class PigKeyValueApp
 			Return "OK"
 		Catch ex As Exception
 			msuStatistics.SaveFailCount += 1
-			strRet = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
-	Public Function RemovePigKeyValue(KeyName As String, CacheLevel As enmCacheLevel) As String
-		Const SUB_NAME As String = "RemovePigKeyValue"
-		Dim strStepName As String = ""
-		Dim strRet As String = ""
+	Public Function RemovePigKeyValue(PkvOld As PigKeyValue, CacheLevel As EnmCacheLevel) As String
+		Dim LOG As New PigStepLog("RemovePigKeyValue")
 		Try
+			If PkvOld Is Nothing Then Throw New Exception("PkvOld Is Nothing")
 			Dim bolIsToList As Boolean = False, bolIsToShareMem As Boolean = False, bolIsToFile As Boolean = False
 			Select Case CacheLevel
-				Case enmCacheLevel.ToList
+				Case EnmCacheLevel.ToList
 					bolIsToList = True
-				Case enmCacheLevel.ToShareMem
+				Case EnmCacheLevel.ToShareMem
 					bolIsToList = True
 					bolIsToShareMem = True
-				Case enmCacheLevel.ToFile
+				Case EnmCacheLevel.ToFile
 					bolIsToList = True
 					bolIsToShareMem = True
 					bolIsToFile = True
 				Case Else
-					strStepName = KeyName
+					LOG.StepName = PkvOld.KeyName
 					Throw New Exception("Unsupported CacheLevel")
 			End Select
 			msuStatistics.RemoveCount += 1
 			Dim strErr As String = ""
 			If bolIsToFile = True Then
-				If Me.mIsCacheFileExists(KeyName) = True Then
-					Dim oPigKeyValue As New PigKeyValue(KeyName)
-					strStepName = "mRemoveFile"
-					strRet = Me.mRemoveFile(oPigKeyValue)
-					If strRet <> "OK" Then strErr &= strStepName & ":" & strRet
-					oPigKeyValue = Nothing
+				If Me.mIsCacheFileExists(PkvOld.KeyName) = True Then
+					LOG.StepName = "mRemoveFile"
+					LOG.Ret = Me.mRemoveFile(PkvOld.KeyName)
+					If LOG.Ret <> "OK" Then strErr &= LOG.StepName & ":" & LOG.Ret
 				End If
 			End If
 			If bolIsToShareMem = True Then
-				If Me.mIsShareMemExists(KeyName) = True Then
-					strStepName = "mClearShareMem"
-					strRet = Me.mClearShareMem(KeyName)
-					If strRet <> "OK" Then strErr &= strStepName & ":" & strRet
-				End If
+				LOG.StepName = "mClearShareMem"
+				LOG.Ret = Me.mClearShareMem(PkvOld)
+				If LOG.Ret <> "OK" Then strErr &= LOG.StepName & ":" & LOG.Ret
 			End If
 			If bolIsToList = True Then
-				If Me.PigKeyValues.IsItemExists(KeyName) = True Then
-					strStepName = "mRemovePigKeyValueFromList"
-					strRet = Me.mRemovePigKeyValueFromList(KeyName)
-					If strRet <> "OK" Then strErr &= strStepName & ":" & strRet
+				If Me.PigKeyValues.IsItemExists(PkvOld.KeyName) = True Then
+					LOG.StepName = "mRemovePigKeyValueFromList"
+					LOG.Ret = Me.mRemovePigKeyValueFromList(PkvOld.KeyName)
+					If LOG.Ret <> "OK" Then strErr &= LOG.StepName & ":" & LOG.Ret
 				End If
 			End If
 			If strErr <> "" Then
-				strStepName = "Remove(" & KeyName & ")"
+				LOG.AddStepNameInf(PkvOld.KeyName)
 				Throw New Exception(strErr)
 			End If
 			Return "OK"
 		Catch ex As Exception
-			strRet = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Me.PrintDebugLog(SUB_NAME, "Catch Exception", strRet)
 			msuStatistics.RemoveFailCount += 1
-			Return strRet
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 	Public Sub RemoveExpItems()
-		Const SUB_NAME As String = "RemoveExpItems"
-		Dim strStepName As String = ""
+		Dim LOG As New PigStepLog("RemoveExpItems")
 		Try
 			Dim intItems As Integer = 0
 			Dim astrKeyName(intItems) As String
-			strStepName = "For Each"
+			LOG.StepName = "For Each"
 			For Each oPigKeyValue As PigKeyValue In Me.PigKeyValues
 				Dim strKeyName As String = oPigKeyValue.KeyName
 				If oPigKeyValue.IsExpired = True Then
@@ -1574,19 +1226,18 @@ Public Class PigKeyValueApp
 				End If
 			Next
 			If intItems > 0 Then
-				Dim strRet As String
-				For i = 1 To intItems
-					strStepName = "RemovePigKeyValue"
-					strRet = Me.RemovePigKeyValue(astrKeyName(i), Me.CacheLevel)
-					If strRet <> "OK" Then
-						strStepName &= "(" & astrKeyName(i) & ")"
-						Me.PrintDebugLog(SUB_NAME, strStepName, strRet)
+				For Each pkvAny As PigKeyValue In Me.PigKeyValues
+					LOG.StepName = "RemovePigKeyValue"
+					LOG.Ret = Me.RemovePigKeyValue(pkvAny, Me.CacheLevel)
+					If LOG.Ret <> "OK" Then
+						LOG.AddStepNameInf(pkvAny.KeyName)
+						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 					End If
 				Next
 			End If
 			Me.ClearErr()
 		Catch ex As Exception
-			Me.SetSubErrInf(SUB_NAME, strStepName, ex)
+			Me.SetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Sub
 
@@ -1594,7 +1245,7 @@ Public Class PigKeyValueApp
 		Try
 			Dim oPigXml As New PigXml(True)
 			GetStatisticsXml = ""
-			oPigXml.AddEle("PID", System.Diagnostics.Process.GetCurrentProcess.Id.ToString)
+			oPigXml.AddEle("PID", Me.fMyPID)
 			oPigXml.AddEle("StatisticsTime", Format(Now, "yyyy-MM-dd HH:mm:ss.fff"))
 			With msuStatistics
 				oPigXml.AddEle("GetCount", .GetCount)
@@ -1604,9 +1255,9 @@ Public Class PigKeyValueApp
 				oPigXml.AddEle("SaveFailCount", .SaveFailCount)
 				oPigXml.AddEle("SaveToListCount", .SaveToListCount)
 				Select Case Me.CacheLevel
-					Case enmCacheLevel.ToShareMem
+					Case EnmCacheLevel.ToShareMem
 						oPigXml.AddEle("SaveToShareMemCount", .SaveToShareMemCount)
-					Case enmCacheLevel.ToFile
+					Case EnmCacheLevel.ToFile
 						oPigXml.AddEle("SaveToShareMemCount", .SaveToShareMemCount)
 						oPigXml.AddEle("SaveToFileCount", .SaveToFileCount)
 				End Select
@@ -1614,9 +1265,9 @@ Public Class PigKeyValueApp
 				oPigXml.AddEle("CacheCount", .CacheCount)
 				oPigXml.AddEle("CacheByListCount", .CacheByListCount)
 				Select Case Me.CacheLevel
-					Case enmCacheLevel.ToShareMem
+					Case EnmCacheLevel.ToShareMem
 						oPigXml.AddEle("CacheByShareMemCount", .CacheByShareMemCount)
-					Case enmCacheLevel.ToFile
+					Case EnmCacheLevel.ToFile
 						oPigXml.AddEle("CacheByShareMemCount", .CacheByShareMemCount)
 						oPigXml.AddEle("CacheByFileCount", .CacheByFileCount)
 				End Select
@@ -1625,9 +1276,9 @@ Public Class PigKeyValueApp
 				oPigXml.AddEle("RemoveFailCount", .RemoveFailCount)
 				oPigXml.AddEle("RemoveExpiredListCount", .RemoveExpiredListCount)
 				Select Case Me.CacheLevel
-					Case enmCacheLevel.ToShareMem
+					Case EnmCacheLevel.ToShareMem
 						oPigXml.AddEle("RemoveExpiredShareMemCount", .RemoveExpiredShareMemCount)
-					Case enmCacheLevel.ToFile
+					Case EnmCacheLevel.ToFile
 						oPigXml.AddEle("RemoveExpiredShareMemCount", .RemoveExpiredShareMemCount)
 						oPigXml.AddEle("RemoveExpiredFileCount", .RemoveExpiredFileCount)
 				End Select
@@ -1640,12 +1291,12 @@ Public Class PigKeyValueApp
 		End Try
 	End Function
 
-	Private menmCacheLevel As enmCacheLevel = enmCacheLevel.ToList
-	Public Property CacheLevel As enmCacheLevel
+	Private menmCacheLevel As EnmCacheLevel = EnmCacheLevel.ToList
+	Public Property CacheLevel As EnmCacheLevel
 		Get
 			Return menmCacheLevel
 		End Get
-		Friend Set(value As enmCacheLevel)
+		Friend Set(value As EnmCacheLevel)
 			menmCacheLevel = value
 		End Set
 	End Property
@@ -1660,12 +1311,12 @@ Public Class PigKeyValueApp
 		End Set
 	End Property
 
-	Private mintDefaultSaveType As PigKeyValue.enmSaveType = PigKeyValue.enmSaveType.SaveSpace
-	Public Property DefaultSaveType As PigKeyValue.enmSaveType
+	Private mintDefaultSaveType As PigKeyValue.EnmSaveType = PigKeyValue.EnmSaveType.SaveSpace
+	Public Property DefaultSaveType As PigKeyValue.EnmSaveType
 		Get
 			Return mintDefaultSaveType
 		End Get
-		Friend Set(value As PigKeyValue.enmSaveType)
+		Friend Set(value As PigKeyValue.EnmSaveType)
 			mintDefaultSaveType = value
 		End Set
 	End Property
@@ -1715,188 +1366,153 @@ Public Class PigKeyValueApp
 	End Function
 
 
-	Private Function mSaveFileHead(SuSMHead As StruSMHead, SMNameHead As String) As String
-		Const SUB_NAME As String = "mSaveFileHead"
-		Dim strStepName As String = ""
-		Try
-			Dim strRet As String
-			Dim strSMNameHeadFilePath As String = Me.CacheWorkDir & Me.OsPathSep & SMNameHead
-			strStepName = "New PigFile"
-			Dim oPigFile As New PigFile(strSMNameHeadFilePath)
-			If oPigFile.LastErr <> "" Then
-				strStepName &= "(" & strSMNameHeadFilePath & ")"
-				Throw New Exception(oPigFile.LastErr)
-			End If
-			strStepName = "New GbMain"
-			oPigFile.GbMain = New PigBytes
-			strStepName = "SetValue"
-			With oPigFile.GbMain
-				.SetValue(SuSMHead.ValueType)
-				If .LastErr <> "" Then
-					strStepName &= ".ValueType"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.ExpTime)
-				If .LastErr <> "" Then
-					strStepName &= ".ExpTime"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.ValueLen)
-				If .LastErr <> "" Then
-					strStepName &= ".ValueLen"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.SaveValueMD5)
-				If .LastErr <> "" Then
-					strStepName &= ".SaveValueMD5"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.TextType)
-				If .LastErr <> "" Then
-					strStepName &= ".TextType"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.SaveType)
-				If .LastErr <> "" Then
-					strStepName &= ".SaveType"
-					Throw New Exception(.LastErr)
-				End If
-				.SetValue(SuSMHead.SaveValueLen)
-				If .LastErr <> "" Then
-					strStepName &= ".SaveValueLen"
-					Throw New Exception(.LastErr)
-				End If
-			End With
-			strStepName = "SaveFile"
-			strRet = oPigFile.SaveFile(False)
-			If strRet <> "OK" Then
-				strStepName &= "(" & strSMNameHeadFilePath & ")"
-				Throw New Exception(strRet)
-			End If
-			Return "OK"
-		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
-		End Try
-	End Function
 
-	Private Function mSaveFileBody(SuSMHead As StruSMHead, SMNameBody As String, ByRef DataBytes As Byte()) As String
-		Const SUB_NAME As String = "mSaveFileBody"
-		Dim strStepName As String = ""
-		Try
-			Dim strRet As String
-			Dim strSMNameBodyFilePath As String = Me.CacheWorkDir & Me.OsPathSep & SMNameBody
-			strStepName = "New PigFile"
-			Dim oPigFile As New PigFile(strSMNameBodyFilePath)
-			If oPigFile.LastErr <> "" Then
-				strStepName &= "(" & strSMNameBodyFilePath & ")"
-				Throw New Exception(oPigFile.LastErr)
-			End If
-			strStepName = "New GbMain"
-			oPigFile.GbMain = New PigBytes(DataBytes)
-			strStepName = "SaveFile"
-			strRet = oPigFile.SaveFile(False)
-			If strRet <> "OK" Then
-				strStepName &= "(" & strSMNameBodyFilePath & ")"
-				Throw New Exception(strRet)
-			End If
-			Return "OK"
-		Catch ex As Exception
-			Dim strRet As String = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			'Me.PrintDebugLog(SUB_NAME, "Catch ex As Exception", strRet)
-			Return strRet
-		End Try
-	End Function
 
 	Private Function mGetPigKeyValueFromFile(KeyName As String, ByRef OutPigKeyValue As PigKeyValue) As String
-		Const SUB_NAME As String = "mGetPigKeyValueFromFile"
-		Dim strStepName As String = ""
-		Dim strRet As String
+		Dim LOG As New PigStepLog("mGetPigKeyValueFromFile")
 		Try
-			If OutPigKeyValue Is Nothing Then
-				strStepName = "New PigKeyValue"
-				OutPigKeyValue = New PigKeyValue(KeyName)
-				If OutPigKeyValue.LastErr <> "" Then
-					strStepName &= "(" & KeyName & ")"
-					Throw New Exception(OutPigKeyValue.LastErr)
+			If OutPigKeyValue IsNot Nothing Then OutPigKeyValue = Nothing
+			LOG.StepName = "New PigKeyValue"
+			OutPigKeyValue = New PigKeyValue(KeyName)
+			If OutPigKeyValue.LastErr <> "" Then
+				LOG.AddStepNameInf(KeyName)
+				Throw New Exception(OutPigKeyValue.LastErr)
+			End If
+			'--------
+			Dim strHeadTitle As String = "", strBodyTitle As String = ""
+			LOG.StepName = "GetKeyTitle"
+			LOG.Ret = Me.GetKeyTitle(KeyName, strHeadTitle, strBodyTitle)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName)
+				Throw New Exception(LOG.Ret)
+			End If
+			'--------
+			Dim pbMain As PigBytes = Nothing
+			Dim strFilePath As String
+			'--------
+			LOG.StepName = "LoadBytesFromFile"
+			strFilePath = Me.CacheWorkDir & Me.OsPathSep & strHeadTitle
+			LOG.Ret = Me.LoadBytesFromFile(strFilePath, pbMain)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName & "." & strHeadTitle)
+				Throw New Exception(LOG.Ret)
+			End If
+			If pbMain Is Nothing Then
+				LOG.AddStepNameInf(KeyName & "." & strHeadTitle)
+				Throw New Exception("pbMain Is Nothing")
+			End If
+			If Me.mIsHeadBytesInit(pbMain.Main) = True Then
+				LOG.StepName = "OutPigKeyValue.LoadHead"
+				LOG.Ret = OutPigKeyValue.LoadHead(pbMain)
+				If LOG.Ret <> "OK" Then
+					LOG.AddStepNameInf(KeyName)
+					Throw New Exception(LOG.Ret)
+				End If
+				'--------
+				pbMain = Nothing
+				strFilePath = Me.CacheWorkDir & Me.OsPathSep & strBodyTitle
+				LOG.StepName = "LoadBytesFromFile"
+				LOG.Ret = Me.LoadBytesFromFile(strFilePath, pbMain)
+				If LOG.Ret <> "OK" Then
+					LOG.AddStepNameInf(KeyName & "." & strBodyTitle)
+					Throw New Exception(LOG.Ret)
+				End If
+				If pbMain Is Nothing Then
+					LOG.AddStepNameInf(KeyName & "." & strBodyTitle)
+					Throw New Exception("pbMain Is Nothing")
+				End If
+				LOG.StepName = "OutPigKeyValue.LoadBody"
+				LOG.Ret = OutPigKeyValue.LoadBody(pbMain.Main)
+				If LOG.Ret <> "OK" Then
+					LOG.AddStepNameInf(KeyName)
+					Throw New Exception(LOG.Ret)
 				End If
 			End If
-			Dim suSMHead As StruSMHead
-			ReDim suSMHead.SaveValueMD5(0)
-			strStepName = "mGetStruSMHead"
-			strRet = Me.mGetStruSMHead(suSMHead, OutPigKeyValue.fSMNameHead, Me.CacheWorkDir)
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Throw New Exception(strRet)
-			End If
-			Dim abSMBody As Byte()
-			ReDim abSMBody(0)
-			strStepName = "mGetBytesFileBody"
-			strRet = Me.mGetBytesFileBody(abSMBody, suSMHead, OutPigKeyValue.fSMNameBody, Me.CacheWorkDir)
-			If strRet = "OK" Then
-				If abSMBody.Length <> suSMHead.SaveValueLen Then
-					strRet = "The imported data length does not match." & "(" & abSMBody.Length & "," & suSMHead.SaveValueLen & ")"
-				Else
-					strStepName &= ",mChkSaveBodyBytes"
-					strRet = Me.mChkSaveBodyBytes(abSMBody, suSMHead)
-					'Dim oPigBytes As New PigBytes(abSMBody)
-					'If Me.mIsBytesMatch(oPigBytes.PigMD5Bytes, suSMHead.ValueMD5) = False Then
-					'	strRet = "The imported data does not match PigMD5"
-					'End If
-					'oPigBytes = Nothing
-				End If
-			End If
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Throw New Exception(strRet)
-			End If
-			strStepName = "InitBytesBySave"
-			strRet = OutPigKeyValue.InitBytesBySave(suSMHead, abSMBody)
-			If strRet <> "OK" Then
-				strStepName &= "(" & KeyName & ")"
-				Throw New Exception(strRet)
-			End If
+			pbMain = Nothing
+			'--------
 			Return "OK"
 		Catch ex As Exception
 			OutPigKeyValue = Nothing
-			strRet = Me.GetSubErrInf(SUB_NAME, strStepName, ex)
-			Return strRet
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
-	Public Function mRemoveFile(ByRef SrcItem As PigKeyValue) As String
-		Dim strStepName As String = ""
+	Public Function mRemoveFile(KeyName As String) As String
+		Dim LOG As New PigStepLog("mRemoveFile")
+		Dim strDelFile As String = ""
 		Try
-			Dim strDelFile As String = Me.CacheWorkDir & Me.OsPathSep & SrcItem.fSMNameBody
+			'--------
+			Dim strHeadTitle As String = "", strBodyTitle As String = ""
+			LOG.StepName = "GetKeyTitle"
+			LOG.Ret = Me.GetKeyTitle(KeyName, strHeadTitle, strBodyTitle)
+			If LOG.Ret <> "OK" Then
+				LOG.AddStepNameInf(KeyName)
+				Throw New Exception(LOG.Ret)
+			End If
+			Dim strDirPath As String = Me.CacheWorkDir & Me.OsPathSep
+			strDelFile = strDirPath & strHeadTitle
 			If IO.File.Exists(strDelFile) = True Then
-				strStepName = "Delete" & strDelFile
+				LOG.StepName = "File.Delete"
 				IO.File.Delete(strDelFile)
 			End If
-			strDelFile = Me.CacheWorkDir & Me.OsPathSep & SrcItem.fSMNameHead
+			strDelFile = strDirPath & strBodyTitle
 			If IO.File.Exists(strDelFile) = True Then
-				strStepName = "Delete" & strDelFile
+				LOG.StepName = "File.Delete"
 				IO.File.Delete(strDelFile)
 			End If
 			Return "OK"
 		Catch ex As Exception
-			Return Me.GetSubErrInf("mRemoveFile", strStepName, ex)
+			LOG.AddStepNameInf(strDelFile)
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 	Private Function mGetFileLen(FilePath As String, ByRef FileLen As Long) As String
-		Dim strStepName As String = ""
+		Dim LOG As New PigStepLog("mGetFileLen")
 		Try
-			strStepName = "New FileInfo"
+			LOG.StepName = "New FileInfo"
 			Dim oFileInfo As New FileInfo(FilePath)
 			FileLen = oFileInfo.Length
 			oFileInfo = Nothing
 			Return "OK"
 		Catch ex As Exception
-			strStepName &= "(" & FilePath & ")"
-			Return Me.GetSubErrInf("mGetFileLen", strStepName, ex)
+			LOG.AddStepNameInf("FilePath")
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
 		End Try
 	End Function
 
 
+
+	''' <summary>
+	''' 获取键值文件名
+	''' </summary>
+	''' <returns></returns>
+	Public Function GetKeyTitle(KeyName As String, ByRef HeadTitle As String, ByRef BodyTitle As String) As String
+		Dim LOG As New PigStepLog("GetKeyTitle")
+		Try
+			Dim strFileTitle As String
+			Select Case Me.CacheLevel
+				Case EnmCacheLevel.ToList
+					strFileTitle = KeyName
+				Case EnmCacheLevel.ToShareMem
+					strFileTitle = "<" & KeyName & "><" & Me.ShareMemRoot & ">"
+				Case EnmCacheLevel.ToFile
+					strFileTitle = "<" & KeyName & "><" & Me.CacheWorkDir & ">"
+				Case Else
+					Throw New Exception("Invalid CacheLevel " & Me.CacheLevel)
+			End Select
+			Dim oPigMD5 As New PigMD5(strFileTitle, PigMD5.enmTextType.UTF8)
+			If oPigMD5.LastErr <> "" Then Throw New Exception(oPigMD5.LastErr)
+			Dim strPigMD5 As String = oPigMD5.PigMD5
+			oPigMD5 = Nothing
+			HeadTitle = strPigMD5 & ".h"
+			BodyTitle = strPigMD5 & ".b"
+			Return "OK"
+		Catch ex As Exception
+			HeadTitle = ""
+			BodyTitle = ""
+			Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
+		End Try
+	End Function
 
 End Class

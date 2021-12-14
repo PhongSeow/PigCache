@@ -34,8 +34,8 @@ It can run on Windows Only.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib" Version="2.0.32" />
-    <PackageReference Include="PigSQLSrvLib" Version="1.6.3" />
+    <PackageReference Include="PigKeyCacheLib" Version="2.1.6" />
+    <PackageReference Include="PigSQLSrvLib" Version="1.6.18" />
   </ItemGroup>
 
 </Project>
