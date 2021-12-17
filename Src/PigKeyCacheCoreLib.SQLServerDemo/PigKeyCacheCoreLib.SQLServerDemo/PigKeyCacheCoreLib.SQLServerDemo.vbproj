@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheCoreLib.SQLServer" Version="1.2.18" />
+    <PackageReference Include="PigKeyCacheCoreLib.SQLServer" Version="2.0.82" />
   </ItemGroup>
 
 </Project>
