@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用|Piggy key value application
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.3
+'* Version: 3.5
 '* Create Time: 8/5/2021
 '* 1.0.2	13/5/2021 Modify New
 '* 1.0.3	22/7/2021 Modify GetPigKeyValue
@@ -45,6 +45,7 @@
 '* 3.1		10/12/2021 Add GetKeyTitle,mGetPigKeyValueByFile,LoadBytesFromFile, modify mRemoveFile,RemovePigKeyValue,mGetPigKeyValueByShareMem,mSavePigKeyValueToShareMem
 '* 3.2		12/12/2021 Modify mSavePigKeyValue,SaveBytesToShareMem,SavePigKeyValue,mClearShareMem,mGetPigKeyValueFromShareMem
 '* 3.3		14/12/2021 Modify mGetPigKeyValueFromFile,mSavePigKeyValueToFile
+'* 3.5		17/12/2021 Modify mRemoveFile
 '************************************
 
 Imports PigToolsLiteLib
@@ -1437,7 +1438,7 @@ Public Class PigKeyValueApp
 		End Try
 	End Function
 
-	Public Function mRemoveFile(KeyName As String) As String
+	Private Function mRemoveFile(KeyName As String) As String
 		Dim LOG As New PigStepLog("mRemoveFile")
 		Dim strDelFile As String = ""
 		Try

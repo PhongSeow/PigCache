@@ -17,7 +17,7 @@
 '* 1.9	6/12/2021 Modify mNew,GetPigKeyValue
 '* 1.10	7/12/2021 Modify PigFunc,SavePigKeyValue, add mAddTableCol
 '* 2.0	15/12/2021 Modify SavePigKeyValue,GetPigKeyValue
-'* 2.1	17/12/2021 Modify GetPigKeyValue
+'* 2.1	17/12/2021 Modify GetPigKeyValue, add Shadows
 '************************************
 
 Imports PigKeyCacheLib
@@ -33,7 +33,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class PigKeyValueApp
     Inherits PigKeyCacheLib.PigKeyValueApp
-    Private Const CLS_VERSION As String = "2.1.1"
+    Private Const CLS_VERSION As String = "2.1.2"
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
 
@@ -129,7 +129,7 @@ Public Class PigKeyValueApp
         End Try
     End Sub
 
-    Public Overloads Function GetPigKeyValue(KeyName As String) As PigKeyValue
+    Public Overloads Function GetPigKeyValue(KeyName As String) As PigKeyCacheLib.PigKeyValue
         Dim LOG As New PigStepLog("GetPigKeyValue")
         Try
             LOG.StepName = "GetPigKeyValue"
