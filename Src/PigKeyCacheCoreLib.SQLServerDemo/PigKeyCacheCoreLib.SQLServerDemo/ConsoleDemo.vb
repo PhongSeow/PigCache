@@ -4,10 +4,11 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: ConsoleDemo for PigKeyCacheLib.SQLServer
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 2.0
+'* Version: 2.1
 '* Create Time: 18/8/2021
 '* 1.1	5/10/2021	Modify RemovePigKeyValue
 '* 2.0	15/12/2021	Supports PigKeyCacheLib.SQLServer 2.0
+'* 2.1	28/12/2021	Supports PigKeyCacheLib.SQLServer 3.0
 '**********************************
 
 Imports System.Data
@@ -38,7 +39,7 @@ Public Class ConsoleDemo
     Public KeyValue As String = "Value1"
     Public ExpTime As DateTime = Now.AddMinutes(10)
     Public PigFunc As New PigFunc
-    Public ValueType As PigKeyValue.enmValueType = PigKeyValue.enmValueType.Text
+    Public ValueType As PigKeyValue.EnmValueType = PigKeyValue.enmValueType.Text
     Public TextType As PigText.enmTextType = PigText.enmTextType.UTF8
     Public SaveType As PigKeyValue.enmSaveType = PigKeyValue.enmSaveType.Original
     Public Ret As String
@@ -73,7 +74,7 @@ Public Class ConsoleDemo
         Me.ConnSQLSrv.ConnectionTimeout = 5
         Me.ConnSQLSrv.OpenOrKeepActive()
 #If NETFRAMEWORK Then
-        Me.PigKeyValueApp = New PigKeyCacheLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
+        Me.PigKeyValueApp = New PigKeyValueApp(Me.ConnSQLSrv)
 #Else
         Me.PigKeyValueApp = New PigKeyCacheCoreLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
 #End If
@@ -171,7 +172,7 @@ Public Class ConsoleDemo
                     If strLine <> "" Then Me.KeyName = strLine
                     With Me.PigKeyValueApp
                         Console.WriteLine("GetPigKeyValue")
-                        Dim oPigKeyValue As PigKeyCacheLib.PigKeyValue = .GetPigKeyValue(Me.KeyName)
+                        Dim oPigKeyValue As PigKeyValue = .GetPigKeyValue(Me.KeyName)
                         If .LastErr <> "" Then
                             Console.WriteLine(.LastErr)
                         Else
@@ -185,10 +186,10 @@ Public Class ConsoleDemo
                                     Console.WriteLine("ValueType=" & .ValueType.ToString)
                                     Console.WriteLine("ValueLen=" & .ValueLen.ToString)
                                     Console.WriteLine("SaveType=" & .SaveType.ToString)
-                                    Console.WriteLine("ChkMD5Type=" & .ChkMD5Type.ToString)
-                                    Console.WriteLine("BodyLen=" & .BodyLen.ToString)
-                                    Console.WriteLine("BodyMD5.Length=" & .BodyMD5.Length.ToString)
-                                    Console.WriteLine("BodyData.Main.Length=" & .BodyData.Main.Length.ToString)
+                                    'Console.WriteLine("ChkMD5Type=" & .ChkMD5Type.ToString)
+                                    'Console.WriteLine("BodyLen=" & .BodyLen.ToString)
+                                    'Console.WriteLine("BodyMD5.Length=" & .BodyMD5.Length.ToString)
+                                    'Console.WriteLine("BodyData.Main.Length=" & .BodyData.Main.Length.ToString)
                                     If .ValueType = PigKeyValue.EnmValueType.Text Then
                                         Console.WriteLine("TextType=" & .TextType.ToString)
                                     End If
@@ -209,7 +210,7 @@ Public Class ConsoleDemo
                     Console.WriteLine("Show all KeyValues")
                     Console.WriteLine("*******************")
                     Dim i As Integer = 1
-                    For Each oPigKeyValue As PigKeyValue In Me.PigKeyValueApp.PigKeyValues
+                    For Each oPigKeyValue As PigKeyCacheLib.PigKeyValue In Me.PigKeyValueApp.PigKeyValues
                         With oPigKeyValue
                             Console.WriteLine("*********" & i.ToString & "*********")
                             Console.WriteLine("KeyName=" & .KeyName)
@@ -221,17 +222,17 @@ Public Class ConsoleDemo
                         End With
                     Next
                 Case ConsoleKey.D
-                    Console.WriteLine("*******************")
-                    Console.WriteLine("RemoveExpItems")
-                    Console.WriteLine("*******************")
-                    With Me.PigKeyValueApp
-                        .RemoveExpItems()
-                        If .LastErr <> "" Then
-                            Console.WriteLine(.LastErr)
-                        Else
-                            Console.WriteLine("OK")
-                        End If
-                    End With
+                    'Console.WriteLine("*******************")
+                    'Console.WriteLine("RemoveExpItems")
+                    'Console.WriteLine("*******************")
+                    'With Me.PigKeyValueApp
+                    '    .RemoveExpItems()
+                    '    If .LastErr <> "" Then
+                    '        Console.WriteLine(.LastErr)
+                    '    Else
+                    '        Console.WriteLine("OK")
+                    '    End If
+                    'End With
                 Case ConsoleKey.E
                     'Console.WriteLine("*******************")
                     'Console.WriteLine("RemovePigKeyValue")

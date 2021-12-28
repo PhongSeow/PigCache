@@ -4,7 +4,7 @@
     <RootNamespace>PigKeyCacheLib.SQLServerDemo</RootNamespace>
     <TargetFrameworks>net20;net30;net40;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.6</Version>
+    <Version>3.0.6</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Description>Demo console program for PigKeyCacheLib.SQLServer</Description>
@@ -14,7 +14,7 @@
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLib.SQLServerDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Key Value Windows cache Single process Multithreading SQLServer</PackageTags>
-    <PackageReleaseNotes>Reference the transformation of PigKeyCacheLib version 3.0 or above.</PackageReleaseNotes>
+    <PackageReleaseNotes>Simplify class library interfaces. Some interfaces are no longer compatible with old versions.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib.SQLServer" Version="2.0.82" />
+    <PackageReference Include="PigKeyCacheLib.SQLServer" Version="3.0.30" />
   </ItemGroup>
 
 </Project>
