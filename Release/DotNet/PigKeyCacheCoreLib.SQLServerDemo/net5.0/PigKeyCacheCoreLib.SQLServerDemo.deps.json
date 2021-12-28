@@ -6,9 +6,9 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "PigKeyCacheCoreLib.SQLServerDemo/2.0.8": {
+      "PigKeyCacheCoreLib.SQLServerDemo/3.0.6": {
         "dependencies": {
-          "PigKeyCacheCoreLib.SQLServer": "2.0.82"
+          "PigKeyCacheCoreLib.SQLServer": "3.0.30"
         },
         "runtime": {
           "PigKeyCacheCoreLib.SQLServerDemo.dll": {}
@@ -224,38 +224,37 @@
           }
         }
       },
-      "PigKeyCacheCoreLib.SQLServer/2.0.82": {
+      "PigKeyCacheCoreLib.SQLServer/3.0.30": {
         "dependencies": {
-          "PigKeyCacheLib": "3.0.170",
-          "PigSQLSrvCoreLib": "1.7.28"
+          "PigSQLSrvCoreLib": "1.7.38"
         },
         "runtime": {
           "lib/net5.0/PigKeyCacheCoreLib.SQLServer.dll": {
-            "assemblyVersion": "2.0.82.0",
-            "fileVersion": "2.0.82.0"
+            "assemblyVersion": "3.0.30.0",
+            "fileVersion": "3.0.30.0"
           }
         }
       },
-      "PigKeyCacheLib/3.0.170": {
+      "PigKeyCacheLib/3.1.12": {
         "dependencies": {
           "PigToolsLiteLib": "1.5.9"
         },
         "runtime": {
           "lib/net5.0/PigKeyCacheLib.dll": {
-            "assemblyVersion": "3.0.170.0",
-            "fileVersion": "3.0.170.0"
+            "assemblyVersion": "3.1.12.0",
+            "fileVersion": "3.1.12.0"
           }
         }
       },
-      "PigSQLSrvCoreLib/1.7.28": {
+      "PigSQLSrvCoreLib/1.7.38": {
         "dependencies": {
           "Microsoft.Data.SqlClient": "4.0.0",
-          "PigKeyCacheLib": "3.0.170"
+          "PigKeyCacheLib": "3.1.12"
         },
         "runtime": {
           "lib/net5.0/PigSQLSrvCoreLib.dll": {
-            "assemblyVersion": "1.7.28.0",
-            "fileVersion": "1.7.28.0"
+            "assemblyVersion": "1.7.38.0",
+            "fileVersion": "1.7.38.0"
           }
         }
       },
@@ -471,7 +470,7 @@
     }
   },
   "libraries": {
-    "PigKeyCacheCoreLib.SQLServerDemo/2.0.8": {
+    "PigKeyCacheCoreLib.SQLServerDemo/3.0.6": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -595,26 +594,26 @@
       "path": "microsoft.win32.systemevents/5.0.0",
       "hashPath": "microsoft.win32.systemevents.5.0.0.nupkg.sha512"
     },
-    "PigKeyCacheCoreLib.SQLServer/2.0.82": {
+    "PigKeyCacheCoreLib.SQLServer/3.0.30": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-s2v8Wc75LIAN5w5xC5l5Dk0th4xoh6vXSHNCsMbl6zp+Rp2Sw9sba1D4ULqE3WE8odqt1CynTk51nEWEemNhYw==",
-      "path": "pigkeycachecorelib.sqlserver/2.0.82",
-      "hashPath": "pigkeycachecorelib.sqlserver.2.0.82.nupkg.sha512"
+      "sha512": "sha512-TtySxuJiJ5puKINe3pnfqjySEvjBoWTzWI+z5LG25H1Dpw2/Ll96TfVajzQR6E5B85BWasg2YYyWFl61se//bA==",
+      "path": "pigkeycachecorelib.sqlserver/3.0.30",
+      "hashPath": "pigkeycachecorelib.sqlserver.3.0.30.nupkg.sha512"
     },
-    "PigKeyCacheLib/3.0.170": {
+    "PigKeyCacheLib/3.1.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-CAJX6BLz2UHXQVyx0w+GcA06KTBbEGyN/j6MtPx+4WbGmI51bRO9k9sVZEkc8cQMV1Al+j/lKGDJixv/nRuStA==",
-      "path": "pigkeycachelib/3.0.170",
-      "hashPath": "pigkeycachelib.3.0.170.nupkg.sha512"
+      "sha512": "sha512-Y3tl4CRhYNk/olaAmW0iAt/W/fhbvupy214mEumCgNHE40IllznHZtG6iTgxgE9p9qsaqBWgPAwBq8DTwuutLw==",
+      "path": "pigkeycachelib/3.1.12",
+      "hashPath": "pigkeycachelib.3.1.12.nupkg.sha512"
     },
-    "PigSQLSrvCoreLib/1.7.28": {
+    "PigSQLSrvCoreLib/1.7.38": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-hnifXnCL4OS0uBFnHJvLHQcPJG0++q2PbWzqMJfxhxdhwXO2TLJWat28xIc/Hlbm9/DoXfQAZffsFWjclZqxLg==",
-      "path": "pigsqlsrvcorelib/1.7.28",
-      "hashPath": "pigsqlsrvcorelib.1.7.28.nupkg.sha512"
+      "sha512": "sha512-OU1cb8NTLDy8oF0CoIqWPVVspkC7ToTmsWu1XwVW9A9lplapIkTxLqVw1iN/9yb+5e31F4f0Ajbt+1LmGg2lnQ==",
+      "path": "pigsqlsrvcorelib/1.7.38",
+      "hashPath": "pigsqlsrvcorelib.1.7.38.nupkg.sha512"
     },
     "PigToolsLiteLib/1.5.9": {
       "type": "package",

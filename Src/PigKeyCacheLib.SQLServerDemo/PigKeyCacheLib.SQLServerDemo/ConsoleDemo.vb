@@ -36,7 +36,7 @@ Public Class ConsoleDemo
 #If NETFRAMEWORK Then
     Public PigKeyValueApp As PigKeyCacheLib.SQLServer.PigKeyValueApp
 #Else
-    Public PigKeyValueApp As PigSQLSrvCoreLib.SQLServer.PigKeyValueApp
+    Public PigKeyValueApp As PigKeyCacheCoreLib.SQLServer.PigKeyValueApp
 #End If
 
     Public ShareMemRoot As String = "Test"

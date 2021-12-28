@@ -33,7 +33,12 @@ Public Class ConsoleDemo
     Public DBPwd As String = ""
     Public CurrDB As String = "TestDB"
     Public InpStr As String
-    Public PigKeyValueApp As PigKeyValueApp
+#If NETFRAMEWORK Then
+    Public PigKeyValueApp As PigKeyCacheLib.SQLServer.PigKeyValueApp
+#Else
+    Public PigKeyValueApp As PigKeyCacheCoreLib.SQLServer.PigKeyValueApp
+#End If
+
     Public ShareMemRoot As String = "Test"
     Public KeyName As String = "Key1"
     Public KeyValue As String = "Value1"
@@ -74,7 +79,7 @@ Public Class ConsoleDemo
         Me.ConnSQLSrv.ConnectionTimeout = 5
         Me.ConnSQLSrv.OpenOrKeepActive()
 #If NETFRAMEWORK Then
-        Me.PigKeyValueApp = New PigKeyValueApp(Me.ConnSQLSrv)
+        Me.PigKeyValueApp = New PigKeyCacheLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
 #Else
         Me.PigKeyValueApp = New PigKeyCacheCoreLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
 #End If
@@ -114,7 +119,11 @@ Public Class ConsoleDemo
                             strLine = Console.ReadLine
                             If strLine <> "" Then Me.KeyValue = strLine
                             Console.WriteLine("New PigKeyValue")
-                            Dim oPigKeyValue As PigKeyValue
+#If NETFRAMEWORK Then
+                            Dim oPigKeyValue As PigKeyCacheLib.SQLServer.PigKeyValue
+#Else
+                            Dim oPigKeyValue As PigKeyCacheCoreLib.SQLServer.PigKeyValue
+#End If
                             oPigKeyValue = Nothing
                             Dim bolIsAdd As Boolean = False
                             Select Case Me.ValueType
@@ -139,10 +148,18 @@ Public Class ConsoleDemo
                                 Case PigKeyValue.EnmSaveType.EncSaveSpace, PigKeyValue.EnmSaveType.Original, PigKeyValue.EnmSaveType.SaveSpace
                                     Select Case Me.ValueType
                                         Case PigKeyValue.EnmValueType.Text
-                                            oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, Me.KeyValue, Me.TextType, Me.SaveType)
+#If NETFRAMEWORK Then
+                                            oPigKeyValue = New PigKeyCacheLib.SQLServer.PigKeyValue(Me.KeyName, Me.ExpTime, Me.KeyValue, Me.TextType, Me.SaveType)
+#Else
+                                            oPigKeyValue = New PigKeyCacheCoreLib.SQLServer.PigKeyValue(Me.KeyName, Me.ExpTime, Me.KeyValue, Me.TextType, Me.SaveType)
+#End If
                                         Case PigKeyValue.EnmValueType.Bytes
                                             Dim oPigText As New PigText(Me.KeyValue, Me.TextType)
-                                            oPigKeyValue = New PigKeyValue(Me.KeyName, Me.ExpTime, oPigText.TextBytes, Me.SaveType)
+#If NETFRAMEWORK Then
+                                            oPigKeyValue = New PigKeyCacheLib.SQLServer.PigKeyValue(Me.KeyName, Me.ExpTime, oPigText.TextBytes, Me.SaveType)
+#Else
+                                            oPigKeyValue = New PigKeyCacheCoreLib.SQLServer.PigKeyValue(Me.KeyName, Me.ExpTime, oPigText.TextBytes, Me.SaveType)
+#End If
                                     End Select
                                     If oPigKeyValue.LastErr <> "" Then
                                         Console.WriteLine(oPigKeyValue.LastErr)
@@ -172,7 +189,11 @@ Public Class ConsoleDemo
                     If strLine <> "" Then Me.KeyName = strLine
                     With Me.PigKeyValueApp
                         Console.WriteLine("GetPigKeyValue")
-                        Dim oPigKeyValue As PigKeyValue = .GetPigKeyValue(Me.KeyName)
+#If NETFRAMEWORK Then
+                        Dim oPigKeyValue As PigKeyCacheLib.SQLServer.PigKeyValue = .GetPigKeyValue(Me.KeyName)
+#Else
+                        Dim oPigKeyValue As PigKeyCacheCoreLib.SQLServer.PigKeyValue = .GetPigKeyValue(Me.KeyName)
+#End If
                         If .LastErr <> "" Then
                             Console.WriteLine(.LastErr)
                         Else
