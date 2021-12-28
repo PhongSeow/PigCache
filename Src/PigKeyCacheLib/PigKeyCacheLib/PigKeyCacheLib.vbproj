@@ -4,7 +4,7 @@
     <RootNamespace>PigKeyCacheLib</RootNamespace>
     <TargetFrameworks>net20;net30;net40;net5.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.170</Version>
+    <Version>3.1.12</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Copyright>Copyright (c) 2021 Seow Phong</Copyright>
@@ -20,7 +20,7 @@ It supports multi processes and multi threads. It does not need to install appli
 Support compression, encryption and other data storage methods.
 It can run on Windows and Linux platforms.
 </Description>
-    <PackageReleaseNotes>The new version reprogrammes the data structure and rewrites the code, which is not fully compatible with the old version.</PackageReleaseNotes>
+    <PackageReleaseNotes>Interface optimization, add AddOrGet interface to the collection class.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

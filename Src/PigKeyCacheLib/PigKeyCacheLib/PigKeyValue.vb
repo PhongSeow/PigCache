@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.3
+'* Version: 3.5
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -43,12 +43,13 @@
 '* 3.1		11/12/2021 Add LoadBody,LoadHead,HeadData,BodyData
 '* 3.2		12/12/2021 Add mIsSaveDiff, modify mRefBodyData,HeadData,LoadHead,PbValue,mNew,BodyMD5
 '* 3.3		13/12/2021 Modify LoadBody,mNew,LoadHead,Check,mIsSaveTypeOK,mRefBodyData,IsMatchAnother,fIsForceRefCache,BodyData, add ValueLen
+'* 3.5		28/12/2021 Modify mNew,BodyData
 '************************************
 
 Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.3.13"
+    Private Const CLS_VERSION As String = "3.5.2"
     Private Const STRU_VALUE_HEAD_VERSION As Integer = 1
     ''' <summary>
     ''' 父对象
@@ -602,7 +603,7 @@ Public Class PigKeyValue
                     Return Me.PbValue
                 End If
             Catch ex As Exception
-                Me.PrintDebugLog("BodyLen", ex.Message.ToString)
+                Me.PrintDebugLog("BodyData", ex.Message.ToString)
                 Return Nothing
             End Try
         End Get
@@ -681,7 +682,7 @@ Public Class PigKeyValue
 
 
 
-    Public Sub mNew(KeyName As String, ExpTime As DateTime, KeyValue As String, Optional TextType As PigText.enmTextType = PigText.enmTextType.UTF8, Optional SaveType As EnmSaveType = EnmSaveType.Original, Optional ChkMD5Type As EnmChkMD5Type = EnmChkMD5Type.FullCheck)
+    Private Sub mNew(KeyName As String, ExpTime As DateTime, KeyValue As String, Optional TextType As PigText.enmTextType = PigText.enmTextType.UTF8, Optional SaveType As EnmSaveType = EnmSaveType.Original, Optional ChkMD5Type As EnmChkMD5Type = EnmChkMD5Type.FullCheck)
         Dim LOG As New PigStepLog("mNew[Text]")
         Try
             With Me

@@ -4,19 +4,20 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: PigKeyValue 的 集合类
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 1.2
+'* Version: 1.3
 '* Create Time: 8/5/2021
 '* 1.0.2	5/8/2021 Add mAdd,IsItemExists, and modify Add,Remove
 '* 1.0.3	25/8/2021 Remove Imports PigToolsLib, change to PigToolsWinLib
 '* 1.1	    29/8/2021 Chanage PigToolsWinLib to PigToolsLiteLib
 '* 1.2	    7/12/2021 Modify Add
+'* 1.3	    28/12/2021 Add AddOrGet
 '************************************
 Imports PigToolsLiteLib
 
 Public Class PigKeyValues
     Inherits PigBaseMini
     Implements IEnumerable(Of PigKeyValue)
-    Private Const CLS_VERSION As String = "1.2.1"
+    Private Const CLS_VERSION As String = "1.3.2"
 
     Private ReadOnly moList As New List(Of PigKeyValue)
 
@@ -98,6 +99,35 @@ Public Class PigKeyValues
     Public Sub Add(NewItem As PigKeyValue)
         Me.mAdd(NewItem)
     End Sub
+
+    Public Function AddOrGet(KeyName As String, ExpTime As DateTime, KeyValue As Byte(), ValueType As PigKeyValue.EnmValueType) As PigKeyValue
+        Dim LOG As New PigStepLog("AddOrGet")
+        Try
+            If Me.IsItemExists(KeyName) = True Then
+                AddOrGet = Me.Item(KeyName)
+            Else
+                AddOrGet = Me.Add(KeyName, ExpTime, KeyValue, ValueType)
+            End If
+        Catch ex As Exception
+            Me.SetSubErrInf(LOG.SubName, LOG.StepName, ex)
+            Return Nothing
+        End Try
+    End Function
+
+
+    Public Function AddOrGet(KeyName As String, ExpTime As DateTime, KeyValue As String) As PigKeyValue
+        Dim LOG As New PigStepLog("AddOrGet")
+        Try
+            If Me.IsItemExists(KeyName) = True Then
+                AddOrGet = Me.Item(KeyName)
+            Else
+                AddOrGet = Me.Add(KeyName, ExpTime, KeyValue)
+            End If
+        Catch ex As Exception
+            Me.SetSubErrInf(LOG.SubName, LOG.StepName, ex)
+            Return Nothing
+        End Try
+    End Function
 
     Public Function Add(KeyName As String, ExpTime As DateTime, KeyValue As String) As PigKeyValue
         Dim strStepName As String = ""

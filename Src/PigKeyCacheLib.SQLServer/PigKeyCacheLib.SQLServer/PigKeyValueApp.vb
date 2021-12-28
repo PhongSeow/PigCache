@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用 SQL Server 版|Piggy key value application for SQL Server
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 2.1
+'* Version: 3.0
 '* Create Time: 31/8/2021
 '* 1.1	1/9/2021 Add mCreateTableKeyValueInf,PigBaseMini,OpenDebug,mIsDBObjExists,GetPigKeyValue
 '* 1.2	2/9/2021 Modify mNew,IsPigKeyValueExists,SavePigKeyValue,mCreateTableKeyValueInf, and remove mIsDBObjExists.
@@ -18,6 +18,7 @@
 '* 1.10	7/12/2021 Modify PigFunc,SavePigKeyValue, add mAddTableCol
 '* 2.0	15/12/2021 Modify SavePigKeyValue,GetPigKeyValue
 '* 2.1	17/12/2021 Modify GetPigKeyValue, add Shadows
+'* 3.0	28/12/2021 Code rewriting
 '************************************
 
 Imports PigKeyCacheLib
@@ -32,66 +33,31 @@ Imports Microsoft.Data.SqlClient
 #End If
 
 Public Class PigKeyValueApp
-    Inherits PigKeyCacheLib.PigKeyValueApp
-    Private Const CLS_VERSION As String = "2.1.2"
+    Inherits PigBaseMini
+    Private Const CLS_VERSION As String = "3.0.21"
+    Friend Property Obj As PigKeyCacheLib.PigKeyValueApp
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
 
-    '-----PigBaseMini-----Begin
-    Private ReadOnly moPigBaseMini As New PigBaseMini(CLS_VERSION)
-    Public Overloads ReadOnly Property LastErr As String
-        Get
-            Return moPigBaseMini.LastErr
-        End Get
-    End Property
 
-    Private Sub ClearErr()
-        moPigBaseMini.ClearErr()
-    End Sub
-
-    Private Sub SetSubErrInf(SubName As String, ByRef exIn As System.Exception, Optional IsStackTrace As Boolean = False)
-        moPigBaseMini.SetSubErrInf(SubName, exIn, IsStackTrace)
-    End Sub
-
-    Private Sub SetSubErrInf(SubName As String, StepName As String, ByRef exIn As System.Exception, Optional IsStackTrace As Boolean = False)
-        moPigBaseMini.SetSubErrInf(SubName, StepName, exIn, IsStackTrace)
-    End Sub
-
-    Private Sub PrintDebugLog(SubName As String, LogInf As String)
-        moPigBaseMini.PrintDebugLog(SubName, LogInf)
-    End Sub
-
-    Private Sub PrintDebugLog(SubName As String, StepName As String, LogInf As String)
-        moPigBaseMini.PrintDebugLog(SubName, StepName, LogInf)
-    End Sub
-
-    Private Function GetSubErrInf(SubName As String, ByRef exIn As System.Exception, Optional IsStackTrace As Boolean = False) As String
-        Return moPigBaseMini.GetSubErrInf(SubName, exIn, IsStackTrace)
-    End Function
-
-    Private Function GetSubErrInf(SubName As String, StepName As String, ByRef exIn As System.Exception, Optional IsStackTrace As Boolean = False) As String
-        Return moPigBaseMini.GetSubErrInf(SubName, StepName, exIn, IsStackTrace)
-    End Function
-
-    '-----PigBaseMini-----End
-
-    Public Overloads Sub OpenDebug()
-        Dim strStepName As String = ""
+    Public Overloads Function OpenDebug() As String
+        Dim LOG As New PigStepLog("OpenDebug")
         Try
-            strStepName = "moConnSQLSrv.OpenDebug"
+            LOG.StepName = "moConnSQLSrv.OpenDebug"
             moConnSQLSrv.OpenDebug()
             If moConnSQLSrv.LastErr <> "" Then Throw New Exception(moConnSQLSrv.LastErr)
-            strStepName = "PigKeyValues.OpenDebug"
-            Me.PigKeyValues.OpenDebug()
-            If Me.PigKeyValues.LastErr <> "" Then Throw New Exception(Me.PigKeyValues.LastErr)
-            strStepName = "moPigBaseMini.OpenDebug"
-            moPigBaseMini.OpenDebug()
-            If moPigBaseMini.LastErr <> "" Then Throw New Exception(moPigBaseMini.LastErr)
-            Me.ClearErr()
+            LOG.StepName = "Obj.OpenDebug"
+            Me.Obj.OpenDebug()
+            If Me.Obj.LastErr <> "" Then Throw New Exception(Me.Obj.LastErr)
+            LOG.StepName = "Obj.PigKeyValues.OpenDebug"
+            Me.Obj.PigKeyValues.OpenDebug()
+            If Me.Obj.PigKeyValues.LastErr <> "" Then Throw New Exception(Me.Obj.PigKeyValues.LastErr)
+            LOG.StepName = "moPigBaseMini.OpenDebug"
+            Return "OK"
         Catch ex As Exception
-            Me.SetSubErrInf("OpenDebug", strStepName, ex)
+            Return Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex)
         End Try
-    End Sub
+    End Function
 
     Public Sub New(ConnSQLSrv As ConnSQLSrv)
         MyBase.New(ConnSQLSrv.Connection.ConnectionString)
@@ -101,39 +67,48 @@ Public Class PigKeyValueApp
 
 
     Private Sub mNew(ConnSQLSrv As ConnSQLSrv)
-        Dim strStepName As String = ""
-        Dim strRet As String
+        Dim LOG As New PigStepLog("mNew")
         Try
-            strStepName = "Set MyClassName"
-            moPigBaseMini.MyClassName = Me.GetType.Name.ToString
-            strStepName = "Set moConnSQLSrv"
+            LOG.StepName = "Set moConnSQLSrv"
             moConnSQLSrv = ConnSQLSrv
-            strStepName = "New SQLSrvTools"
+            Dim strShareMemRoot As String = ""
+            With moConnSQLSrv
+                strShareMemRoot = "<" & .PrincipalSQLServer & ">"
+                If .IsTrustedConnection = False Then
+                    strShareMemRoot &= "<" & .DBUser & ">"
+                End If
+                strShareMemRoot &= "<" & .CurrDatabase & ">"
+            End With
+            LOG.StepName = "New PigKeyCacheLib.PigKeyValueApp"
+            Me.Obj = New PigKeyCacheLib.PigKeyValueApp(strShareMemRoot)
+            If Me.Obj.LastErr <> "" Then Throw New Exception(Me.Obj.LastErr)
+            LOG.StepName = "New SQLSrvTools"
             Dim oSQLSrvTools As New SQLSrvTools(moConnSQLSrv)
-            strStepName = "IsDBObjExists"
+            LOG.StepName = "IsDBObjExists"
             If oSQLSrvTools.IsDBObjExists(SQLSrvTools.enmDBObjType.UserTable, "_ptKeyValueInf") = False Then
-                strStepName = "mCreateTableKeyValueInf"
-                strRet = mCreateTableKeyValueInf()
-                If strRet <> "" Then Throw New Exception(strRet)
+                LOG.StepName = "mCreateTableKeyValueInf"
+                LOG.Ret = mCreateTableKeyValueInf()
+                If LOG.Ret <> "" Then Throw New Exception(LOG.Ret)
             Else
-                strStepName = "mTabAddCol(SaveType)"
-                strRet = Me.mAddTableCol()
-                If strRet <> "OK" Then
-                    Me.PrintDebugLog("mNew", strStepName, strRet)
+                LOG.StepName = "mTabAddCol(SaveType)"
+                LOG.Ret = Me.mAddTableCol()
+                If LOG.Ret <> "OK" Then
+                    Me.PrintDebugLog("mNew", LOG.StepName, LOG.Ret)
                 End If
             End If
             oSQLSrvTools = Nothing
             Me.ClearErr()
         Catch ex As Exception
-            Me.SetSubErrInf("mNew", strStepName, ex)
+            Me.SetSubErrInf(LOG.SubName, LOG.StepName, ex)
         End Try
     End Sub
 
-    Public Overloads Function GetPigKeyValue(KeyName As String) As PigKeyCacheLib.PigKeyValue
+    Public Overloads Function GetPigKeyValue(KeyName As String) As PigKeyValue
         Dim LOG As New PigStepLog("GetPigKeyValue")
         Try
+            If Me.Obj Is Nothing Then Throw New Exception("Obj not instantiated")
             LOG.StepName = "GetPigKeyValue"
-            Dim oPigKeyValue As PigKeyCacheLib.PigKeyValue = MyBase.GetPigKeyValue(KeyName)
+            Dim oPigKeyValue As PigKeyCacheLib.PigKeyValue = Me.Obj.GetPigKeyValue(KeyName)
             If oPigKeyValue Is Nothing Then
                 Dim strSQL As String = "SELECT TOP 1 ExpTime,HeadData,BodyData FROM dbo._ptKeyValueInf WITH(NOLOCK) WHERE KeyName=@KeyName AND ExpTime>GETDATE()"
                 LOG.StepName = "New CmdSQLSrvText"
@@ -182,7 +157,7 @@ Public Class PigKeyValueApp
                             Throw New Exception(.LastErr)
                         End If
                         LOG.StepName = "MyBase.SavePigKeyValue"
-                        MyBase.SavePigKeyValue(oPigKeyValue, True)
+                        Me.Obj.SavePigKeyValue(oPigKeyValue, True)
                         If Me.LastErr <> "" Then Throw New Exception(Me.LastErr)
                     End If
                     rsAny.Close()
@@ -190,7 +165,20 @@ Public Class PigKeyValueApp
                     oCmdSQLSrvText = Nothing
                 End With
             End If
-            Return oPigKeyValue
+            With oPigKeyValue
+                If .ValueType = PigKeyCacheLib.PigKeyValue.EnmValueType.Text Then
+                    LOG.StepName = "New PigKeyValue(Text)"
+                    GetPigKeyValue = New PigKeyValue(KeyName, .ExpTime, .StrValue, .TextType, .SaveType)
+                Else
+                    LOG.StepName = "New PigKeyValue(Bytes)"
+                    GetPigKeyValue = New PigKeyValue(KeyName, .ExpTime, .BytesValue, .SaveType)
+                End If
+            End With
+            If GetPigKeyValue.LastErr <> "" Then
+                LOG.AddStepNameInf(KeyName)
+                Throw New Exception(GetPigKeyValue.LastErr)
+            End If
+            oPigKeyValue = Nothing
         Catch ex As Exception
             Me.PrintDebugLog(LOG.SubName, LOG.StepName, ex.Message.ToString)
             Return Nothing
@@ -198,20 +186,24 @@ Public Class PigKeyValueApp
     End Function
 
     Public Overloads Function IsPigKeyValueExists(KeyName As String) As Boolean
-        Const SUB_NAME As String = "IsPigKeyValueExists"
-        Dim strStepName As String = ""
+        Dim LOG As New PigStepLog("IsPigKeyValueExists")
         Try
             Dim strSQL As String = "SELECT TOP 1 1 FROM dbo._ptKeyValueInf WITH(NOLOCK) WHERE KeyName=@KeyName AND ExpTime>GETDATE()"
-            strStepName = "New CmdSQLSrvText"
+            LOG.StepName = "New CmdSQLSrvText"
             Dim oCmdSQLSrvText As New CmdSQLSrvText(strSQL)
+            If oCmdSQLSrvText.LastErr <> "" Then
+                LOG.AddStepNameInf(KeyName)
+                Throw New Exception(oCmdSQLSrvText.LastErr)
+            End If
             With oCmdSQLSrvText
                 .ActiveConnection = Me.moConnSQLSrv.Connection
                 .AddPara("@KeyName", SqlDbType.VarChar, 128)
                 .ParaValue("@KeyName") = KeyName
-                strStepName = "Execute"
+                LOG.StepName = "Execute"
                 Dim rsAny = .Execute()
                 If .LastErr <> "" Then
-                    Me.PrintDebugLog(SUB_NAME, strStepName, .DebugStr)
+                    LOG.AddStepNameInf(KeyName)
+                    Me.PrintDebugLog(LOG.SubName, LOG.StepName, .DebugStr)
                     Throw New Exception(.LastErr)
                 End If
                 If rsAny.EOF = False Then
@@ -219,14 +211,13 @@ Public Class PigKeyValueApp
                 Else
                     IsPigKeyValueExists = False
                 End If
-                strStepName = ""
-                strStepName = "rsAny.Close"
+                LOG.StepName = "Close"
                 rsAny.Close()
                 rsAny = Nothing
             End With
             oCmdSQLSrvText = Nothing
         Catch ex As Exception
-            Me.SetSubErrInf(SUB_NAME, strStepName, ex)
+            Me.PrintDebugLog(LOG.SubName, LOG.StepName, ex.Message.ToString)
             Return False
         End Try
     End Function
@@ -238,7 +229,7 @@ Public Class PigKeyValueApp
         Try
             Dim strKeyName As String = NewItem.KeyName
             LOG.StepName = "Check NewItem"
-            LOG.Ret = NewItem.Check
+            LOG.Ret = NewItem.fCheck
             If LOG.Ret <> "OK" Then
                 LOG.AddStepNameInf(strKeyName)
                 Throw New Exception(LOG.Ret)
@@ -265,8 +256,8 @@ Public Class PigKeyValueApp
                 .AddPara("@BodyData", SqlDbType.VarChar, -1)
                 .ParaValue("@KeyName") = NewItem.KeyName
                 .ParaValue("@ExpTime") = NewItem.ExpTime
-                .ParaValue("@HeadData") = NewItem.HeadData.Base64Str
-                .ParaValue("@BodyData") = NewItem.BodyData.Base64Str
+                .ParaValue("@HeadData") = NewItem.fHeadData.Base64Str
+                .ParaValue("@BodyData") = NewItem.fBodyData.Base64Str
                 LOG.StepName = "ExecuteNonQuery"
                 LOG.Ret = .ExecuteNonQuery
                 If LOG.Ret <> "OK" Then
@@ -277,8 +268,8 @@ Public Class PigKeyValueApp
                     Throw New Exception("RecordsAffected=" & .RecordsAffected)
                 End If
             End With
-            LOG.StepName = "MyBase.SavePigKeyValue"
-            LOG.Ret = MyBase.SavePigKeyValue(NewItem, IsOverwrite)
+            LOG.StepName = "Obj.SavePigKeyValue"
+            LOG.Ret = Me.Obj.SavePigKeyValue(NewItem.Obj, IsOverwrite)
             If LOG.Ret <> "OK" Then Throw New Exception(MyBase.LastErr)
             Return "OK"
         Catch ex As Exception
@@ -379,5 +370,22 @@ Public Class PigKeyValueApp
         End Try
     End Function
 
+    Public Function GetStatisticsXml() As String
+        Try
+            Return Me.Obj.GetStatisticsXml
+        Catch ex As Exception
+            Me.PrintDebugLog("GetStatisticsXml", ex.Message.ToString)
+            Return ""
+        End Try
+    End Function
+
+    Public Function PigKeyValues() As PigKeyValues
+        Try
+            Return Me.Obj.PigKeyValues
+        Catch ex As Exception
+            Me.PrintDebugLog("GetStatisticsXml", ex.Message.ToString)
+            Return Nothing
+        End Try
+    End Function
 
 End Class
