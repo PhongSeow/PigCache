@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用 SQL Server 版|Piggy key value application for SQL Server
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.0
+'* Version: 3.1
 '* Create Time: 31/8/2021
 '* 1.1	1/9/2021 Add mCreateTableKeyValueInf,PigBaseMini,OpenDebug,mIsDBObjExists,GetPigKeyValue
 '* 1.2	2/9/2021 Modify mNew,IsPigKeyValueExists,SavePigKeyValue,mCreateTableKeyValueInf, and remove mIsDBObjExists.
@@ -19,6 +19,7 @@
 '* 2.0	15/12/2021 Modify SavePigKeyValue,GetPigKeyValue
 '* 2.1	17/12/2021 Modify GetPigKeyValue, add Shadows
 '* 3.0	28/12/2021 Code rewriting
+'* 3.1	29/12/2021 Modify mNew
 '************************************
 
 Imports PigKeyCacheLib
@@ -34,7 +35,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class PigKeyValueApp
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.0.21"
+    Private Const CLS_VERSION As String = "3.1.2"
     Friend Property Obj As PigKeyCacheLib.PigKeyValueApp
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
@@ -88,7 +89,7 @@ Public Class PigKeyValueApp
             If oSQLSrvTools.IsDBObjExists(SQLSrvTools.enmDBObjType.UserTable, "_ptKeyValueInf") = False Then
                 LOG.StepName = "mCreateTableKeyValueInf"
                 LOG.Ret = mCreateTableKeyValueInf()
-                If LOG.Ret <> "" Then Throw New Exception(LOG.Ret)
+                If LOG.Ret <> "OK" Then Throw New Exception(LOG.Ret)
             Else
                 LOG.StepName = "mTabAddCol(SaveType)"
                 LOG.Ret = Me.mAddTableCol()
