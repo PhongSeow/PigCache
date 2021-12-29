@@ -4,7 +4,7 @@
     <RootNamespace>PigKeyCacheCoreLib.SQLServer</RootNamespace>
     <TargetFrameworks>net5.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.32</Version>
+    <Version>3.0.36</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Description>PigKeyCacheLib.SQLServer is a very lightweight key value Caching Application support multi server load balancing.

@@ -19,7 +19,7 @@
 '* 2.0	15/12/2021 Modify SavePigKeyValue,GetPigKeyValue
 '* 2.1	17/12/2021 Modify GetPigKeyValue, add Shadows
 '* 3.0	28/12/2021 Code rewriting
-'* 3.1	29/12/2021 Modify mNew
+'* 3.1	29/12/2021 Modify mNew,IsPigKeyValueExists,GetPigKeyValue
 '************************************
 
 Imports PigKeyCacheLib
@@ -119,7 +119,7 @@ Public Class PigKeyValueApp
                     .AddPara("@KeyName", SqlDbType.VarChar, 128)
                     .ParaValue("@KeyName") = KeyName
                     LOG.StepName = "Execute"
-                    Dim rsAny = .Execute()
+                    Dim rsAny As Recordset = .Execute()
                     If .LastErr <> "" Then
                         LOG.AddStepNameInf(KeyName)
                         LOG.AddStepNameInf(.DebugStr)
@@ -181,7 +181,8 @@ Public Class PigKeyValueApp
             End If
             oPigKeyValue = Nothing
         Catch ex As Exception
-            Me.PrintDebugLog(LOG.SubName, LOG.StepName, ex.Message.ToString)
+            LOG.Ret = Me.GetSubErrInf(LOG.SubName, LOG.StepName, ex, True)
+            Me.PrintDebugLog(LOG.SubName, LOG.Ret)
             Return Nothing
         End Try
     End Function
@@ -201,12 +202,13 @@ Public Class PigKeyValueApp
                 .AddPara("@KeyName", SqlDbType.VarChar, 128)
                 .ParaValue("@KeyName") = KeyName
                 LOG.StepName = "Execute"
-                Dim rsAny = .Execute()
+                Dim rsAny As Recordset = .Execute()
                 If .LastErr <> "" Then
                     LOG.AddStepNameInf(KeyName)
                     Me.PrintDebugLog(LOG.SubName, LOG.StepName, .DebugStr)
                     Throw New Exception(.LastErr)
                 End If
+                LOG.StepName = "Execute"
                 If rsAny.EOF = False Then
                     IsPigKeyValueExists = True
                 Else
