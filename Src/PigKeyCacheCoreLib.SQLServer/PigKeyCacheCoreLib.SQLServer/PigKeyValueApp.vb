@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用 SQL Server 版|Piggy key value application for SQL Server
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.1
+'* Version: 3.2
 '* Create Time: 31/8/2021
 '* 1.1	1/9/2021 Add mCreateTableKeyValueInf,PigBaseMini,OpenDebug,mIsDBObjExists,GetPigKeyValue
 '* 1.2	2/9/2021 Modify mNew,IsPigKeyValueExists,SavePigKeyValue,mCreateTableKeyValueInf, and remove mIsDBObjExists.
@@ -20,6 +20,7 @@
 '* 2.1	17/12/2021 Modify GetPigKeyValue, add Shadows
 '* 3.0	28/12/2021 Code rewriting
 '* 3.1	29/12/2021 Modify mNew,IsPigKeyValueExists,GetPigKeyValue
+'* 3.2	31/12/2021 Modify mAddTableCol
 '************************************
 
 Imports PigKeyCacheLib
@@ -35,7 +36,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class PigKeyValueApp
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.1.2"
+    Private Const CLS_VERSION As String = "3.2.2"
     Friend Property Obj As PigKeyCacheLib.PigKeyValueApp
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
@@ -352,9 +353,13 @@ Public Class PigKeyValueApp
         Try
             Dim strTabName As String = ""
             Dim strSQL As String = ""
-            moPigFunc.AddMultiLineText(strSQL, "IF NOT EXISTS(SELECT 1 FROM syscolumns c JOIN sysobjects o ON c.id=o.id AND o.xtype='U' AND o.uid=1 WHERE o.name='_ptKeyValueInf' AND c.name='KeyHead')")
+            moPigFunc.AddMultiLineText(strSQL, "IF NOT EXISTS(SELECT 1 FROM syscolumns c JOIN sysobjects o ON c.id=o.id AND o.xtype='U' AND o.uid=1 WHERE o.name='_ptKeyValueInf' AND c.name='HeadData')")
             moPigFunc.AddMultiLineText(strSQL, "BEGIN")
-            moPigFunc.AddMultiLineText(strSQL, "ALTER TABLE dbo._ptKeyValueInf ADD KeyHead varchar(256) NOT NULL DEFAULT ('')", 1)
+            moPigFunc.AddMultiLineText(strSQL, "ALTER TABLE dbo._ptKeyValueInf ADD HeadData varchar(256) NOT NULL DEFAULT ('')", 1)
+            moPigFunc.AddMultiLineText(strSQL, "END")
+            moPigFunc.AddMultiLineText(strSQL, "IF NOT EXISTS(SELECT 1 FROM syscolumns c JOIN sysobjects o ON c.id=o.id AND o.xtype='U' AND o.uid=1 WHERE o.name='_ptKeyValueInf' AND c.name='BodyData')")
+            moPigFunc.AddMultiLineText(strSQL, "BEGIN")
+            moPigFunc.AddMultiLineText(strSQL, "ALTER TABLE dbo._ptKeyValueInf ADD BodyData varchar(max) NOT NULL DEFAULT ('')", 1)
             moPigFunc.AddMultiLineText(strSQL, "END")
             strStepName = "New CmdSQLSrvText"
             Dim oCmdSQLSrvText As New CmdSQLSrvText(strSQL)
