@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.5
+'* Version: 3.6
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -44,12 +44,13 @@
 '* 3.2		12/12/2021 Add mIsSaveDiff, modify mRefBodyData,HeadData,LoadHead,PbValue,mNew,BodyMD5
 '* 3.3		13/12/2021 Modify LoadBody,mNew,LoadHead,Check,mIsSaveTypeOK,mRefBodyData,IsMatchAnother,fIsForceRefCache,BodyData, add ValueLen
 '* 3.5		28/12/2021 Modify mNew,BodyData
+'* 3.6		4/1/2022 Modify StrValue
 '************************************
 
 Imports PigToolsLiteLib
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.5.2"
+    Private Const CLS_VERSION As String = "3.6.2"
     Private Const STRU_VALUE_HEAD_VERSION As Integer = 1
     ''' <summary>
     ''' 父对象
@@ -279,9 +280,10 @@ Public Class PigKeyValue
         Get
             Dim LOG As New PigStepLog("StrValue")
             Try
-                If mstrValue.Length = 0 Then
+                If mstrValue = "" Or mstrValue Is vbNullChar Then
                     Select Case Me.ValueType
                         Case EnmValueType.Text
+
                             LOG.StepName = "New PigText(Text)"
                             Dim oPigText As New PigText(Me.mpbPbValue.Main, Me.TextType)
                             If oPigText.LastErr <> "" Then Throw New Exception(oPigText.LastErr)

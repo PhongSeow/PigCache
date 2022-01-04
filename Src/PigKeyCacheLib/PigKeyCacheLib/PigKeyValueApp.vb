@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用|Piggy key value application
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.5
+'* Version: 3.6
 '* Create Time: 8/5/2021
 '* 1.0.2	13/5/2021 Modify New
 '* 1.0.3	22/7/2021 Modify GetPigKeyValue
@@ -46,6 +46,7 @@
 '* 3.2		12/12/2021 Modify mSavePigKeyValue,SaveBytesToShareMem,SavePigKeyValue,mClearShareMem,mGetPigKeyValueFromShareMem
 '* 3.3		14/12/2021 Modify mGetPigKeyValueFromFile,mSavePigKeyValueToFile
 '* 3.5		17/12/2021 Modify mRemoveFile
+'* 3.6		2/1/2022 Modify mGetPigKeyValueByShareMem,SaveBytesToShareMem,mClearShareMem,GetPigKeyValue,mGetPigKeyValueByFile
 '************************************
 
 Imports PigToolsLiteLib
@@ -53,7 +54,7 @@ Imports System.IO
 
 Public Class PigKeyValueApp
 	Inherits PigBaseMini
-	Private Const CLS_VERSION As String = "3.3.6"
+	Private Const CLS_VERSION As String = "3.6.20"
 	Private Const SM_HEAD_LEN As Integer = 40
 	Private ReadOnly moPigFunc As New PigFunc
 
@@ -148,6 +149,7 @@ Public Class PigKeyValueApp
 					Me.ShareMemRoot = ""
 					Me.CacheWorkDir = ""
 				Case EnmCacheLevel.ToShareMem
+					If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 					If ShareMemRootOrCacheWorkDir = "" Then ShareMemRootOrCacheWorkDir = Me.AppTitle
 					Me.ShareMemRoot = ShareMemRootOrCacheWorkDir
 					Me.CacheWorkDir = ""
@@ -236,6 +238,7 @@ Public Class PigKeyValueApp
 	Private Function mGetPigKeyValueFromShareMem(KeyName As String, ByRef OutPigKeyValue As PigKeyValue) As String
 		Dim LOG As New PigStepLog("mGetPigKeyValueFromShareMem")
 		Try
+			If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 			If OutPigKeyValue IsNot Nothing Then OutPigKeyValue = Nothing
 			LOG.StepName = "New PigKeyValue"
 			OutPigKeyValue = New PigKeyValue(KeyName)
@@ -303,6 +306,7 @@ Public Class PigKeyValueApp
 	Private Function mClearShareMem(PkvOld As PigKeyValue) As String
 		Dim LOG As New PigStepLog("mClearShareMem")
 		Try
+			If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 			If PkvOld Is Nothing Then Throw New Exception("PkvOld Is Nothing")
 			Dim strKeyName As String = PkvOld.KeyName
 			Dim strHeadTitle As String = "", strBodyTitle As String = ""
@@ -388,6 +392,7 @@ Public Class PigKeyValueApp
 	Private Function mGetPigKeyValueByShareMem(KeyName As String, ByRef OutPigKeyValue As PigKeyValue) As String
 		Dim LOG As New PigStepLog("mGetPigKeyValueByShareMem")
 		Try
+			If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 			msuStatistics.GetCount += 1
 			LOG.StepName = "mGetPigKeyValueFromShareMem"
 			LOG.Ret = Me.mGetPigKeyValueFromShareMem(KeyName, OutPigKeyValue)
@@ -453,14 +458,16 @@ Public Class PigKeyValueApp
 						msuStatistics.RemoveFailCount += 1
 					End If
 					OutPigKeyValue = Nothing
-					msuStatistics.RemoveCount += 1
-					msuStatistics.RemoveExpiredShareMemCount += 1
-					LOG.StepName = "mClearShareMem"
-					LOG.Ret = Me.mClearShareMem(OutPigKeyValue)
-					If LOG.Ret <> "OK" Then
-						LOG.AddStepNameInf(KeyName)
-						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
-						msuStatistics.RemoveFailCount += 1
+					If Me.IsWindows = True Then
+						msuStatistics.RemoveCount += 1
+						msuStatistics.RemoveExpiredShareMemCount += 1
+						LOG.StepName = "mClearShareMem"
+						LOG.Ret = Me.mClearShareMem(OutPigKeyValue)
+						If LOG.Ret <> "OK" Then
+							LOG.AddStepNameInf(KeyName)
+							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+							msuStatistics.RemoveFailCount += 1
+						End If
 					End If
 					If Me.PigKeyValues.IsItemExists(KeyName) = True Then
 						msuStatistics.RemoveCount += 1
@@ -534,6 +541,10 @@ Public Class PigKeyValueApp
 					GetPigKeyValue = pkvList
 					pkvList = Nothing
 				Case EnmCacheLevel.ToShareMem
+					If Me.IsWindows = False Then
+						LOG.StepName = "Check OS"
+						Throw New Exception("This Function can only be used on windows")
+					End If
 					Dim bolIsGetByShareMem As Boolean = False
 					If pkvList Is Nothing Then
 						bolIsGetByShareMem = True
@@ -592,7 +603,11 @@ Public Class PigKeyValueApp
 					Dim bolIsGetByShareMem As Boolean = False
 					Dim bolIsGetByFile As Boolean = False
 					If pkvList Is Nothing Then
-						bolIsGetByShareMem = True
+						If Me.IsWindows = True Then
+							bolIsGetByShareMem = True
+						Else
+							bolIsGetByFile = True
+						End If
 					Else
 						If pkvList.Parent Is Nothing Then pkvList.Parent = Me
 						If pkvList.fIsForceRefCache = True Then
@@ -608,7 +623,7 @@ Public Class PigKeyValueApp
 							Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 						End If
 						If GetPigKeyValue Is Nothing Then
-							LOG.StepName = "RemovePigKeyValue.ToShareMem"
+							LOG.StepName = "RemovePigKeyValue.ToFile"
 							LOG.Ret = Me.RemovePigKeyValue(pkvList, EnmCacheLevel.ToShareMem)
 							If LOG.Ret <> "OK" Then
 								LOG.AddStepNameInf(KeyName)
@@ -616,32 +631,34 @@ Public Class PigKeyValueApp
 							End If
 						Else
 							If GetPigKeyValue.Parent Is Nothing Then GetPigKeyValue.Parent = Me
-							LOG.StepName = "mGetPigKeyValueByShareMem.ToFile"
-							LOG.Ret = Me.mGetPigKeyValueByShareMem(KeyName, pkvShareMem)
-							If LOG.Ret <> "OK" Then
-								LOG.AddStepNameInf(KeyName)
-								Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
-							End If
-							Dim bolIsSaveShareMem As Boolean = False
-							If pkvShareMem IsNot Nothing Then
-								If pkvShareMem.IsMatchAnother(GetPigKeyValue) = False Then
-									LOG.StepName = "mClearShareMem.ToFile"
-									LOG.Ret = Me.mClearShareMem(pkvShareMem)
+							If Me.IsWindows = True Then
+								LOG.StepName = "mGetPigKeyValueByShareMem.ToFile"
+								LOG.Ret = Me.mGetPigKeyValueByShareMem(KeyName, pkvShareMem)
+								If LOG.Ret <> "OK" Then
+									LOG.AddStepNameInf(KeyName)
+									Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+								End If
+								Dim bolIsSaveShareMem As Boolean = False
+								If pkvShareMem IsNot Nothing Then
+									If pkvShareMem.IsMatchAnother(GetPigKeyValue) = False Then
+										LOG.StepName = "mClearShareMem.ToFile"
+										LOG.Ret = Me.mClearShareMem(pkvShareMem)
+										If LOG.Ret <> "OK" Then
+											LOG.AddStepNameInf(KeyName)
+											Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+										End If
+										bolIsSaveShareMem = True
+									End If
+								Else
+									bolIsSaveShareMem = True
+								End If
+								If bolIsSaveShareMem = True Then
+									LOG.StepName = "mSavePigKeyValueToShareMem.ToFile"
+									LOG.Ret = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
 									If LOG.Ret <> "OK" Then
 										LOG.AddStepNameInf(KeyName)
 										Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 									End If
-									bolIsSaveShareMem = True
-								End If
-							Else
-								bolIsSaveShareMem = True
-							End If
-							If bolIsSaveShareMem = True Then
-								LOG.StepName = "mSavePigKeyValueToShareMem.ToFile"
-								LOG.Ret = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
-								If LOG.Ret <> "OK" Then
-									LOG.AddStepNameInf(KeyName)
-									Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 								End If
 							End If
 						End If
@@ -663,6 +680,7 @@ Public Class PigKeyValueApp
 								If GetPigKeyValue.Parent Is Nothing Then GetPigKeyValue.Parent = Me
 								msuStatistics.SaveToShareMemCount += 1
 								LOG.StepName = "mSavePigKeyValueToShareMem.ToFile2"
+								LOG.AddStepNameInf(GetPigKeyValue.StrValue)
 								LOG.Ret = Me.mSavePigKeyValueToShareMem(GetPigKeyValue)
 								If LOG.Ret <> "OK" Then
 									LOG.AddStepNameInf(KeyName)
@@ -702,6 +720,7 @@ Public Class PigKeyValueApp
 	Public Function SaveBytesToShareMem(SMName As String, SMLen As Long, ByRef AbIn As Byte()) As String
 		Dim LOG As New PigStepLog("SaveBytesToShareMem")
 		Try
+			If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 			Dim smMain As New ShareMem
 			LOG.StepName = "Init"
 			LOG.Ret = smMain.Init(SMName, SMLen)
@@ -798,6 +817,7 @@ Public Class PigKeyValueApp
 	Public Function LoadBytesFromShareMem(SMName As String, SMLen As Long, ByRef PbOut As PigBytes) As String
 		Dim LOG As New PigStepLog("LoadBytesFromFile")
 		Try
+			If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 			Dim smMain As New ShareMem
 			LOG.StepName = "Init"
 			LOG.Ret = smMain.Init(SMName, SMLen)
@@ -832,6 +852,7 @@ Public Class PigKeyValueApp
 	Private Function mSavePigKeyValueToShareMem(ByRef NewItem As PigKeyValue) As String
 		Dim LOG As New PigStepLog("mSavePigKeyValueToShareMem")
 		Try
+			If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 			Dim strKeyName As String = NewItem.KeyName
 			'--------
 			LOG.StepName = "Check"
@@ -1007,6 +1028,7 @@ Public Class PigKeyValueApp
 						Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
 					End If
 				Case EnmCacheLevel.ToShareMem
+					If Me.IsWindows = False Then Throw New Exception("This Function can only be used on windows")
 					LOG.StepName = "mGetPigKeyValueByShareMem"
 					LOG.Ret = Me.mGetPigKeyValueByShareMem(strKeyName, pkvOld)
 					If LOG.Ret <> "OK" Then
@@ -1093,7 +1115,7 @@ Public Class PigKeyValueApp
 						msuStatistics.SaveToShareMemCount += 1
 					Case EnmCacheLevel.ToFile
 						If pkvOld.Parent Is Nothing Then pkvOld.Parent = Me
-						LOG.StepName = "mClearShareMem.Update"
+						LOG.StepName = "mRemoveFile.Update"
 						LOG.Ret = Me.mRemoveFile(pkvOld.KeyName)
 						If LOG.Ret <> "OK" Then
 							LOG.AddStepNameInf(strKeyName)
@@ -1115,21 +1137,23 @@ Public Class PigKeyValueApp
 			Select Case Me.CacheLevel
 				Case EnmCacheLevel.ToShareMem, EnmCacheLevel.ToFile
 					If Me.CacheLevel = EnmCacheLevel.ToFile Then
-						LOG.StepName = "mGetPigKeyValueByShareMem"
-						LOG.Ret = Me.mGetPigKeyValueByShareMem(strKeyName, pkvOld)
-						If LOG.Ret <> "OK" Then
-							LOG.AddStepNameInf(strKeyName)
-							Me.PrintDebugLog(LOG.SubName, LOG.StepName, Me.PigKeyValues.LastErr)
-						End If
-						If pkvOld IsNot Nothing Then
-							If pkvOld.Parent Is Nothing Then pkvOld.Parent = Me
-							If pkvOld.IsMatchAnother(NewItem) = False Then
-								LOG.StepName = "mClearShareMem.ToFile"
-								LOG.Ret = Me.mClearShareMem(pkvOld)
-								If LOG.Ret <> "OK" Then
-									LOG.AddStepNameInf(strKeyName)
-									Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
-									msuStatistics.RemoveFailCount += 1
+						If Me.IsWindows = True Then
+							LOG.StepName = "mGetPigKeyValueByShareMem"
+							LOG.Ret = Me.mGetPigKeyValueByShareMem(strKeyName, pkvOld)
+							If LOG.Ret <> "OK" Then
+								LOG.AddStepNameInf(strKeyName)
+								Me.PrintDebugLog(LOG.SubName, LOG.StepName, Me.PigKeyValues.LastErr)
+							End If
+							If pkvOld IsNot Nothing Then
+								If pkvOld.Parent Is Nothing Then pkvOld.Parent = Me
+								If pkvOld.IsMatchAnother(NewItem) = False Then
+									LOG.StepName = "mClearShareMem.ToFile"
+									LOG.Ret = Me.mClearShareMem(pkvOld)
+									If LOG.Ret <> "OK" Then
+										LOG.AddStepNameInf(strKeyName)
+										Me.PrintDebugLog(LOG.SubName, LOG.StepName, LOG.Ret)
+										msuStatistics.RemoveFailCount += 1
+									End If
 								End If
 							End If
 						End If
