@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: ConsoleDemo for PigKeyCacheLib
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.1.2
+'* Version: 3.2.2
 '* Create Time: 28/8/2021
 '* 1.1	13/11/2021	Add ValueType
 '* 1.2	14/11/2021	Modify SavePigKeyValue,GetPigKeyValue
@@ -14,6 +14,7 @@
 '* 1.6	5/12/2021	Modify TextType,SaveType
 '* 3.0	10/12/2021	Pigkeycachelib version 3.0 is supported, and the following versions of interfaces are no longer supported.
 '* 3.1	13/12/2021	Modify GetPigKeyValue,SavePigKeyValue
+'* 3.2	2/1/2022	Modify New 
 '**********************************
 Imports System.Data
 Imports PigKeyCacheLib
@@ -63,6 +64,10 @@ Public Class ConsoleDemo
                 Console.WriteLine("Unsupported CacheLevel")
                 Exit Sub
         End Select
+        If Me.PigKeyValueApp.LastErr <> "" Then
+            Console.WriteLine(Me.PigKeyValueApp.LastErr)
+            Exit Sub
+        End If
         Me.PigKeyValueApp.OpenDebug()
         Me.PigKeyValueApp.PigKeyValues.OpenDebug()
         Do While True
