@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用 SQL Server 版|Piggy key value application for SQL Server
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.2
+'* Version: 3.3
 '* Create Time: 31/8/2021
 '* 1.1	1/9/2021 Add mCreateTableKeyValueInf,PigBaseMini,OpenDebug,mIsDBObjExists,GetPigKeyValue
 '* 1.2	2/9/2021 Modify mNew,IsPigKeyValueExists,SavePigKeyValue,mCreateTableKeyValueInf, and remove mIsDBObjExists.
@@ -21,6 +21,7 @@
 '* 3.0	28/12/2021 Code rewriting
 '* 3.1	29/12/2021 Modify mNew,IsPigKeyValueExists,GetPigKeyValue
 '* 3.2	31/12/2021 Modify mAddTableCol
+'* 3.3	31/12/2021 Modify mAddTableCol
 '************************************
 
 Imports PigKeyCacheLib
@@ -36,7 +37,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class PigKeyValueApp
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.2.2"
+    Private Const CLS_VERSION As String = "3.3.2"
     Friend Property Obj As PigKeyCacheLib.PigKeyValueApp
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
@@ -82,7 +83,11 @@ Public Class PigKeyValueApp
                 strShareMemRoot &= "<" & .CurrDatabase & ">"
             End With
             LOG.StepName = "New PigKeyCacheLib.PigKeyValueApp"
-            Me.Obj = New PigKeyCacheLib.PigKeyValueApp(strShareMemRoot)
+            If Me.IsWindows = True Then
+                Me.Obj = New PigKeyCacheLib.PigKeyValueApp(strShareMemRoot)
+            Else
+                Me.Obj = New PigKeyCacheLib.PigKeyValueApp()
+            End If
             If Me.Obj.LastErr <> "" Then Throw New Exception(Me.Obj.LastErr)
             LOG.StepName = "New SQLSrvTools"
             Dim oSQLSrvTools As New SQLSrvTools(moConnSQLSrv)
