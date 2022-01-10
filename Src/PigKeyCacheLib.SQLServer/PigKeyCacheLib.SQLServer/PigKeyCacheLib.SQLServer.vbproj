@@ -19,7 +19,7 @@
 This is a scenario with the best read performance and horizontal scalability. It shares database connection with applications, which is equivalent to no third-party service support, and the high availability of the database is better than redis.
 It can run on Windows Only.
 </Description>
-    <PackageReleaseNotes>Simplify class library interfaces. Some interfaces are no longer compatible with old versions, and fix bugs for PigKeyValueApp.</PackageReleaseNotes>
+    <PackageReleaseNotes>Solve the problem of using CacheQuery in Linux and windows.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
