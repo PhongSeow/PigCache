@@ -78,12 +78,19 @@ Public Class ConsoleDemo
         End Select
         Me.ConnSQLSrv.ConnectionTimeout = 5
         Me.ConnSQLSrv.OpenOrKeepActive()
+        If Me.ConnSQLSrv.LastErr <> "" Then
+            Console.WriteLine(Me.ConnSQLSrv.LastErr)
+            Exit Sub
+        End If
 #If NETFRAMEWORK Then
         Me.PigKeyValueApp = New PigKeyCacheLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
 #Else
         Me.PigKeyValueApp = New PigKeyCacheCoreLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
 #End If
-
+        If Me.PigKeyValueApp.LastErr <> "" Then
+            Console.WriteLine(Me.PigKeyValueApp.LastErr)
+            Exit Sub
+        End If
         Me.PigKeyValueApp.OpenDebug()
         Do While True
             Console.WriteLine("*******************")
