@@ -7,7 +7,7 @@
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Description>Demo console program for PigKeyCacheCoreLib.SQLServer</Description>
-    <Copyright>Copyright (c) 2021 Seow Phong</Copyright>
+    <Copyright>Copyright (c) 2021-2022 Seow Phong</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheCoreLib.SQLServerDemo</RepositoryUrl>
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheCoreLib.SQLServer" Version="3.0.38" />
+    <PackageReference Include="PigKeyCacheCoreLib.SQLServer" Version="3.1.8" />
   </ItemGroup>
 
 </Project>
