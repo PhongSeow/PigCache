@@ -4,14 +4,16 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: ConsoleDemo for PigKeyCacheLib.SQLServer
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 2.1
+'* Version: 2.2
 '* Create Time: 18/8/2021
 '* 1.1	5/10/2021	Modify RemovePigKeyValue
 '* 2.0	15/12/2021	Supports PigKeyCacheLib.SQLServer 2.0
 '* 2.1	28/12/2021	Supports PigKeyCacheLib.SQLServer 3.0
+'* 2.2	26/1/2022	Refer to PigConsole.Getpwdstr of PigCmdLib  is used to hide the entered password.
 '**********************************
 
 Imports System.Data
+Imports PigCmdLib
 Imports PigToolsLiteLib
 #If NETFRAMEWORK Then
 Imports PigKeyCacheLib.SQLServer
@@ -48,11 +50,13 @@ Public Class ConsoleDemo
     Public TextType As PigText.enmTextType = PigText.enmTextType.UTF8
     Public SaveType As PigKeyValue.enmSaveType = PigKeyValue.enmSaveType.Original
     Public Ret As String
+    Public PigConsole As New PigConsole
     Public Sub Main()
         Dim strLine As String
         Console.WriteLine("*******************")
         Console.WriteLine("Init Setting")
         Console.WriteLine("*******************")
+        Console.CursorVisible = True
         Console.WriteLine("Input SQL Server:" & Me.DBSrv)
         Me.DBSrv = Console.ReadLine()
         If Me.DBSrv = "" Then Me.DBSrv = "localhost"
@@ -72,25 +76,18 @@ Public Class ConsoleDemo
                 If Me.DBUser = "" Then Me.DBUser = "sa"
                 Console.WriteLine("DB User=" & Me.DBUser)
                 Console.WriteLine("Input DB Password:")
-                Me.DBPwd = Console.ReadLine()
-                Console.WriteLine("DB Password=" & Me.DBPwd)
+                Me.DBPwd = Me.PigConsole.GetPwdStr
+                'Console.WriteLine("DB Password=" & Me.DBPwd)
                 Me.ConnSQLSrv = New ConnSQLSrv(Me.DBSrv, Me.CurrDB, Me.DBUser, Me.DBPwd)
         End Select
         Me.ConnSQLSrv.ConnectionTimeout = 5
         Me.ConnSQLSrv.OpenOrKeepActive()
-        If Me.ConnSQLSrv.LastErr <> "" Then
-            Console.WriteLine(Me.ConnSQLSrv.LastErr)
-            Exit Sub
-        End If
 #If NETFRAMEWORK Then
         Me.PigKeyValueApp = New PigKeyCacheLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
 #Else
         Me.PigKeyValueApp = New PigKeyCacheCoreLib.SQLServer.PigKeyValueApp(Me.ConnSQLSrv)
 #End If
-        If Me.PigKeyValueApp.LastErr <> "" Then
-            Console.WriteLine(Me.PigKeyValueApp.LastErr)
-            Exit Sub
-        End If
+
         Me.PigKeyValueApp.OpenDebug()
         Do While True
             Console.WriteLine("*******************")
@@ -104,13 +101,15 @@ Public Class ConsoleDemo
             Console.WriteLine("Press E to RemovePigKeyValue")
             Console.WriteLine("Press F to GetStatisticsXml")
             Console.WriteLine("*******************")
-            Select Case Console.ReadKey().Key
+            Console.CursorVisible = False
+            Select Case Console.ReadKey(True).Key
                 Case ConsoleKey.Q
                     Exit Do
                 Case ConsoleKey.A
                     Console.WriteLine("*******************")
                     Console.WriteLine("SavePigKeyValue")
                     Console.WriteLine("*******************")
+                    Console.CursorVisible = True
                     Console.WriteLine("Input KeyName:" & Me.KeyName)
                     strLine = Console.ReadLine
                     If strLine <> "" Then Me.KeyName = strLine
@@ -191,6 +190,7 @@ Public Class ConsoleDemo
                     Console.WriteLine("*******************")
                     Console.WriteLine("GetPigKeyValue")
                     Console.WriteLine("*******************")
+                    Console.CursorVisible = True
                     Console.WriteLine("Input KeyName:" & Me.KeyName)
                     strLine = Console.ReadLine
                     If strLine <> "" Then Me.KeyName = strLine
