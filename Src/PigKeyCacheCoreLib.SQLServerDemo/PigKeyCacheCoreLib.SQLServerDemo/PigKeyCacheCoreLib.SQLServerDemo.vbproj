@@ -13,11 +13,12 @@
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheCoreLib.SQLServerDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Key Value Windows cache Single process Multithreading SQLServer Linux Core</PackageTags>
-    <Version>3.1.6</Version>
-    <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
+    <Version>3.1.12</Version>
+    <PackageReleaseNotes>Refer to PigConsole.Getpwdstr of PigCmdLib  is used to hide the entered password.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PigCmdLib" Version="1.1.20" />
     <PackageReference Include="PigKeyCacheCoreLib.SQLServer" Version="3.1.16" />
   </ItemGroup>
 
