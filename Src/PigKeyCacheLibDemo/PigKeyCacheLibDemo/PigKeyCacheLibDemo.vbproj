@@ -2,23 +2,23 @@
 
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLibDemo</RootNamespace>
-    <TargetFrameworks>net20;net30;net40;net461;net472;net5.0;netcoreapp3.1;</TargetFrameworks>
+    <TargetFrameworks>net20;net30;net40;net461;net472;net5.0;netcoreapp3.1;net6.0;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Description>Demo console program for PigKeyCacheLib</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) 2021 Seow Phong</Copyright>
+    <Copyright>Copyright (c) 2021-2022 Seow Phong</Copyright>
     <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLibDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Version>3.2.12</Version>
+    <Version>3.2.18</Version>
     <PackageTags>Key Value Windows cache Single process Multithreading</PackageTags>
     <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib" Version="3.2.30" />
+    <PackageReference Include="PigKeyCacheLib" Version="3.2.68" />
   </ItemGroup>
 
   <ItemGroup>
