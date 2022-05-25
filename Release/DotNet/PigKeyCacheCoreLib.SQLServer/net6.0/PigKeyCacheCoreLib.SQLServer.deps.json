@@ -1,11 +1,11 @@
 {
   "runtimeTarget": {
-    "name": ".NETCoreApp,Version=v5.0",
+    "name": ".NETCoreApp,Version=v6.0",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    ".NETCoreApp,Version=v5.0": {
+    ".NETCoreApp,Version=v6.0": {
       "PigKeyCacheCoreLib.SQLServer/3.1.38": {
         "dependencies": {
           "PigSQLSrvCoreLib": "2.0.16"
@@ -229,7 +229,7 @@
           "PigToolsLiteLib": "2.5.38"
         },
         "runtime": {
-          "lib/net5.0/PigKeyCacheLib.dll": {
+          "lib/net6.0/PigKeyCacheLib.dll": {
             "assemblyVersion": "3.2.88.0",
             "fileVersion": "3.2.88.0"
           }
@@ -241,7 +241,7 @@
           "PigKeyCacheLib": "3.2.88"
         },
         "runtime": {
-          "lib/net5.0/PigSQLSrvCoreLib.dll": {
+          "lib/net6.0/PigSQLSrvCoreLib.dll": {
             "assemblyVersion": "2.0.16.0",
             "fileVersion": "2.0.16.0"
           }
@@ -249,7 +249,7 @@
       },
       "PigToolsLiteLib/2.5.38": {
         "runtime": {
-          "lib/net5.0/PigToolsLiteLib.dll": {
+          "lib/net6.0/PigToolsLiteLib.dll": {
             "assemblyVersion": "2.5.38.0",
             "fileVersion": "2.5.38.0"
           }
