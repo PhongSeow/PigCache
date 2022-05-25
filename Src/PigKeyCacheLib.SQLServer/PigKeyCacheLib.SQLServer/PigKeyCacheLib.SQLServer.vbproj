@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLib.SQLServer</RootNamespace>
-    <TargetFrameworks>net20;net30;net40;</TargetFrameworks>
-    <Version>3.1.16</Version>
+    <TargetFrameworks>net20;net30;net48;</TargetFrameworks>
+    <Version>3.1.38</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Seow Phong</Authors>
@@ -34,7 +34,7 @@ It can run on Windows Only.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigSQLSrvLib" Version="1.8.16" />
+    <PackageReference Include="PigSQLSrvLib" Version="2.0.16" />
   </ItemGroup>
 
 </Project>
