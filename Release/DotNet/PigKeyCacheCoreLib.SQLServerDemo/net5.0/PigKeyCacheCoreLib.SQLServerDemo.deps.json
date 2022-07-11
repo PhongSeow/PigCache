@@ -6,10 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "PigKeyCacheCoreLib.SQLServerDemo/3.2.8": {
+      "PigKeyCacheCoreLib.SQLServerDemo/3.2.10": {
         "dependencies": {
-          "PigCmdLib": "1.9.92",
-          "PigKeyCacheCoreLib.SQLServer": "3.2.8"
+          "PigCmdLib": "1.9.98",
+          "PigKeyCacheCoreLib.SQLServer": "3.2.10"
         },
         "runtime": {
           "PigKeyCacheCoreLib.SQLServerDemo.dll": {}
@@ -225,31 +225,31 @@
           }
         }
       },
-      "PigCmdLib/1.9.92": {
+      "PigCmdLib/1.9.98": {
         "dependencies": {
-          "PigToolsLiteLib": "2.9.2"
+          "PigToolsLiteLib": "2.9.38"
         },
         "runtime": {
           "lib/net5.0/PigCmdLib.dll": {
-            "assemblyVersion": "1.9.92.0",
-            "fileVersion": "1.9.92.0"
+            "assemblyVersion": "1.9.98.0",
+            "fileVersion": "1.9.98.0"
           }
         }
       },
-      "PigKeyCacheCoreLib.SQLServer/3.2.8": {
+      "PigKeyCacheCoreLib.SQLServer/3.2.10": {
         "dependencies": {
-          "PigSQLSrvCoreLib": "2.3.32"
+          "PigSQLSrvCoreLib": "2.5.18"
         },
         "runtime": {
           "lib/net5.0/PigKeyCacheCoreLib.SQLServer.dll": {
-            "assemblyVersion": "3.2.8.0",
-            "fileVersion": "3.2.8.0"
+            "assemblyVersion": "3.2.10.0",
+            "fileVersion": "3.2.10.0"
           }
         }
       },
       "PigKeyCacheLib/3.3.8": {
         "dependencies": {
-          "PigToolsLiteLib": "2.9.2"
+          "PigToolsLiteLib": "2.9.38"
         },
         "runtime": {
           "lib/net5.0/PigKeyCacheLib.dll": {
@@ -258,23 +258,23 @@
           }
         }
       },
-      "PigSQLSrvCoreLib/2.3.32": {
+      "PigSQLSrvCoreLib/2.5.18": {
         "dependencies": {
           "Microsoft.Data.SqlClient": "4.1.0",
           "PigKeyCacheLib": "3.3.8"
         },
         "runtime": {
           "lib/net5.0/PigSQLSrvCoreLib.dll": {
-            "assemblyVersion": "2.3.32.0",
-            "fileVersion": "2.3.32.0"
+            "assemblyVersion": "2.5.18.0",
+            "fileVersion": "2.5.18.0"
           }
         }
       },
-      "PigToolsLiteLib/2.9.2": {
+      "PigToolsLiteLib/2.9.38": {
         "runtime": {
           "lib/net5.0/PigToolsLiteLib.dll": {
-            "assemblyVersion": "2.9.2.0",
-            "fileVersion": "2.9.2.0"
+            "assemblyVersion": "2.9.38.0",
+            "fileVersion": "2.9.38.0"
           }
         }
       },
@@ -482,7 +482,7 @@
     }
   },
   "libraries": {
-    "PigKeyCacheCoreLib.SQLServerDemo/3.2.8": {
+    "PigKeyCacheCoreLib.SQLServerDemo/3.2.10": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -606,19 +606,19 @@
       "path": "microsoft.win32.systemevents/5.0.0",
       "hashPath": "microsoft.win32.systemevents.5.0.0.nupkg.sha512"
     },
-    "PigCmdLib/1.9.92": {
+    "PigCmdLib/1.9.98": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Ipv3sfb41nPYBPEP6imiE5IRxqglWWa6TJFovr+1cAtqJD4GzgNbdVCXG0FwRjd/5RNkjJKYO+VhqEp0LqwE/A==",
-      "path": "pigcmdlib/1.9.92",
-      "hashPath": "pigcmdlib.1.9.92.nupkg.sha512"
+      "sha512": "sha512-AcUTdNkpexDg0ZIKBVrNN0OVfRBnH4EkvqmVBHzslVQ2wCeGVHvVzbpqOlpxwR/MZE947xShv5vIR9QRcpk0YA==",
+      "path": "pigcmdlib/1.9.98",
+      "hashPath": "pigcmdlib.1.9.98.nupkg.sha512"
     },
-    "PigKeyCacheCoreLib.SQLServer/3.2.8": {
+    "PigKeyCacheCoreLib.SQLServer/3.2.10": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-OJ914OPmttwKikxwNL0bgrTAqLNHUMiSWewR9EIW25e/eU+wMZze9YIh/4DRqaScXpsYLicuIIxBle9d7GKr7Q==",
-      "path": "pigkeycachecorelib.sqlserver/3.2.8",
-      "hashPath": "pigkeycachecorelib.sqlserver.3.2.8.nupkg.sha512"
+      "sha512": "sha512-GvO4Wq2emYVfO8IUmGhXh73yB9ZzNuHMeHdRNSb/Nd3/Kagli/0vWkFYzF75B5LkuN2inVGbj8SVG8GZrfaawA==",
+      "path": "pigkeycachecorelib.sqlserver/3.2.10",
+      "hashPath": "pigkeycachecorelib.sqlserver.3.2.10.nupkg.sha512"
     },
     "PigKeyCacheLib/3.3.8": {
       "type": "package",
@@ -627,19 +627,19 @@
       "path": "pigkeycachelib/3.3.8",
       "hashPath": "pigkeycachelib.3.3.8.nupkg.sha512"
     },
-    "PigSQLSrvCoreLib/2.3.32": {
+    "PigSQLSrvCoreLib/2.5.18": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ljdPjedtZdrSsQy70K/Q4k1mh1axOlWfpNPNH+LIHk/wxzioLgMu4/peTr3CI2pvKiIIlG4Z311H9p7Lxcjb/A==",
-      "path": "pigsqlsrvcorelib/2.3.32",
-      "hashPath": "pigsqlsrvcorelib.2.3.32.nupkg.sha512"
+      "sha512": "sha512-DRoIfTKG9XMoITBVUULO6h/vjno7T28xOtDae5sqK8khkKuO97X9tYBEvaVKrTRxrhxL7BLI8pfXPiivvbUa2A==",
+      "path": "pigsqlsrvcorelib/2.5.18",
+      "hashPath": "pigsqlsrvcorelib.2.5.18.nupkg.sha512"
     },
-    "PigToolsLiteLib/2.9.2": {
+    "PigToolsLiteLib/2.9.38": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-P7LIBKMb6SBtRwDPDoP6qN1tibWred5bmJLErmqj2nyhE84vnISkVhG8FR8x1ntzVsYVrEopRyrRNiacNiap2Q==",
-      "path": "pigtoolslitelib/2.9.2",
-      "hashPath": "pigtoolslitelib.2.9.2.nupkg.sha512"
+      "sha512": "sha512-Ab+upWRP8831J/B1DldTlE6ShpZNnElNpOVy1DLvE0NCJ2peLMe5HESLk6I8MGaab81Xnaabanj76fami+U8FA==",
+      "path": "pigtoolslitelib/2.9.38",
+      "hashPath": "pigtoolslitelib.2.9.38.nupkg.sha512"
     },
     "System.Buffers/4.5.1": {
       "type": "package",
