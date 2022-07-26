@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PigKeyCacheFwkLib</RootNamespace>
+    <TargetFrameworks>net20;net30;net40;</TargetFrameworks>
+    <Version>3.3.28</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Seow Phong</Authors>
+    <Company>Seow Phong Studio</Company>
+    <Description>PigKeyCacheFwkLib is a very lightweight key value Caching Application. 
+It supports multi processes and multi threads. It does not need to install application support like memcached or redis. It is suitable for lightweight small applications.
+Support compression, encryption and other data storage methods.
+It can run on Windows Only.
+</Description>
+    <Copyright>Copyright (c) 2021-2022 Seow Phong</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
+    <PackageIcon>SeowPhongLogo.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheFwkLib</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>Key Value Windows cache multiprocessing multithreading memcached redis share memory</PackageTags>
+    <PackageReleaseNotes>In order to be compatible with more windows, support .Net 4.0 again.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PigToolsWinLib" Version="2.9.68" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="SeowPhongLogo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

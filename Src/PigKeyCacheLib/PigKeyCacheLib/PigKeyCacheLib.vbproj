@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLib</RootNamespace>
-    <TargetFrameworks>net20;net30;net48;net5.0;net6.0;netcoreapp3.1;</TargetFrameworks>
+    <TargetFrameworks>net5.0;net6.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.3.20</Version>
+    <Version>3.3.28</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Copyright>Copyright (c) 2021-2022 Seow Phong</Copyright>
@@ -20,7 +20,7 @@ It supports multi processes and multi threads. It does not need to install appli
 Support compression, encryption and other data storage methods.
 It can run on Windows and Linux platforms.
 </Description>
-    <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
+    <PackageReleaseNotes>The .net FrameWork is no longer supported, and you need to continue to use .Net 2.0., .Net 3.0 and .Net 4.0 Please refer to PigKeyCacheFwkLib</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
