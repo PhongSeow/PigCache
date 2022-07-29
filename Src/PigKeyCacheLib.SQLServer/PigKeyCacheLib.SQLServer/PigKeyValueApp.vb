@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用 SQL Server 版|Piggy key value application for SQL Server
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.3
+'* Version: 3.5
 '* Create Time: 31/8/2021
 '* 1.1	1/9/2021 Add mCreateTableKeyValueInf,PigBaseMini,OpenDebug,mIsDBObjExists,GetPigKeyValue
 '* 1.2	2/9/2021 Modify mNew,IsPigKeyValueExists,SavePigKeyValue,mCreateTableKeyValueInf, and remove mIsDBObjExists.
@@ -22,30 +22,25 @@
 '* 3.1	29/12/2021 Modify mNew,IsPigKeyValueExists,GetPigKeyValue
 '* 3.2	31/12/2021 Modify mAddTableCol
 '* 3.3	31/12/2021 Modify mAddTableCol
-'* 3.5	26/7/2022 Modify Imports and Obj,GetPigKeyValue
+'* 3.4	26/7/2022 Modify Imports and Obj,GetPigKeyValue
+'* 3.5	29/7/2022 Modify Imports
 '************************************
 
 Imports System.Data
 #If NETFRAMEWORK Then
 Imports PigSQLSrvLib
 Imports System.Data.SqlClient
-Imports PigKeyCacheFwkLib
-Imports PigToolsWinLib
 #Else
 Imports PigSQLSrvCoreLib
 Imports Microsoft.Data.SqlClient
+#End If
 Imports PigKeyCacheLib
 Imports PigToolsLiteLib
-#End If
 
 Public Class PigKeyValueApp
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.5.8"
-#If NETFRAMEWORK Then
-    Friend Property Obj As PigKeyCacheFwkLib.PigKeyValueApp
-#Else
+    Private Const CLS_VERSION As String = "3.5.10"
     Friend Property Obj As PigKeyCacheLib.PigKeyValueApp
-#End If
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
 
@@ -91,17 +86,9 @@ Public Class PigKeyValueApp
             End With
             LOG.StepName = "New PigKeyCacheLib.PigKeyValueApp"
             If Me.IsWindows = True Then
-#If NETFRAMEWORK Then
-                Me.Obj = New PigKeyCacheFwkLib.PigKeyValueApp(strShareMemRoot)
-#Else
                 Me.Obj = New PigKeyCacheLib.PigKeyValueApp(strShareMemRoot)
-#End If
             Else
-#If NETFRAMEWORK Then
-                Me.Obj = New PigKeyCacheFwkLib.PigKeyValueApp()
-#Else
                 Me.Obj = New PigKeyCacheLib.PigKeyValueApp()
-#End If
             End If
             If Me.Obj.LastErr <> "" Then Throw New Exception(Me.Obj.LastErr)
             LOG.StepName = "New SQLSrvTools"
@@ -130,11 +117,7 @@ Public Class PigKeyValueApp
         Try
             If Me.Obj Is Nothing Then Throw New Exception("Obj not instantiated")
             LOG.StepName = "GetPigKeyValue"
-#If NETFRAMEWORK Then
-            Dim oPigKeyValue As PigKeyCacheFwkLib.PigKeyValue = Me.Obj.GetPigKeyValue(KeyName)
-#Else
             Dim oPigKeyValue As PigKeyCacheLib.PigKeyValue = Me.Obj.GetPigKeyValue(KeyName)
-#End If
             If oPigKeyValue Is Nothing Then
                 Dim strSQL As String = "SELECT TOP 1 ExpTime,HeadData,BodyData FROM dbo._ptKeyValueInf WITH(NOLOCK) WHERE KeyName=@KeyName AND ExpTime>GETDATE()"
                 LOG.StepName = "New CmdSQLSrvText"
@@ -160,11 +143,7 @@ Public Class PigKeyValueApp
                             Throw New Exception(.LastErr)
                         End If
                         LOG.StepName = "New PigKeyValue"
-#If NETFRAMEWORK Then
-                        oPigKeyValue = New PigKeyCacheFwkLib.PigKeyValue(KeyName)
-#Else
                         oPigKeyValue = New PigKeyCacheLib.PigKeyValue(KeyName)
-#End If
                         If oPigKeyValue.LastErr <> "" Then Throw New Exception(oPigKeyValue.LastErr)
                         LOG.StepName = "LoadHead"
                         LOG.Ret = oPigKeyValue.LoadHead(pbHead)
