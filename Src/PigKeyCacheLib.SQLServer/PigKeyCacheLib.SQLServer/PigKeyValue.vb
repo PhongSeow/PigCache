@@ -4,20 +4,31 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.0
+'* Version: 3.1
 '* Create Time: 31/8/2021
 '* 1.1	21/9/2021 
 '* 1.2	3/12/2021 Add more new
 '* 1.3	6/12/2021 Add GetSaveData,Check,InitBytesBySave
 '* 2.0	15/12/2021 Modify New
 '* 3.0	28/12/2021 Code rewriting
+'* 3.1	26/7/2022 Modify Imports and Obj
 '************************************
+#If NETFRAMEWORK Then
+Imports PigKeyCacheFwkLib
+Imports PigToolsWinLib
+#Else
 Imports PigKeyCacheLib
 Imports PigToolsLiteLib
+#End If
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.0.18"
+    Private Const CLS_VERSION As String = "3.1.8"
+#If NETFRAMEWORK Then
+    Friend Property Obj As PigKeyCacheFwkLib.PigKeyValue
+#Else
     Friend Property Obj As PigKeyCacheLib.PigKeyValue
+#End If
+
 
     ''' <summary>
     ''' Save data type, Decide whether to process the saved data.
@@ -60,31 +71,55 @@ Public Class PigKeyValue
 
     Public Sub New(KeyName As String)
         MyBase.New(CLS_VERSION)
-        Me.Obj = New PigKeyCacheLib.PigKeyValue(KeyName)
+#If NETFRAMEWORK Then
+        Me.Obj = New PigKeyCacheFwkLib.PigKeyValue(KeyName)
+#Else
+    Me.Obj = New PigKeyCacheLib.PigKeyValue(KeyName)
+#End If
     End Sub
 
     Public Sub New(KeyName As String, ExpTime As Date, KeyValue As String)
         MyBase.New(CLS_VERSION)
+#If NETFRAMEWORK Then
+        Me.Obj = New PigKeyCacheFwkLib.PigKeyValue(KeyName, ExpTime, KeyValue)
+#Else
         Me.Obj = New PigKeyCacheLib.PigKeyValue(KeyName, ExpTime, KeyValue)
+#End If
     End Sub
 
     Public Sub New(KeyName As String, ExpTime As Date, KeyValue As String, TextType As PigText.enmTextType)
         MyBase.New(CLS_VERSION)
+#If NETFRAMEWORK Then
+        Me.Obj = New PigKeyCacheFwkLib.PigKeyValue(KeyName, ExpTime, KeyValue, TextType)
+#Else
         Me.Obj = New PigKeyCacheLib.PigKeyValue(KeyName, ExpTime, KeyValue, TextType)
+#End If
     End Sub
 
     Public Sub New(KeyName As String, ExpTime As Date, KeyValue As String, TextType As PigText.enmTextType, SaveType As EnmSaveType)
         MyBase.New(CLS_VERSION)
+#If NETFRAMEWORK Then
+        Me.Obj = New PigKeyCacheFwkLib.PigKeyValue(KeyName, ExpTime, KeyValue, TextType, SaveType)
+#Else
         Me.Obj = New PigKeyCacheLib.PigKeyValue(KeyName, ExpTime, KeyValue, TextType, SaveType)
+#End If
     End Sub
 
     Public Sub New(KeyName As String, ExpTime As Date, KeyValue() As Byte)
         MyBase.New(CLS_VERSION)
+#If NETFRAMEWORK Then
+        Me.Obj = New PigKeyCacheFwkLib.PigKeyValue(KeyName, ExpTime, KeyValue)
+#Else
         Me.Obj = New PigKeyCacheLib.PigKeyValue(KeyName, ExpTime, KeyValue)
+#End If
     End Sub
     Public Sub New(KeyName As String, ExpTime As Date, KeyValue() As Byte, SaveType As EnmSaveType)
         MyBase.New(CLS_VERSION)
+#If NETFRAMEWORK Then
+        Me.Obj = New PigKeyCacheFwkLib.PigKeyValue(KeyName, ExpTime, KeyValue, SaveType)
+#Else
         Me.Obj = New PigKeyCacheLib.PigKeyValue(KeyName, ExpTime, KeyValue, SaveType)
+#End If
     End Sub
 
     Public ReadOnly Property KeyName As String

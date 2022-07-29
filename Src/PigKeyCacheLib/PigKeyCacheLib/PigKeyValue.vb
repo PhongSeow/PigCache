@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 键值项
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.7
+'* Version: 3.8
 '* Create Time: 11/3/2021
 '* 1.0.2	6/4/2021 Add IsKeyNameToPigMD5Force
 '* 1.0.3	6/5/2021 Modify New,mNew
@@ -46,16 +46,13 @@
 '* 3.5		28/12/2021 Modify mNew,BodyData
 '* 3.6		4/1/2022 Modify StrValue
 '* 3.7		26/7/2022 Imports PigToolsWinLib
+'* 3.8		29/7/2022 Modify Imports
 '************************************
 
-#If NETFRAMEWORK Then
-Imports PigToolsWinLib
-#Else
 Imports PigToolsLiteLib
-#End If
 Public Class PigKeyValue
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.7.2"
+    Private Const CLS_VERSION As String = "3.8.2"
     Private Const STRU_VALUE_HEAD_VERSION As Integer = 1
     ''' <summary>
     ''' 父对象

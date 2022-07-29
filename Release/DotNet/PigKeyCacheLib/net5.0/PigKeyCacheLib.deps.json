@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "PigKeyCacheLib/3.3.28": {
+      "PigKeyCacheLib/3.5.18": {
         "dependencies": {
           "PigToolsLiteLib": "2.9.60"
         },
@@ -25,7 +25,7 @@
     }
   },
   "libraries": {
-    "PigKeyCacheLib/3.3.28": {
+    "PigKeyCacheLib/3.5.18": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

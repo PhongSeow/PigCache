@@ -22,23 +22,30 @@
 '* 3.1	29/12/2021 Modify mNew,IsPigKeyValueExists,GetPigKeyValue
 '* 3.2	31/12/2021 Modify mAddTableCol
 '* 3.3	31/12/2021 Modify mAddTableCol
+'* 3.5	26/7/2022 Modify Imports and Obj,GetPigKeyValue
 '************************************
 
-Imports PigKeyCacheLib
-Imports PigToolsLiteLib
 Imports System.Data
 #If NETFRAMEWORK Then
 Imports PigSQLSrvLib
 Imports System.Data.SqlClient
+Imports PigKeyCacheFwkLib
+Imports PigToolsWinLib
 #Else
 Imports PigSQLSrvCoreLib
 Imports Microsoft.Data.SqlClient
+Imports PigKeyCacheLib
+Imports PigToolsLiteLib
 #End If
 
 Public Class PigKeyValueApp
     Inherits PigBaseMini
-    Private Const CLS_VERSION As String = "3.3.2"
+    Private Const CLS_VERSION As String = "3.5.8"
+#If NETFRAMEWORK Then
+    Friend Property Obj As PigKeyCacheFwkLib.PigKeyValueApp
+#Else
     Friend Property Obj As PigKeyCacheLib.PigKeyValueApp
+#End If
     Private moConnSQLSrv As ConnSQLSrv
     Private moPigFunc As New PigFunc
 
@@ -84,9 +91,17 @@ Public Class PigKeyValueApp
             End With
             LOG.StepName = "New PigKeyCacheLib.PigKeyValueApp"
             If Me.IsWindows = True Then
+#If NETFRAMEWORK Then
+                Me.Obj = New PigKeyCacheFwkLib.PigKeyValueApp(strShareMemRoot)
+#Else
                 Me.Obj = New PigKeyCacheLib.PigKeyValueApp(strShareMemRoot)
+#End If
             Else
+#If NETFRAMEWORK Then
+                Me.Obj = New PigKeyCacheFwkLib.PigKeyValueApp()
+#Else
                 Me.Obj = New PigKeyCacheLib.PigKeyValueApp()
+#End If
             End If
             If Me.Obj.LastErr <> "" Then Throw New Exception(Me.Obj.LastErr)
             LOG.StepName = "New SQLSrvTools"
@@ -115,7 +130,11 @@ Public Class PigKeyValueApp
         Try
             If Me.Obj Is Nothing Then Throw New Exception("Obj not instantiated")
             LOG.StepName = "GetPigKeyValue"
+#If NETFRAMEWORK Then
+            Dim oPigKeyValue As PigKeyCacheFwkLib.PigKeyValue = Me.Obj.GetPigKeyValue(KeyName)
+#Else
             Dim oPigKeyValue As PigKeyCacheLib.PigKeyValue = Me.Obj.GetPigKeyValue(KeyName)
+#End If
             If oPigKeyValue Is Nothing Then
                 Dim strSQL As String = "SELECT TOP 1 ExpTime,HeadData,BodyData FROM dbo._ptKeyValueInf WITH(NOLOCK) WHERE KeyName=@KeyName AND ExpTime>GETDATE()"
                 LOG.StepName = "New CmdSQLSrvText"
@@ -141,7 +160,11 @@ Public Class PigKeyValueApp
                             Throw New Exception(.LastErr)
                         End If
                         LOG.StepName = "New PigKeyValue"
+#If NETFRAMEWORK Then
+                        oPigKeyValue = New PigKeyCacheFwkLib.PigKeyValue(KeyName)
+#Else
                         oPigKeyValue = New PigKeyCacheLib.PigKeyValue(KeyName)
+#End If
                         If oPigKeyValue.LastErr <> "" Then Throw New Exception(oPigKeyValue.LastErr)
                         LOG.StepName = "LoadHead"
                         LOG.Ret = oPigKeyValue.LoadHead(pbHead)
@@ -173,7 +196,7 @@ Public Class PigKeyValueApp
                 End With
             End If
             With oPigKeyValue
-                If .ValueType = PigKeyCacheLib.PigKeyValue.EnmValueType.Text Then
+                If .ValueType = PigKeyValue.EnmValueType.Text Then
                     LOG.StepName = "New PigKeyValue(Text)"
                     GetPigKeyValue = New PigKeyValue(KeyName, .ExpTime, .StrValue, .TextType, .SaveType)
                 Else

@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: 豚豚键值应用|Piggy key value application
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.6
+'* Version: 3.8
 '* Create Time: 8/5/2021
 '* 1.0.2	13/5/2021 Modify New
 '* 1.0.3	22/7/2021 Modify GetPigKeyValue
@@ -48,19 +48,15 @@
 '* 3.5		17/12/2021 Modify mRemoveFile
 '* 3.6		2/1/2022 Modify mGetPigKeyValueByShareMem,SaveBytesToShareMem,mClearShareMem,GetPigKeyValue,mGetPigKeyValueByFile
 '* 3.7		26/7/2022 Imports PigToolsWinLib
+'* 3.8		29/7/2022 Modify Imports
 '************************************
 
-#If NETFRAMEWORK Then
-Imports PigToolsWinLib
-#Else
 Imports PigToolsLiteLib
-#End If
-
 Imports System.IO
 
 Public Class PigKeyValueApp
 	Inherits PigBaseMini
-	Private Const CLS_VERSION As String = "3.7.2"
+	Private Const CLS_VERSION As String = "3.8.2"
 	Private Const SM_HEAD_LEN As Integer = 40
 	Private ReadOnly moPigFunc As New PigFunc
 
