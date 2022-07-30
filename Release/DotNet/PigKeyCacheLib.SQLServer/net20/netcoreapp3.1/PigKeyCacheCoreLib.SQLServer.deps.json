@@ -1,14 +1,14 @@
 {
   "runtimeTarget": {
-    "name": ".NETCoreApp,Version=v5.0",
+    "name": ".NETCoreApp,Version=v3.1",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    ".NETCoreApp,Version=v5.0": {
-      "PigKeyCacheCoreLib.SQLServer/3.3.18": {
+    ".NETCoreApp,Version=v3.1": {
+      "PigKeyCacheCoreLib.SQLServer/3.2.38": {
         "dependencies": {
-          "PigSQLSrvCoreLib": "2.6.28"
+          "PigSQLSrvCoreLib": "2.5.38"
         },
         "runtime": {
           "PigKeyCacheCoreLib.SQLServer.dll": {}
@@ -203,6 +203,20 @@
         "dependencies": {
           "System.Security.AccessControl": "5.0.0",
           "System.Security.Principal.Windows": "5.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
         }
       },
       "Microsoft.Win32.SystemEvents/5.0.0": {
@@ -224,34 +238,34 @@
           }
         }
       },
-      "PigKeyCacheLib/3.5.28": {
+      "PigKeyCacheLib/3.3.28": {
         "dependencies": {
-          "PigToolsLiteLib": "3.0.8"
+          "PigToolsLiteLib": "2.9.60"
         },
         "runtime": {
-          "lib/net5.0/PigKeyCacheLib.dll": {
-            "assemblyVersion": "3.5.28.0",
-            "fileVersion": "3.5.28.0"
+          "lib/netcoreapp3.1/PigKeyCacheLib.dll": {
+            "assemblyVersion": "3.3.28.0",
+            "fileVersion": "3.3.28.0"
           }
         }
       },
-      "PigSQLSrvCoreLib/2.6.28": {
+      "PigSQLSrvCoreLib/2.5.38": {
         "dependencies": {
           "Microsoft.Data.SqlClient": "4.1.0",
-          "PigKeyCacheLib": "3.5.28"
+          "PigKeyCacheLib": "3.3.28"
         },
         "runtime": {
-          "lib/net5.0/PigSQLSrvCoreLib.dll": {
-            "assemblyVersion": "2.6.28.0",
-            "fileVersion": "2.6.28.0"
+          "lib/netcoreapp3.1/PigSQLSrvCoreLib.dll": {
+            "assemblyVersion": "2.5.38.0",
+            "fileVersion": "2.5.38.0"
           }
         }
       },
-      "PigToolsLiteLib/3.0.8": {
+      "PigToolsLiteLib/2.9.60": {
         "runtime": {
-          "lib/net5.0/PigToolsLiteLib.dll": {
-            "assemblyVersion": "3.0.8.0",
-            "fileVersion": "3.0.8.0"
+          "lib/netcoreapp3.1/PigToolsLiteLib.dll": {
+            "assemblyVersion": "2.9.60.0",
+            "fileVersion": "2.9.60.0"
           }
         }
       },
@@ -268,7 +282,14 @@
           }
         }
       },
-      "System.Diagnostics.DiagnosticSource/5.0.0": {},
+      "System.Diagnostics.DiagnosticSource/5.0.0": {
+        "runtime": {
+          "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        }
+      },
       "System.Drawing.Common/5.0.0": {
         "dependencies": {
           "Microsoft.Win32.SystemEvents": "5.0.0"
@@ -294,7 +315,14 @@
           }
         }
       },
-      "System.Formats.Asn1/5.0.0": {},
+      "System.Formats.Asn1/5.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Formats.Asn1.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        }
+      },
       "System.Globalization/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -375,15 +403,51 @@
           }
         }
       },
+      "System.Runtime.CompilerServices.Unsafe/5.0.0": {
+        "runtime": {
+          "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        }
+      },
       "System.Security.AccessControl/5.0.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
           "System.Security.Principal.Windows": "5.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.AccessControl.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
         }
       },
       "System.Security.Cryptography.Cng/5.0.0": {
         "dependencies": {
           "System.Formats.Asn1": "5.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/System.Security.Cryptography.Cng.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp3.0/System.Security.Cryptography.Cng.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
         }
       },
       "System.Security.Cryptography.ProtectedData/5.0.0": {
@@ -408,13 +472,34 @@
           "System.Windows.Extensions": "5.0.0"
         },
         "runtime": {
-          "lib/net5.0/System.Security.Permissions.dll": {
+          "lib/netcoreapp3.0/System.Security.Permissions.dll": {
             "assemblyVersion": "5.0.0.0",
             "fileVersion": "5.0.20.51904"
           }
         }
       },
-      "System.Security.Principal.Windows/5.0.0": {},
+      "System.Security.Principal.Windows/5.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Security.Principal.Windows.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "rid": "unix",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          },
+          "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        }
+      },
       "System.Text.Encoding/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -424,10 +509,32 @@
       },
       "System.Text.Encoding.CodePages/5.0.0": {
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "5.0.0"
+          "Microsoft.NETCore.Platforms": "5.0.0",
+          "System.Runtime.CompilerServices.Unsafe": "5.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Text.Encoding.CodePages.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp2.0/System.Text.Encoding.CodePages.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
+          }
         }
       },
-      "System.Text.Encodings.Web/4.7.2": {},
+      "System.Text.Encodings.Web/4.7.2": {
+        "runtime": {
+          "lib/netstandard2.1/System.Text.Encodings.Web.dll": {
+            "assemblyVersion": "4.0.5.1",
+            "fileVersion": "4.700.21.11602"
+          }
+        }
+      },
       "System.Text.Json/4.6.0": {},
       "System.Threading.Tasks/4.3.0": {
         "dependencies": {
@@ -459,7 +566,7 @@
     }
   },
   "libraries": {
-    "PigKeyCacheCoreLib.SQLServer/3.3.18": {
+    "PigKeyCacheCoreLib.SQLServer/3.2.38": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -583,26 +690,26 @@
       "path": "microsoft.win32.systemevents/5.0.0",
       "hashPath": "microsoft.win32.systemevents.5.0.0.nupkg.sha512"
     },
-    "PigKeyCacheLib/3.5.28": {
+    "PigKeyCacheLib/3.3.28": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-dZPlEJV2hPylwLGuzV+t+t0VrQ5YgXJO5zv/MzoDqfcPZksHKYOnqL/xLSyP5AMeBS53u2h6W+WWEanG7esYBg==",
-      "path": "pigkeycachelib/3.5.28",
-      "hashPath": "pigkeycachelib.3.5.28.nupkg.sha512"
+      "sha512": "sha512-gHFlw8AWOn7Gqg1nVlDsV1tlWPETT0JvZci3vq3gSMdCpXw39GADKqemRpD1V91ZhBxsyaTJbokyRf9knHaZ9g==",
+      "path": "pigkeycachelib/3.3.28",
+      "hashPath": "pigkeycachelib.3.3.28.nupkg.sha512"
     },
-    "PigSQLSrvCoreLib/2.6.28": {
+    "PigSQLSrvCoreLib/2.5.38": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-x3T3Ti96Af5Ytfjmaw/xXdrv+FhdGaqqUEHc6fMiJAIs5veuHhFBJ3+0GcXR0Rk5ITf1b6r7RC4Gx+Vy6HqnDA==",
-      "path": "pigsqlsrvcorelib/2.6.28",
-      "hashPath": "pigsqlsrvcorelib.2.6.28.nupkg.sha512"
+      "sha512": "sha512-AlP6+kezwMecKR3LGQRgpHvtMTI6IEnPRsMpfJQZvLzVwu4PtwIX1jCuh4zujS8mF2DU7eySBG2ah6VUD5Bw6w==",
+      "path": "pigsqlsrvcorelib/2.5.38",
+      "hashPath": "pigsqlsrvcorelib.2.5.38.nupkg.sha512"
     },
-    "PigToolsLiteLib/3.0.8": {
+    "PigToolsLiteLib/2.9.60": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-y8CCwXrl//1XW3XSO28sHCtBvDccj/XsxqbpBXQxhl0cbDQhrH19h2awA8tWK3eIoqCh2TUIfRr9MqUg3A6V5g==",
-      "path": "pigtoolslitelib/3.0.8",
-      "hashPath": "pigtoolslitelib.3.0.8.nupkg.sha512"
+      "sha512": "sha512-WoBguCdoA+v6bucAkWrd/WMy3xMGTqpcpx074IlPOAkFboXorbqO2RCoqYkBdJAoPR5ZZIIfWAhHl8vzHOnwCg==",
+      "path": "pigtoolslitelib/2.9.60",
+      "hashPath": "pigtoolslitelib.2.9.60.nupkg.sha512"
     },
     "System.Buffers/4.5.1": {
       "type": "package",
@@ -708,6 +815,13 @@
       "sha512": "sha512-30D6MkO8WF9jVGWZIP0hmCN8l9BTY4LCsAzLIe4xFSXzs+AjDotR7DpSmj27pFskDURzUvqYYY0ikModgBTxWw==",
       "path": "system.runtime.caching/5.0.0",
       "hashPath": "system.runtime.caching.5.0.0.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZD9TMpsmYJLrxbbmdvhwt9YEgG5WntEnZ/d1eH8JBX9LBp+Ju8BSBhUGbZMNVHHomWo2KVImJhTDl2hIgw/6MA==",
+      "path": "system.runtime.compilerservices.unsafe/5.0.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
     },
     "System.Security.AccessControl/5.0.0": {
       "type": "package",
