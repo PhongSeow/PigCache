@@ -4,7 +4,7 @@
     <RootNamespace>PigKeyCacheLib</RootNamespace>
     <TargetFrameworks>net20;net30;net40;net5.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.5.28</Version>
+    <Version>3.5.38</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Copyright>Copyright (c) 2021-2022 Seow Phong</Copyright>
@@ -20,7 +20,7 @@ It supports multi processes and multi threads. It does not need to install appli
 Support compression, encryption and other data storage methods.
 It can run on Windows and Linux platforms.
 </Description>
-    <PackageReleaseNotes>Adjust to be more compatible with .net core and .net framework at the same time.</PackageReleaseNotes>
+    <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +35,7 @@ It can run on Windows and Linux platforms.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigToolsLiteLib" Version="3.0.8" />
+    <PackageReference Include="PigToolsLiteLib" Version="3.0.18" />
   </ItemGroup>
 
 </Project>
