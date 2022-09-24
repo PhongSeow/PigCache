@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLibDemo</RootNamespace>
-    <TargetFrameworks>net20;net30;net48;net5.0;netcoreapp3.1;net6.0;</TargetFrameworks>
+    <TargetFrameworks>net20;net30;net40;net5.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
@@ -12,17 +12,17 @@
     <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLibDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Version>3.3.18</Version>
+    <Version>3.3.38</Version>
     <PackageTags>Key Value Windows cache Single process Multithreading</PackageTags>
-    <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
+    <PackageReleaseNotes>Reference PigToolsLiteLib.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigKeyCacheLib" Version="3.3.20" />
+    <Folder Include="My Project\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="My Project\" />
+    <PackageReference Include="PigCmdLib" Version="2.0.72" />
   </ItemGroup>
 
 </Project>

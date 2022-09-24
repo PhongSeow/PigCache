@@ -4,7 +4,7 @@
     <RootNamespace>PigKeyCacheLib</RootNamespace>
     <TargetFrameworks>net20;net30;net40;net5.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.5.38</Version>
+    <Version>3.5.50</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Copyright>Copyright (c) 2021-2022 Seow Phong</Copyright>
@@ -35,7 +35,7 @@ It can run on Windows and Linux platforms.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigToolsLiteLib" Version="3.0.18" />
+    <PackageReference Include="PigToolsLiteLib" Version="3.2.38" />
   </ItemGroup>
 
 </Project>

@@ -6,54 +6,99 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "PigKeyCacheLibDemo/3.3.18": {
+      "PigKeyCacheLibDemo/3.3.38": {
         "dependencies": {
-          "PigKeyCacheLib": "3.3.20"
+          "PigCmdLib": "2.0.72"
         },
         "runtime": {
           "PigKeyCacheLibDemo.dll": {}
         }
       },
-      "PigKeyCacheLib/3.3.20": {
+      "Microsoft.NETCore.Platforms/5.0.0": {},
+      "Microsoft.Win32.Registry/5.0.0": {
         "dependencies": {
-          "PigToolsLiteLib": "2.9.60"
+          "System.Security.AccessControl": "5.0.0",
+          "System.Security.Principal.Windows": "5.0.0"
+        }
+      },
+      "PigCmdLib/2.0.72": {
+        "dependencies": {
+          "PigToolsLiteLib": "3.2.98"
         },
         "runtime": {
-          "lib/net5.0/PigKeyCacheLib.dll": {
-            "assemblyVersion": "3.3.20.0",
-            "fileVersion": "3.3.20.0"
+          "lib/net5.0/PigCmdLib.dll": {
+            "assemblyVersion": "2.0.72.0",
+            "fileVersion": "2.0.72.0"
           }
         }
       },
-      "PigToolsLiteLib/2.9.60": {
+      "PigToolsLiteLib/3.2.98": {
+        "dependencies": {
+          "Microsoft.Win32.Registry": "5.0.0"
+        },
         "runtime": {
           "lib/net5.0/PigToolsLiteLib.dll": {
-            "assemblyVersion": "2.9.60.0",
-            "fileVersion": "2.9.60.0"
+            "assemblyVersion": "3.2.98.0",
+            "fileVersion": "3.2.98.0"
           }
         }
-      }
+      },
+      "System.Security.AccessControl/5.0.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0",
+          "System.Security.Principal.Windows": "5.0.0"
+        }
+      },
+      "System.Security.Principal.Windows/5.0.0": {}
     }
   },
   "libraries": {
-    "PigKeyCacheLibDemo/3.3.18": {
+    "PigKeyCacheLibDemo/3.3.38": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "PigKeyCacheLib/3.3.20": {
+    "Microsoft.NETCore.Platforms/5.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-tn3g0sGEYxwZ8e2dlj7ApkNo2R94OF1vb+/Hs3HQu/UmN2ZSnJPVA+TLHLsuTfJ2rLOsVRfaiok+kPXdjm9idA==",
-      "path": "pigkeycachelib/3.3.20",
-      "hashPath": "pigkeycachelib.3.3.20.nupkg.sha512"
+      "sha512": "sha512-VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
+      "path": "microsoft.netcore.platforms/5.0.0",
+      "hashPath": "microsoft.netcore.platforms.5.0.0.nupkg.sha512"
     },
-    "PigToolsLiteLib/2.9.60": {
+    "Microsoft.Win32.Registry/5.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-WoBguCdoA+v6bucAkWrd/WMy3xMGTqpcpx074IlPOAkFboXorbqO2RCoqYkBdJAoPR5ZZIIfWAhHl8vzHOnwCg==",
-      "path": "pigtoolslitelib/2.9.60",
-      "hashPath": "pigtoolslitelib.2.9.60.nupkg.sha512"
+      "sha512": "sha512-dDoKi0PnDz31yAyETfRntsLArTlVAVzUzCIvvEDsDsucrl33Dl8pIJG06ePTJTI3tGpeyHS9Cq7Foc/s4EeKcg==",
+      "path": "microsoft.win32.registry/5.0.0",
+      "hashPath": "microsoft.win32.registry.5.0.0.nupkg.sha512"
+    },
+    "PigCmdLib/2.0.72": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ertw2uHFh92OCPmQi7udalO89oITOp3hqFazSjF3z21lsmDHRyNSh2AzpHl/Ka1hPuAzOerb6O+ibj0u/CQW+A==",
+      "path": "pigcmdlib/2.0.72",
+      "hashPath": "pigcmdlib.2.0.72.nupkg.sha512"
+    },
+    "PigToolsLiteLib/3.2.98": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ikiNFcvrj1/SXiZe8Oslnk0y26kj49N0Ws5m9guimsIkNEVixbnbs9aK5LtGBO27ijkzzSyweFrIYJCqmw3ggA==",
+      "path": "pigtoolslitelib/3.2.98",
+      "hashPath": "pigtoolslitelib.3.2.98.nupkg.sha512"
+    },
+    "System.Security.AccessControl/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dagJ1mHZO3Ani8GH0PHpPEe/oYO+rVdbQjvjJkBRNQkX4t0r1iaeGn8+/ybkSLEan3/slM0t59SVdHzuHf2jmw==",
+      "path": "system.security.accesscontrol/5.0.0",
+      "hashPath": "system.security.accesscontrol.5.0.0.nupkg.sha512"
+    },
+    "System.Security.Principal.Windows/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-t0MGLukB5WAVU9bO3MGzvlGnyJPgUlcwerXn1kzBRjwLKixT96XV0Uza41W49gVd8zEMFu9vQEFlv0IOrytICA==",
+      "path": "system.security.principal.windows/5.0.0",
+      "hashPath": "system.security.principal.windows.5.0.0.nupkg.sha512"
     }
   }
 }
