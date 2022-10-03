@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLib.SQLServerDemo</RootNamespace>
-    <TargetFrameworks>net20;net30;net48;</TargetFrameworks>
+    <TargetFrameworks>net20;net30;net40;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.2.16</Version>
+    <Version>3.3.8</Version>
     <Authors>Seow Phong</Authors>
     <Company>Seow Phong Studio</Company>
     <Description>Demo console program for PigKeyCacheLib.SQLServer</Description>
@@ -14,7 +14,7 @@
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLib.SQLServerDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Key Value Windows cache Single process Multithreading SQLServer</PackageTags>
-    <PackageReleaseNotes>Reference the latest class library and fix bugs.</PackageReleaseNotes>
+    <PackageReleaseNotes>Reference PigSQLSrvLib.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,8 +22,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigCmdLib" Version="1.9.98" />
-    <PackageReference Include="PigKeyCacheLib.SQLServer" Version="3.2.16" />
+    <PackageReference Include="PigCmdLib" Version="2.0.78" />
+    <PackageReference Include="PigSQLSrvLib" Version="2.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PigSQLSrvLib">
+      <HintPath>..\..\..\..\PigSQLSrv\Src\DotNet\PigSQLSrvLib\PigSQLSrvLib\bin\Debug\net40\PigSQLSrvLib.dll</HintPath>
+    </Reference>
+    <Reference Include="PigToolsLiteLib">
+      <HintPath>..\..\..\..\PigSQLSrv\Src\DotNet\PigSQLSrvLib\PigSQLSrvLib\bin\Debug\net40\PigToolsLiteLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
