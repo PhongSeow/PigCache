@@ -10,7 +10,7 @@
 '* 2.0	15/12/2021	Supports PigKeyCacheLib.SQLServer 2.0
 '* 2.1	28/12/2021	Supports PigKeyCacheLib.SQLServer 3.0
 '* 2.2	26/1/2022	Refer to PigConsole.Getpwdstr of PigCmdLib  is used to hide the entered password.
-'* 2.3	1/10/2022	Reference PigSQLSrvLib or PigSQLSrvCoreLib instead
+'* 2.3	1/10/2022	Reference PigToolsLiteLib instead
 '**********************************
 
 Imports System.Data
@@ -112,6 +112,14 @@ Public Class ConsoleDemo
                     Console.WriteLine("KeyValue=" & Me.KeyValue)
                     Console.WriteLine("CacheTimeSec=" & Me.CacheTimeSec)
                     Console.WriteLine("HitCache=" & Me.HitCache.ToString)
+                Case ConsoleKey.C
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("RemoveKeyValue")
+                    Console.WriteLine("*******************")
+                    Me.PigConsole.GetLine("Input KeyName", Me.KeyName)
+                    Console.WriteLine("RemoveKeyValue...")
+                    Me.Ret = Me.SQLSrvKeyValue.RemoveKeyValue(Me.KeyName)
+                    Console.WriteLine(Me.Ret)
             End Select
         Loop
     End Sub

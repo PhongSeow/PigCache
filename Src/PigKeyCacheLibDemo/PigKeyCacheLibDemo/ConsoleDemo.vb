@@ -4,7 +4,7 @@
 '* License: Copyright (c) 2020 Seow Phong, For more details, see the MIT LICENSE file included with this distribution.
 '* Describe: ConsoleDemo for PigKeyCacheLib
 '* Home Url: https://www.seowphong.com or https://en.seowphong.com
-'* Version: 3.2.2
+'* Version: 3.5.2
 '* Create Time: 28/8/2021
 '* 1.1	13/11/2021	Add ValueType
 '* 1.2	14/11/2021	Modify SavePigKeyValue,GetPigKeyValue
@@ -16,6 +16,7 @@
 '* 3.1	13/12/2021	Modify GetPigKeyValue,SavePigKeyValue
 '* 3.2	2/1/2022	Modify New 
 '* 3.3	18/9/2022	Modify ConsoleDemo
+'* 3.5	3/10/2022	Modify Main
 '**********************************
 Imports System.Data
 Imports PigToolsLiteLib
@@ -54,6 +55,7 @@ Public Class ConsoleDemo
             Console.WriteLine("Press Q to Exit")
             Console.WriteLine("Press A to SavePigKeyValue")
             Console.WriteLine("Press B to GetPigKeyValue")
+            Console.WriteLine("Press C to RemoveKeyValue")
             Console.WriteLine("*******************")
             Select Case Console.ReadKey().Key
                 Case ConsoleKey.Q
@@ -83,6 +85,14 @@ Public Class ConsoleDemo
                     Console.WriteLine("KeyValue=" & Me.KeyValue)
                     Console.WriteLine("CacheTimeSec=" & Me.CacheTimeSec)
                     Console.WriteLine("HitCache=" & Me.HitCache.ToString)
+                Case ConsoleKey.C
+                    Console.WriteLine("*******************")
+                    Console.WriteLine("RemoveKeyValue")
+                    Console.WriteLine("*******************")
+                    Me.PigConsole.GetLine("Input KeyName", Me.KeyName)
+                    Console.WriteLine("RemoveKeyValue...")
+                    Me.Ret = Me.PigKeyValue.RemoveKeyValue(Me.KeyName)
+                    Console.WriteLine(Me.Ret)
             End Select
         Loop
     End Sub
