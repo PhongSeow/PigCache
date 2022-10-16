@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLibDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Version>3.3.50</Version>
+    <Version>3.3.52</Version>
     <PackageTags>Key Value Windows cache Single process Multithreading</PackageTags>
     <PackageReleaseNotes>Add new function of PigKeyValue.</PackageReleaseNotes>
   </PropertyGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigCmdLib" Version="2.0.80" />
+    <PackageReference Include="PigCmdLib" Version="2.0.82" />
   </ItemGroup>
 
 </Project>
