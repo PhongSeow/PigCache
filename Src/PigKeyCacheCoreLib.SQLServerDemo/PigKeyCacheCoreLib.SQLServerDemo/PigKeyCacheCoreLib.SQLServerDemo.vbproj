@@ -13,13 +13,17 @@
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheCoreLib.SQLServerDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Key Value Windows cache Single process Multithreading SQLServer Linux Core</PackageTags>
-    <Version>3.3.16</Version>
+    <Version>3.3.18</Version>
     <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigCmdLib" Version="2.1.6" />
-    <PackageReference Include="PigSQLSrvCoreLib" Version="2.8.20" />
+    <PackageReference Include="PigCmdLib" Version="2.1.32" />
+    <PackageReference Include="PigSQLSrvCoreLib" Version="2.8.56" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="My Project\" />
   </ItemGroup>
 
 </Project>
