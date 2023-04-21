@@ -9,11 +9,11 @@
     <Description>Demo console program for PigKeyCacheCoreLib.SQLServer</Description>
     <Copyright>Copyright (c) 2021-2023 Seow Phong</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
+    <PackageProjectUrl>https://en.seowphong.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheCoreLib.SQLServerDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Key Value Windows cache Single process Multithreading SQLServer Linux Core</PackageTags>
-    <Version>3.3.26</Version>
+    <Version>3.3.28</Version>
     <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
   </PropertyGroup>
 
@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigCmdLib" Version="2.2.20" />
-    <PackageReference Include="PigSQLSrvCoreLib" Version="2.8.80" />
+    <PackageReference Include="PigCmdLib" Version="2.2.22" />
+    <PackageReference Include="PigSQLSrvCoreLib" Version="2.8.82" />
   </ItemGroup>
 
 </Project>

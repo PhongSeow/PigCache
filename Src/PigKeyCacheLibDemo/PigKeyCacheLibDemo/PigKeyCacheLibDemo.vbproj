@@ -8,11 +8,11 @@
     <Company>Seow Phong Studio</Company>
     <Description>Demo console program for PigKeyCacheLib</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) 2021-2022 Seow Phong</Copyright>
-    <PackageProjectUrl>https://en.seowphong.com/oss/PigCache/</PackageProjectUrl>
+    <Copyright>Copyright (c) 2021-2023 Seow Phong</Copyright>
+    <PackageProjectUrl>https://en.seowphong.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLibDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Version>3.3.60</Version>
+    <Version>3.3.62</Version>
     <PackageTags>Key Value Windows cache Single process Multithreading</PackageTags>
     <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
   </PropertyGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigCmdLib" Version="2.2.20" />
+    <PackageReference Include="PigCmdLib" Version="2.2.22" />
   </ItemGroup>
 
 </Project>
