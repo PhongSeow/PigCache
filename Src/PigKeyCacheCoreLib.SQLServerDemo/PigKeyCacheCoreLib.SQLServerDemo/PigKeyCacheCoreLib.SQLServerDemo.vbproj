@@ -13,8 +13,9 @@
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheCoreLib.SQLServerDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Key Value Windows cache Single process Multithreading SQLServer Linux Core</PackageTags>
-    <Version>3.3.28</Version>
+    <Version>3.3.30</Version>
     <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
+    <PackageReadmeFile>SampleDemo.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,8 +23,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigCmdLib" Version="2.2.22" />
-    <PackageReference Include="PigSQLSrvCoreLib" Version="2.8.82" />
+    <None Include="..\..\..\Release\DotNet\PigKeyCacheCoreLib.SQLServerDemo\SampleDemo.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PigCmdLib" Version="2.2.50" />
+    <PackageReference Include="PigSQLSrvCoreLib" Version="2.8.98" />
   </ItemGroup>
 
 </Project>

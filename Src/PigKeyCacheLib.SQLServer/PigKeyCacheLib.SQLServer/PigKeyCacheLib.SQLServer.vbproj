@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>PigKeyCacheLib.SQLServer</RootNamespace>
     <TargetFrameworks>net20;net30;net40;</TargetFrameworks>
-    <Version>3.3.62</Version>
+    <Version>3.3.66</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Seow Phong</Authors>
@@ -16,10 +16,9 @@
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLib.SQLServer</RepositoryUrl>
     <PackageTags>Key Value Windows cache multiprocessing multithreading memcached redis share memory Linux SQL Server</PackageTags>
     <Description>PigKeyCacheLib.SQLServer is a very lightweight key value Caching Application support multi server load balancing.
-This is a scenario with the best read performance and horizontal scalability. It shares database connection with applications, which is equivalent to no third-party service support, and the high availability of the database is better than redis.
-It can run on Windows Only.
 </Description>
-    <PackageReleaseNotes>Update project information.</PackageReleaseNotes>
+    <PackageReleaseNotes>Update readme.</PackageReleaseNotes>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +34,13 @@ It can run on Windows Only.
 
   <ItemGroup>
     <PackageReference Include="PigSQLSrvLib" Version="2.6.88" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

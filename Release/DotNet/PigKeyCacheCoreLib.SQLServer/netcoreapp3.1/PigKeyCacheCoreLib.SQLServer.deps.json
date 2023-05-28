@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "PigKeyCacheCoreLib.SQLServer/3.3.50": {
+      "PigKeyCacheCoreLib.SQLServer/3.3.56": {
         "dependencies": {
           "PigSQLSrvCoreLib": "2.6.88"
         },
@@ -566,7 +566,7 @@
     }
   },
   "libraries": {
-    "PigKeyCacheCoreLib.SQLServer/3.3.50": {
+    "PigKeyCacheCoreLib.SQLServer/3.3.56": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
