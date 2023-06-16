@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://en.seowphong.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PhongSeow/PigCache/tree/master/Src/PigKeyCacheLibDemo</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Version>3.3.66</Version>
+    <Version>3.3.68</Version>
     <PackageTags>Key Value Windows cache Single process Multithreading</PackageTags>
     <PackageReleaseNotes>Reference the latest class library.</PackageReleaseNotes>
     <PackageReadmeFile>SampleDemo.md</PackageReadmeFile>
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PigCmdLib" Version="2.2.50" />
+    <PackageReference Include="PigCmdLib" Version="2.2.68" />
   </ItemGroup>
 
 </Project>
